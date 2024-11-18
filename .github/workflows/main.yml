@@ -1,0 +1,27 @@
+name: Commit Message Check
+
+# Trigger the workflow on every push
+on: push
+
+jobs:
+  check-commit-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Validate commit messages
+        run: |
+          # Get all commit messages in the push
+          commits=$(git rev-list ${{ github.event.before }}..${{ github.sha }})
+
+          for commit in $commits; do
+            message=$(git log -1 --format=%B "$commit")
+
+            # Check if the commit message matches the required format
+            if ! [[ "$message" =~ ^PROJ-[0-9]+ ]]; then
+              echo "Invalid commit message: $message"
+              echo "Commit messages must start with a ticket number (e.g., PROJ-1)."
+              exit 1
+            fi
+          done
