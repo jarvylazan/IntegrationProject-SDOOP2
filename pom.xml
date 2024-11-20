@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.integrationprojectsdoop2/com.example.integrationprojectsdoop2.HelloApplication
+                                com.example.integrationprojectsdoop2/com.example.integrationprojectsdoop2.MovieTheatreApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
