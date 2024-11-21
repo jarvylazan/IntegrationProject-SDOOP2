@@ -16,12 +16,12 @@
       </Label>
       <ListView fx:id="showListView" layoutX="21.0" layoutY="123.0" prefHeight="258.0" prefWidth="370.0" />
       <Label layoutX="21.0" layoutY="98.0" text="Please select an option in the box below" />
-      <Button fx:id="BuyTicketButton" layoutX="21.0" layoutY="390.0" mnemonicParsing="false" onAction="#onBuyTicketButtonClick" prefHeight="35.0" prefWidth="370.0" text="Buy Ticket">
+      <Button fx:id="buyTicketButton" layoutX="21.0" layoutY="390.0" mnemonicParsing="false" onAction="#onBuyTicketButtonClick" prefHeight="35.0" prefWidth="370.0" text="Buy Ticket">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="signOutButton" layoutX="324.0" layoutY="463.0" mnemonicParsing="false" onAction="#onSignOutButtonClick" prefHeight="35.0" prefWidth="112.0" text="Sign Out">
+      <Button fx:id="backButton" layoutX="324.0" layoutY="463.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="35.0" prefWidth="112.0" text="Back">
          <font>
             <Font size="14.0" />
          </font>
