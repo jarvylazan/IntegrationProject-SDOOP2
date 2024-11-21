@@ -14,6 +14,6 @@ public class Manager extends User implements Serializable {
      * Calls the default constructor of the {@link User} class.
      */
     public Manager() {
-        super(); // Calls the default constructor of User
+        super();
     }
 }

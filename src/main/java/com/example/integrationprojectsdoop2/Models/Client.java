@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 /**
  * Represents a Client, which is a type of {@link User}.
  * In addition to the user properties, a Client has a subscription date.
@@ -24,8 +20,7 @@ public class Client extends User implements Serializable {
      */
     public Client() {
         super(); // Calls the default constructor of User
-        aClientSubscriptionDate = new SimpleDateFormat("yyyy/MM/dd");
-        // To include time, use "yyyy/MM/dd HH:mm:ss".
+        aClientSubscriptionDate = new SimpleDateFormat("yyyy/MM/dd"); // To include time, use "yyyy/MM/dd HH:mm:ss".
     }
 
     /**
@@ -40,7 +35,7 @@ public class Client extends User implements Serializable {
      */
     public Client(String pUser_ID, String pUser_Name, String pUser_Email, String pUser_Password,
                   String pUser_Type, DateFormat pClientSubscriptionDate) {
-        super(pUser_ID, pUser_Name, pUser_Email, pUser_Password, pUser_Type); // Calls the parameterized constructor of User
+        super(pUser_ID, pUser_Name, pUser_Email, pUser_Password, pUser_Type);
         aClientSubscriptionDate = pClientSubscriptionDate;
     }
 
