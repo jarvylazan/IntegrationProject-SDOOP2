@@ -1,4 +1,4 @@
-package com.example.integrationprojectsdoop2;
+package com.example.integrationprojectsdoop2.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
