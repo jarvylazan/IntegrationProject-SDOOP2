@@ -5,26 +5,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A utility class to read serialized objects from a file.
+ * A utility class to handle deserialization of objects from a specified file.
+ * This class reads serialized objects from a file and returns them as a list.
+ * Useful for retrieving previously saved objects.
+ * <p>
+ * Example usage:
+ * <pre>
+ * {@code
+ * ReadObjects reader = new ReadObjects("datafile.ser");
+ * try {
+ *     List<Object> objects = reader.read();
+ *     // Process the objects
+ * } catch (IOException | ClassNotFoundException e) {
+ *     e.printStackTrace();
+ * }
+ * }
+ * </pre>
  */
 public class ReadObjects {
 
-    /** The name of the file to read objects from. */
+    /** The name of the file from which objects are read. */
     private String aFileName;
 
     /**
      * Constructs a new instance of {@code ReadObjects} with the specified file name.
      *
      * @param pFileName the name of the file to read objects from.
+     *                  Must not be {@code null} or empty.
      */
     public ReadObjects(String pFileName) {
+        if (pFileName == null || pFileName.isEmpty()) {
+            throw new IllegalArgumentException("File name cannot be null or empty.");
+        }
         this.aFileName = pFileName;
     }
 
     /**
-     * Reads all objects from the specified file and returns them as a list.
+     * Reads all serialized objects from the specified file and returns them as a list.
+     * The file must contain objects serialized using {@link ObjectOutputStream}.
+     * <p>
+     * If the file is empty or contains no objects, an empty list is returned.
      *
-     * @return a list of deserialized objects from the file, or an empty list if the file is empty.
+     * @return a list of deserialized objects from the file.
+     * @throws FileNotFoundException  if the specified file does not exist.
      * @throws IOException            if an I/O error occurs while reading the file.
      * @throws ClassNotFoundException if a class of a serialized object cannot be found.
      */

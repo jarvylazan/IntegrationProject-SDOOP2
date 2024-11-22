@@ -23,30 +23,6 @@ public class MovieTheatreApplication extends Application {
 
     public static void main(String[] args) {
 
-
-
-
-        List<Object> objects = new ArrayList<>();
-        objects.add("Sample String");
-        objects.add(123); // Integer
-        objects.add(45.67); // Double
-
-        String fileName = "test1.ser";
-
-        // Instantiate the WriteObjects utility and write the objects
-        WriteObjects writer = new WriteObjects(fileName);
-        writer.write(objects);
-
-
-
-        ReadObjects reader = new ReadObjects(fileName);
-        try {
-            List<Object> objectz = reader.read();
-            objects.forEach(System.out::println);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
         launch();
     }
 }
