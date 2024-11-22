@@ -1,49 +1,68 @@
 package com.example.integrationprojectsdoop2.Helpers;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A utility class to read serialized objects from a file.
+ */
 public class ReadObjects {
-    private String aFileName; // Not sure for this.
-    private List<Object> aObjectsList;
 
-    public ReadObjects(String pFileName, List<Object> pObjectsList) {
+    /** The name of the file to read objects from. */
+    private String aFileName;
+
+    /**
+     * Constructs a new instance of {@code ReadObjects} with the specified file name.
+     *
+     * @param pFileName the name of the file to read objects from.
+     */
+    public ReadObjects(String pFileName) {
         this.aFileName = pFileName;
-        this.aObjectsList = pObjectsList;
     }
-    public void Read(List<Object> pObjectsList) {
-        System.out.println("Reading objects...");
 
-        try(FileInputStream fi = new FileInputStream(aFileName)) {
+    /**
+     * Reads all objects from the specified file and returns them as a list.
+     *
+     * @return a list of deserialized objects from the file, or an empty list if the file is empty.
+     * @throws IOException            if an I/O error occurs while reading the file.
+     * @throws ClassNotFoundException if a class of a serialized object cannot be found.
+     */
+    public List<Object> read() throws IOException, ClassNotFoundException {
+        List<Object> objectsList = new ArrayList<>();
 
-            ObjectInputStream os = new ObjectInputStream(fi);
+        System.out.println("Reading objects from file: " + aFileName);
 
-            //Person person1 = (Person) os.readObject();
-            //Person person2 = (Person) os.readObject();
+        try (FileInputStream fi = new FileInputStream(aFileName);
+             ObjectInputStream os = new ObjectInputStream(fi)) {
 
-            os.close();
-
-            System.out.println();
-            System.out.println();
+            while (true) {
+                try {
+                    Object obj = os.readObject();
+                    objectsList.add(obj);
+                } catch (EOFException e) {
+                    break; // End of file reached
+                }
+            }
 
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("File not found: " + aFileName);
+            throw e;
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error reading objects: " + e.getMessage());
+            throw e;
         }
 
+        System.out.println("Successfully read " + objectsList.size() + " objects.");
+        return objectsList;
     }
-    public String getaFileName(){
+
+    /**
+     * Gets the name of the file being read.
+     *
+     * @return the file name.
+     */
+    public String getaFileName() {
         return aFileName;
     }
-
-    public List<Object> getaObjectsList() {
-        return aObjectsList;
-    }
 }
-
-
-
