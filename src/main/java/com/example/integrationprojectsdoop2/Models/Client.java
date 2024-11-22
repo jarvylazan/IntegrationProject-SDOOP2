@@ -1,8 +1,8 @@
 package com.example.integrationprojectsdoop2.Models;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a Client, which is a type of {@link User}.
@@ -11,8 +11,14 @@ import java.text.SimpleDateFormat;
  */
 public class Client extends User implements Serializable {
 
+    private static int clientIDCounter = 1; // Counter specific to Client
+    private final String clientID;         // Unique ID for each Client
+
     /** The subscription date for the client. */
-    private DateFormat aClientSubscriptionDate;
+    private LocalDate aClientSubscriptionDate;
+
+    /** Date formatter for displaying the subscription date. */
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
     /**
      * Default constructor that initializes the client with default values.
@@ -20,7 +26,8 @@ public class Client extends User implements Serializable {
      */
     public Client() {
         super(); // Calls the default constructor of User
-        aClientSubscriptionDate = new SimpleDateFormat("yyyy/MM/dd"); // To include time, use "yyyy/MM/dd HH:mm:ss".
+        this.clientID = generateClientID();
+        aClientSubscriptionDate = LocalDate.now(); // To include time, use "yyyy/MM/dd HH:mm:ss".
     }
 
     /**
@@ -34,9 +41,18 @@ public class Client extends User implements Serializable {
      * @param pClientSubscriptionDate the subscription date for the client.
      */
     public Client(String pUser_ID, String pUser_Name, String pUser_Email, String pUser_Password,
-                  String pUser_Type, DateFormat pClientSubscriptionDate) {
-        super(pUser_ID, pUser_Name, pUser_Email, pUser_Password, pUser_Type);
+                  String pUser_Type, LocalDate pClientSubscriptionDate) {
+        super(pUser_ID, pUser_Name, pUser_Email);
+        this.clientID = generateClientID();
         aClientSubscriptionDate = pClientSubscriptionDate;
+    }
+
+    private static synchronized String generateClientID() {
+        return "C" + clientIDCounter++;
+    }
+
+    public String getClientID() {
+        return clientID;
     }
 
     /**
@@ -44,7 +60,7 @@ public class Client extends User implements Serializable {
      *
      * @return the subscription date of the client.
      */
-    public DateFormat getaClientSubscriptionDate() {
+    public LocalDate getaClientSubscriptionDate() {
         return aClientSubscriptionDate;
     }
 
@@ -53,18 +69,8 @@ public class Client extends User implements Serializable {
      *
      * @param aClientSubscriptionDate the new subscription date for the client.
      */
-    public void setaClientSubscriptionDate(DateFormat aClientSubscriptionDate) {
+    public void setaClientSubscriptionDate(LocalDate aClientSubscriptionDate) {
         this.aClientSubscriptionDate = aClientSubscriptionDate;
     }
 
-    /**
-     * Returns a string representation of the client, including user details and the subscription date.
-     * The format is: "UserDetails,SubscriptionDate".
-     *
-     * @return a string representation of the client.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + "," + aClientSubscriptionDate;
-    }
 }

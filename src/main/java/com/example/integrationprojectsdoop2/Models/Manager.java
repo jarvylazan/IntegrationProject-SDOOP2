@@ -9,11 +9,28 @@ import java.io.Serializable;
  */
 public class Manager extends User implements Serializable {
 
+    private static int managerIDCounter = 1; // Counter specific to Manager
+    private final String managerID;         // Unique ID for each Manager
+
     /**
-     * Default constructor that initializes a Manager with default user values.
-     * Calls the default constructor of the {@link User} class.
+     * Constructs a Manager with the specified user details.
+     *
+     * @param pUser_ID       the unique identifier for the user.
+     * @param pUser_Name     the name of the user.
+     * @param pUser_Email    the email address of the user.
+     * @param pUser_Password the password of the user.
      */
-    public Manager() {
-        super();
+    public Manager(String pUser_ID, String pUser_Name, String pUser_Email, String pUser_Password) {
+        super(pUser_Name, pUser_Email, pUser_Password);
+        this.managerID = generateManagerID();
     }
+
+    private static synchronized String generateManagerID() {
+        return "M" + managerIDCounter++;
+    }
+
+    public String getManagerID() {
+        return managerID;
+    }
+
 }
