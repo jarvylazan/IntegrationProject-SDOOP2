@@ -6,13 +6,16 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a Client, which is a type of {@link User}.
- * In addition to the user properties, a Client has a subscription date.
+ * A Client has a subscription date and a unique client ID.
  * Implements {@link Serializable} for object serialization.
  */
 public class Client extends User implements Serializable {
 
-    private static int clientIDCounter = 1; // Counter specific to Client
-    private final String clientID;         // Unique ID for each Client
+    /** Counter for generating unique Client IDs. */
+    private static int clientIDCounter = 1;
+
+    /** Unique ID for each Client. */
+    private final String clientID;
 
     /** The subscription date for the client. */
     private LocalDate aClientSubscriptionDate;
@@ -22,35 +25,46 @@ public class Client extends User implements Serializable {
 
     /**
      * Default constructor that initializes the client with default values.
-     * Sets the subscription date format to "yyyy/MM/dd".
+     * The client is assigned a unique ID, and the subscription date is set to the current date.
      */
     public Client() {
         super(); // Calls the default constructor of User
         this.clientID = generateClientID();
-        aClientSubscriptionDate = LocalDate.now(); // To include time, use "yyyy/MM/dd HH:mm:ss".
+        this.aClientSubscriptionDate = LocalDate.now();
     }
 
     /**
      * Constructs a new Client with the specified user details and subscription date.
      *
-     * @param pUser_ID                the unique identifier for the user.
      * @param pUser_Name              the name of the user.
      * @param pUser_Email             the email address of the user.
      * @param pUser_Password          the password of the user.
-     * @param pUser_Type              the type of the user.
      * @param pClientSubscriptionDate the subscription date for the client.
+     * @throws IllegalArgumentException if the subscription date is null.
      */
-    public Client(String pUser_ID, String pUser_Name, String pUser_Email, String pUser_Password,
-                  String pUser_Type, LocalDate pClientSubscriptionDate) {
-        super(pUser_ID, pUser_Name, pUser_Email);
+    public Client(String pUser_Name, String pUser_Email, String pUser_Password, LocalDate pClientSubscriptionDate) {
+        super(pUser_Name, pUser_Email, pUser_Password);
         this.clientID = generateClientID();
-        aClientSubscriptionDate = pClientSubscriptionDate;
+        if (pClientSubscriptionDate == null) {
+            throw new IllegalArgumentException("Subscription date cannot be null.");
+        }
+        this.aClientSubscriptionDate = pClientSubscriptionDate;
     }
 
+    /**
+     * Generates a unique Client ID by incrementing the counter.
+     *
+     * @return the generated Client ID in the format "C<number>".
+     */
     private static synchronized String generateClientID() {
         return "C" + clientIDCounter++;
     }
 
+    /**
+     * Gets the unique Client ID.
+     *
+     * @return the unique Client ID.
+     */
     public String getClientID() {
         return clientID;
     }
@@ -67,10 +81,25 @@ public class Client extends User implements Serializable {
     /**
      * Sets the client's subscription date.
      *
-     * @param aClientSubscriptionDate the new subscription date for the client.
+     * @param pClientSubscriptionDate the new subscription date for the client.
+     * @throws IllegalArgumentException if the subscription date is null or in the future.
      */
-    public void setaClientSubscriptionDate(LocalDate aClientSubscriptionDate) {
-        this.aClientSubscriptionDate = aClientSubscriptionDate;
+    public void setaClientSubscriptionDate(LocalDate pClientSubscriptionDate) {
+        if (pClientSubscriptionDate == null) {
+            throw new IllegalArgumentException("Subscription date cannot be null.");
+        }
+        if (pClientSubscriptionDate.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Subscription date cannot be in the future.");
+        }
+        this.aClientSubscriptionDate = pClientSubscriptionDate;
     }
 
+    /**
+     * Gets the subscription date as a formatted string.
+     *
+     * @return the subscription date formatted as "yyyy/MM/dd".
+     */
+    public String getFormattedSubscriptionDate() {
+        return aClientSubscriptionDate.format(DATE_FORMATTER);
+    }
 }
