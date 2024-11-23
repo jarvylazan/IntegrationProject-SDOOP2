@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.awt.event.ActionEvent;
@@ -19,7 +20,7 @@ public class LoginController {
     private TextField emailLoginTextField;
 
     @FXML
-    private TextField passwordLoginTextField;
+    private PasswordField loginPasswordField;
 
     private List<User> aManagersList;
 
@@ -50,7 +51,7 @@ public class LoginController {
             }
 
             // Validate password input
-            String password = passwordLoginTextField.getText().trim();
+            String password = loginPasswordField.getText().trim();
             if (password.isEmpty()) {
                 throw new Exception("Please enter your password.");
             }
@@ -63,7 +64,6 @@ public class LoginController {
 
             // Check in clients list
             for (User client : aClientsList) {
-                System.out.println(client);
                 if (client.getaUser_Email().equals(email) && client.getaUser_Password().equals(password)) {
                     // Load client dashboard
                     /*nextViewLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("client-dashboard-view.fxml"));
@@ -77,12 +77,11 @@ public class LoginController {
             // Check in managers list if not authenticated yet
             if (!isUserAuthenticated) {
                 for (User manager : aManagersList) {
-                    System.out.println(manager);
                     if (manager.getaUser_Email().equals(email) && manager.getaUser_Password().equals(password)) {
                         // Load manager dashboard
                        /* nextViewLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("manager-dashboard-view.fxml"));
                         nextViewLoader.load();*/
-                        System.out.println("The Client dashboard view");
+                        System.out.println("The Manager dashboard view");
                         isUserAuthenticated = true;
                         break;
                     }
