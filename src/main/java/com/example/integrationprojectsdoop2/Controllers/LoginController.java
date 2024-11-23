@@ -6,11 +6,14 @@ import com.example.integrationprojectsdoop2.MovieTheatreApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -99,6 +102,16 @@ public class LoginController {
         }
     }
 
+    public void onSignUpClick(MouseEvent mouseEvent){
+        try{
+            FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/SignUp-View.fxml"));
+            Parent signUpView = SignUpfxmlLoader.load();
+            emailLoginTextField.getScene().setRoot(signUpView);
+        } catch (IOException e) {
+            System.out.println("Error loading SignUp view: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 
     public List<User> loginReader(String filename) {
@@ -118,4 +131,5 @@ public class LoginController {
 
         return users;
     }
+
 }
