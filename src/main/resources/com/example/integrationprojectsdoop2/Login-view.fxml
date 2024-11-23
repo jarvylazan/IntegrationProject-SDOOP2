@@ -33,7 +33,7 @@
             </VBox.margin>
          </TextField>
          <VBox prefHeight="32.0" prefWidth="408.0" />
-          <Button onAction="#onLoginButtonClicked" prefHeight="36.0" prefWidth="410.0" style="-fx-background-color: #33b5ff; -fx-text-fill: white;" text="Log in">
+          <Button defaultButton="true" onAction="#onLoginButtonClicked" prefHeight="36.0" prefWidth="410.0" text="Log in">
             <font>
                <Font name="System Bold" size="13.0" />
             </font>

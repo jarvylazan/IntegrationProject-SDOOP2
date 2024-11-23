@@ -26,13 +26,13 @@ public class LoginController {
     private List<User> aClientsList;
 
     public void initialize() {
-        //aClientsList = loginReader("clients.ser");
-        //aManagersList = loginReader("managers.ser");
+        aClientsList = loginReader("clients.ser");
+        aManagersList = loginReader("managers.ser");
     }
 
     @FXML
     protected void onLoginButtonClicked(javafx.event.ActionEvent pEvent) {
-        FXMLLoader nextViewLoader;
+        //FXMLLoader nextViewLoader;
 
         try {
             // Check if managers list is initialized and not empty
@@ -63,10 +63,12 @@ public class LoginController {
 
             // Check in clients list
             for (User client : aClientsList) {
+                System.out.println(client);
                 if (client.getaUser_Email().equals(email) && client.getaUser_Password().equals(password)) {
                     // Load client dashboard
-                    nextViewLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("client-dashboard-view.fxml"));
-                    nextViewLoader.load();
+                    /*nextViewLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("client-dashboard-view.fxml"));
+                    nextViewLoader.load();*/
+                    System.out.println("The Client dashboard view");
                     isUserAuthenticated = true;
                     break;
                 }
@@ -75,10 +77,12 @@ public class LoginController {
             // Check in managers list if not authenticated yet
             if (!isUserAuthenticated) {
                 for (User manager : aManagersList) {
+                    System.out.println(manager);
                     if (manager.getaUser_Email().equals(email) && manager.getaUser_Password().equals(password)) {
                         // Load manager dashboard
-                        nextViewLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("manager-dashboard-view.fxml"));
-                        nextViewLoader.load();
+                       /* nextViewLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("manager-dashboard-view.fxml"));
+                        nextViewLoader.load();*/
+                        System.out.println("The Client dashboard view");
                         isUserAuthenticated = true;
                         break;
                     }
@@ -91,6 +95,7 @@ public class LoginController {
             }
 
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             //showWarning(e.getMessage()); TO BE BUILD
         }
     }

@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
  * A Client has a subscription date and a unique client ID.
  * Implements {@link Serializable} for object serialization.
  */
-public class Client extends User implements Serializable {
+public class Client extends User {
 
     /** Counter for generating unique Client IDs. */
     private static int clientIDCounter = 1;

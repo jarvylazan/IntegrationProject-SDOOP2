@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,9 @@ import java.io.Serializable;
  * Implements {@link Serializable} for object serialization.
  */
 public abstract class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /** The name of the user (private for encapsulation). */
     private String aUser_Name;
