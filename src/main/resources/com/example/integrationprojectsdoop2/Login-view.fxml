@@ -8,32 +8,32 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="513.0" prefWidth="450.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="com.example.integrationprojectsdoop2.Controllers.LoginController">
+<VBox alignment="CENTER" prefHeight="513.0" prefWidth="450.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <VBox prefHeight="320.0" prefWidth="410.0" style="-fx-border-color: grey;">
       <children>
-         <VBox prefHeight="34.0" prefWidth="408.0" />
+         <VBox prefHeight="46.0" prefWidth="408.0" />
          <Label alignment="CENTER" prefHeight="41.0" prefWidth="408.0" text="TJS MOVIE THEATER">
             <font>
                <Font name="System Bold" size="31.0" />
             </font>
          </Label>
-         <VBox prefHeight="61.0" prefWidth="408.0" />
-         <TextField fx:id="inputemail" prefHeight="36.0" prefWidth="386.0" promptText="Email">
+         <VBox prefHeight="46.0" prefWidth="408.0" />
+         <TextField fx:id="emailLoginTextField" prefHeight="36.0" prefWidth="386.0" promptText="Email">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>
          </TextField>
          <VBox prefHeight="16.0" prefWidth="410.0" />
-         <TextField fx:id="inputPassword" prefHeight="36.0" prefWidth="410.0" promptText="Password">
+         <TextField fx:id="passwordLoginTextField" prefHeight="36.0" prefWidth="410.0" promptText="Password">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>
          </TextField>
          <VBox prefHeight="32.0" prefWidth="408.0" />
-          <Button fx:id="onLogInClick" prefHeight="36.0" prefWidth="410.0" style="-fx-background-color: #33b5ff; -fx-text-fill: white;" text="Log in">
+          <Button onAction="#onLoginButtonClicked" prefHeight="36.0" prefWidth="410.0" style="-fx-background-color: #33b5ff; -fx-text-fill: white;" text="Log in">
             <font>
                <Font name="System Bold" size="13.0" />
             </font>
@@ -46,7 +46,7 @@
    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="410.0" style="-fx-border-color: grey;">
       <children>
          <Label text="Don't have an account?" />
-         <Label fx:id="onSignUpClick" text=" Sign Up" textFill="#4674ff">
+         <Label text=" Sign Up" textFill="#4674ff">
             <font>
                <Font name="System Bold" size="11.0" />
             </font>
