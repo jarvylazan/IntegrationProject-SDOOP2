@@ -18,6 +18,7 @@ import java.io.Serializable;
  */
 public abstract class User implements Serializable {
 
+    /** The serialID for the files. */
     @Serial
     private static final long serialVersionUID = 1L;
 
