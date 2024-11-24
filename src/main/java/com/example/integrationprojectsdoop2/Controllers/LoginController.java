@@ -2,6 +2,7 @@ package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Models.User;
+import com.example.integrationprojectsdoop2.Models.UserManager;
 import com.example.integrationprojectsdoop2.MovieTheatreApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,14 +26,9 @@ public class LoginController {
     @FXML
     private PasswordField loginPasswordField;
 
-    private List<User> aManagersList;
+    private final List<User> aManagersList = UserManager.getInstance().getaManagersList();
 
-    private List<User> aClientsList;
-
-    public void initialize() {
-        aClientsList = loginReader("clients.ser");
-        aManagersList = loginReader("managers.ser");
-    }
+    private final List<User> aClientsList = UserManager.getInstance().getaClientsList();
 
     @FXML
     protected void onLoginButtonClicked(javafx.event.ActionEvent pEvent) {
