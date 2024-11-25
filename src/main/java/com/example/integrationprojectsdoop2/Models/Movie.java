@@ -3,6 +3,8 @@ package com.example.integrationprojectsdoop2.Models;
 /**
  * Represents a Movie with attributes such as ID, title, genre, and synopsis.
  * Provides validation for attribute values to ensure data integrity.
+ *
+ * @author Jarvy Lazan
  */
 public class Movie {
     private int movie_ID;
@@ -12,6 +14,8 @@ public class Movie {
 
     /**
      * Default constructor for creating a Movie instance without initializing fields.
+     *
+     * @author Jarvy Lazan
      */
     public Movie() {
     }
@@ -24,6 +28,8 @@ public class Movie {
      * @param movie_Title   the title of the movie (cannot be null or empty).
      * @param movie_Genre   the genre of the movie (cannot be null or empty).
      * @param movie_Synopsis the synopsis of the movie (cannot be null or empty).
+     * @throws IllegalArgumentException if any parameter is invalid.
+     * @author Jarvy Lazan
      */
     public Movie(int movie_ID, String movie_Title, String movie_Genre, String movie_Synopsis) {
         setMovie_ID(movie_ID);
@@ -36,6 +42,7 @@ public class Movie {
      * Gets the unique identifier of the movie.
      *
      * @return the movie ID.
+     * @author Jarvy Lazan
      */
     public int getMovie_ID() {
         return movie_ID;
@@ -46,6 +53,7 @@ public class Movie {
      *
      * @param movie_ID the movie ID to set.
      * @throws IllegalArgumentException if the movie ID is not positive.
+     * @author Jarvy Lazan
      */
     public void setMovie_ID(int movie_ID) {
         if (movie_ID <= 0) {
@@ -58,6 +66,7 @@ public class Movie {
      * Gets the title of the movie.
      *
      * @return the movie title.
+     * @author Jarvy Lazan
      */
     public String getMovie_Title() {
         return movie_Title;
@@ -68,6 +77,7 @@ public class Movie {
      *
      * @param movie_Title the movie title to set.
      * @throws IllegalArgumentException if the title is null or empty.
+     * @author Jarvy Lazan
      */
     public void setMovie_Title(String movie_Title) {
         if (movie_Title == null || movie_Title.trim().isEmpty()) {
@@ -80,6 +90,7 @@ public class Movie {
      * Gets the genre of the movie.
      *
      * @return the movie genre.
+     * @author Jarvy Lazan
      */
     public String getMovie_Genre() {
         return movie_Genre;
@@ -90,6 +101,7 @@ public class Movie {
      *
      * @param movie_Genre the movie genre to set.
      * @throws IllegalArgumentException if the genre is null or empty.
+     * @author Jarvy Lazan
      */
     public void setMovie_Genre(String movie_Genre) {
         if (movie_Genre == null || movie_Genre.trim().isEmpty()) {
@@ -102,6 +114,7 @@ public class Movie {
      * Gets the synopsis of the movie.
      *
      * @return the movie synopsis.
+     * @author Jarvy Lazan
      */
     public String getMovie_Synopsis() {
         return movie_Synopsis;
@@ -112,6 +125,7 @@ public class Movie {
      *
      * @param movie_Synopsis the movie synopsis to set.
      * @throws IllegalArgumentException if the synopsis is null or empty.
+     * @author Jarvy Lazan
      */
     public void setMovie_Synopsis(String movie_Synopsis) {
         if (movie_Synopsis == null || movie_Synopsis.trim().isEmpty()) {
