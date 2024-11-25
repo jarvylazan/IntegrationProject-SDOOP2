@@ -58,8 +58,9 @@ public class WriteObjects {
 
         try (FileOutputStream fs = new FileOutputStream(aFileName);
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
-
-            os.writeObject(pObjectsList); // Serialize and write the object list
+            for (Object o : pObjectsList) {
+                os.writeObject(o); // Serialize and write the object list
+            }
 
             System.out.println("Successfully wrote objects to " + aFileName);
 
