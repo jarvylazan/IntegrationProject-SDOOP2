@@ -44,7 +44,7 @@
             </VBox.margin>
          </PasswordField>
          <VBox prefHeight="15.0" prefWidth="408.0" />
-         <PasswordField fx:id="SignUpReTypePassword" prefHeight="36.0" prefWidth="410.0" promptText="Retype Password">
+         <PasswordField fx:id="SignUpConfirmPassword" prefHeight="36.0" prefWidth="410.0" promptText="Retype Password">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>

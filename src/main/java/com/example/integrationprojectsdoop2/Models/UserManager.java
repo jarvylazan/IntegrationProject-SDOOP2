@@ -55,7 +55,7 @@ public class UserManager {
     }
 
     private List<User> usersReader(String pFilename) {
-        List<User> users = List.of(); // Start with an immutable empty list
+        List<User> users = new ArrayList<>(); // Start with an immutable empty list
         try {
             ReadObjects readObjects = new ReadObjects(pFilename);
             List<Object> rawObjects = readObjects.read(); // Read as Object list
@@ -69,7 +69,7 @@ public class UserManager {
             e.printStackTrace(); // Add logging to debug issues
         }
 
-        return users;
+        return new ArrayList<>(users);
     }
 
     private void usersWriter(String filename, List<User> pUsers) throws IOException {
