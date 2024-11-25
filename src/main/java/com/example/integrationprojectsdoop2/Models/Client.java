@@ -19,10 +19,10 @@ public class Client extends User {
 
 
     /** Counter for generating unique Client IDs. */
-    private static int clientIDCounter = 1;
+    private static int aClientIDCounter = 1;
 
     /** Unique ID for each Client. */
-    private final String clientID;
+    private final String aClientID;
 
     /** The subscription date for the client. */
     private final LocalDate aClientSubscriptionDate;
@@ -37,7 +37,7 @@ public class Client extends User {
      */
     public Client() {
         super(); // Calls the default constructor of User
-        this.clientID = generateClientID();
+        this.aClientID = generateClientID();
         this.aClientSubscriptionDate = LocalDate.now();
     }
 
@@ -52,7 +52,7 @@ public class Client extends User {
      */
     public Client(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
-        this.clientID = generateClientID();
+        this.aClientID = generateClientID();
         this.aClientSubscriptionDate =  LocalDate.now();
     }
 
@@ -63,7 +63,7 @@ public class Client extends User {
      * @author Samuel
      */
     private static synchronized String generateClientID() {
-        return "C" + clientIDCounter++;
+        return "C" + aClientIDCounter++;
     }
 
     /**
@@ -73,7 +73,7 @@ public class Client extends User {
      * @author Samuel
      */
     public String getClientID() {
-        return clientID;
+        return aClientID;
     }
 
     /**
