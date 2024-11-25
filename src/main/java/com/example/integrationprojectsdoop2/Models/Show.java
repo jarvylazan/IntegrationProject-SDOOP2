@@ -2,45 +2,31 @@ package com.example.integrationprojectsdoop2.Models;
 
 import java.time.LocalDate;
 
-/**
- * Represents a Showtime with a unique identifier and a specific time.
- *
- * The unique identifier is auto-generated using a static counter. The time is validated
- * to ensure it follows the format HH:mm (e.g., 12:34).
- *
- * @author Mohammad Tarin Wahidi
- */
 public class Show {
 
     private static int aShowIDCounter = 1;
 
     private String aShow_ID;
     private LocalDate aShow_Date;
-    private String aClient_ID;
-    private String aMovie_ID;
-    private String aScreenroom_ID;
-    private String aShowtime_ID;
+    private String aClient_Name;
+    private String aMovie_Title;
+    private String aScreenroom_Name;
+    private String aShowtime_Time;
 
-
-    /**
-     * Default constructor for creating a Showtime instance without initializing fields.
-     */
     public Show() {}
 
-    public Show(LocalDate pShow_Date, String pClient_ID, String pMovie_ID, String pScreenroom_ID, String pShowtime_ID) {
+    public Show(LocalDate pShow_Date, String pClient_Name, String pMovie_Title, String pScreenroom_Name, String pShowtime_Time) {
         this.aShow_ID = setaShowID();
         this.aShow_Date = pShow_Date;
-        this.aClient_ID = pClient_ID;
-        this.aMovie_ID = pMovie_ID;
-        this.aScreenroom_ID = pScreenroom_ID;
-        this.aShowtime_ID = pShowtime_ID;
+        this.aClient_Name = pClient_Name;
+        this.aMovie_Title = pMovie_Title;
+        this.aScreenroom_Name = pScreenroom_Name;
+        this.aShowtime_Time = pShowtime_Time;
     }
-
 
     public String getaShowID() {
         return this.aShow_ID;
     }
-
 
     private static synchronized String setaShowID() {
         return "S" + aShowIDCounter++;
