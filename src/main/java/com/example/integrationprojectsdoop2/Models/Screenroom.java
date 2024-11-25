@@ -28,8 +28,8 @@ public class Screenroom {
      * @author Jarvy Lazan
      */
     public Screenroom(String pScreenroom_ID, String pScreenroom_Name) {
-        setAScreenroom_ID(pScreenroom_ID);
-        setAScreenroom_Name(pScreenroom_Name);
+        this.setAScreenroom_ID(pScreenroom_ID);
+        this. setAScreenroom_Name(pScreenroom_Name);
     }
 
     /**
@@ -39,7 +39,7 @@ public class Screenroom {
      * @author Jarvy Lazan
      */
     public String getAScreenroom_ID() {
-        return aScreenroom_ID;
+        return this.aScreenroom_ID;
     }
 
     /**
@@ -64,7 +64,7 @@ public class Screenroom {
      * @author Jarvy Lazan
      */
     public String getAScreenroom_Name() {
-        return aScreenroom_Name;
+        return this.aScreenroom_Name;
     }
 
     /**
