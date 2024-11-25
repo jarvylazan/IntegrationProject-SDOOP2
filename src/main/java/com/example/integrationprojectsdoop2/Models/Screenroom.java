@@ -22,6 +22,16 @@ public class Screenroom implements Serializable {
     private String aScreenroom_Name;
 
     /**
+     * Empty Constructor for the Screenroom class.
+     * Automatically generates a unique Screenroom ID.
+     * Other attributes can be set using setter methods
+     * @author Jarvy Lazan
+     * */
+    public Screenroom() {
+        this.aScreenroom_ID = generateScreenroomID();
+    }
+
+    /**
      * Constructs a Screenroom with the specified name.
      *
      * @param pScreenroom_Name the name of the screenroom (cannot be null or empty).
