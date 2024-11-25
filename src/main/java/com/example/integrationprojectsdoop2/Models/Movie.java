@@ -1,66 +1,66 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serializable;
+
 /**
  * Represents a Movie with attributes such as ID, title, genre, and synopsis.
- * Provides validation for attribute values to ensure data integrity.
+ * Implements {@link Serializable} for object serialization.
+ * Each Movie is assigned a unique Movie ID.
+ * Provides validation for input values to ensure data integrity.
  *
  * @author Jarvy Lazan
  */
-public class Movie {
-    private String aMovie_ID;
+public class Movie implements Serializable {
+
+    /** Counter for generating unique Movie IDs. */
+    private static int movieIDCounter = 1;
+
+    /** Unique ID for each Movie. */
+    private final String aMovie_ID;
+
+    /** Title of the Movie. */
     private String aMovie_Title;
+
+    /** Genre of the Movie. */
     private String aMovie_Genre;
+
+    /** Synopsis of the Movie. */
     private String aMovie_Synopsis;
 
     /**
-     * Default constructor for creating a Movie instance without initializing fields.
+     * Constructs a Movie with the specified title, genre, and synopsis.
      *
-     * @author Jarvy Lazan
-     */
-    public Movie() {
-    }
-
-    /**
-     * Parameterized constructor for creating a Movie instance with specified values.
-     * Uses setters for validation.
-     *
-     * @param pMovie_ID      the unique identifier of the movie (cannot be null or empty).
      * @param pMovie_Title   the title of the movie (cannot be null or empty).
      * @param pMovie_Genre   the genre of the movie (cannot be null or empty).
      * @param pMovie_Synopsis the synopsis of the movie (cannot be null or empty).
-     * @throws IllegalArgumentException if any parameter is invalid.
-     * @author Jarvy Lazan
+     * @throws IllegalArgumentException if any parameter is null or empty.
+     * @author Jarvy
      */
-    public Movie(String pMovie_ID, String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
-        this.setAMovie_ID(pMovie_ID);
+    public Movie(String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
+        this.aMovie_ID = generateMovieID();
         this.setAMovie_Title(pMovie_Title);
         this.setAMovie_Genre(pMovie_Genre);
         this.setAMovie_Synopsis(pMovie_Synopsis);
     }
 
     /**
-     * Gets the unique identifier of the movie.
+     * Generates a unique Movie ID by incrementing the counter.
      *
-     * @return the movie ID.
-     * @throws IllegalArgumentException if the movie ID is null or empty.
+     * @return the generated Movie ID in the format "MOV<number>".
+     * @author Jarvy Lazan
+     */
+    private static synchronized String generateMovieID() {
+        return "MOV" + movieIDCounter++;
+    }
+
+    /**
+     * Gets the unique Movie ID.
+     *
+     * @return the Movie ID.
      * @author Jarvy Lazan
      */
     public String getAMovie_ID() {
         return this.aMovie_ID;
-    }
-
-    /**
-     * Sets the unique identifier of the movie. Cannot be null or empty.
-     *
-     * @param pMovie_ID the movie ID to set.
-     * @throws IllegalArgumentException if the movie ID is null or empty.
-     * @author Jarvy Lazan
-     */
-    public void setAMovie_ID(String pMovie_ID) {
-        if (pMovie_ID == null || pMovie_ID.trim().isEmpty()) {
-            throw new IllegalArgumentException("Movie ID cannot be null or empty.");
-        }
-        this.aMovie_ID = pMovie_ID;
     }
 
     /**

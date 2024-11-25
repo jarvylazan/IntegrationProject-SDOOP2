@@ -1,41 +1,52 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serializable;
+
 /**
  * Represents a Screenroom with attributes such as ID and name.
- * Provides validation for attribute values to ensure data integrity.
+ * Implements {@link Serializable} for object serialization.
+ * Each Screenroom is assigned a unique Screenroom ID.
+ * Provides validation for input values to ensure data integrity.
  *
  * @author Jarvy Lazan
  */
-public class Screenroom {
-    private String aScreenroom_ID;
+public class Screenroom implements Serializable {
+
+    /** Counter for generating unique Screenroom IDs. */
+    private static int screenroomIDCounter = 1;
+
+    /** Unique ID for each Screenroom. */
+    private final String aScreenroom_ID;
+
+    /** Name of the Screenroom. */
     private String aScreenroom_Name;
 
     /**
-     * Default constructor for creating a Screenroom instance without initializing fields.
+     * Constructs a Screenroom with the specified name.
      *
-     * @author Jarvy Lazan
-     */
-    public Screenroom() {
-    }
-
-    /**
-     * Parameterized constructor for creating a Screenroom instance with specified values.
-     * Uses setters for validation.
-     *
-     * @param pScreenroom_ID   the unique identifier of the screenroom (cannot be null or empty).
      * @param pScreenroom_Name the name of the screenroom (cannot be null or empty).
-     * @throws IllegalArgumentException if any parameter is invalid.
+     * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
-     */
-    public Screenroom(String pScreenroom_ID, String pScreenroom_Name) {
-        this.setAScreenroom_ID(pScreenroom_ID);
-        this. setAScreenroom_Name(pScreenroom_Name);
+     * */
+    public Screenroom(String pScreenroom_Name) {
+        this.aScreenroom_ID = generateScreenroomID();
+        this.setScreenroom_Name(pScreenroom_Name);
     }
 
     /**
-     * Gets the unique identifier of the screenroom.
+     * Generates a unique Screenroom ID by incrementing the counter.
      *
-     * @return the screenroom ID.
+     * @return the generated Screenroom ID in the format "R<number>".
+     * @author Jarvy Lazan
+     */
+    private static synchronized String generateScreenroomID() {
+        return "R" + screenroomIDCounter++;
+    }
+
+    /**
+     * Gets the unique Screenroom ID.
+     *
+     * @return the Screenroom ID.
      * @author Jarvy Lazan
      */
     public String getAScreenroom_ID() {
@@ -43,38 +54,24 @@ public class Screenroom {
     }
 
     /**
-     * Sets the unique identifier of the screenroom. Cannot be null or empty.
+     * Gets the name of the Screenroom.
      *
-     * @param pScreenroom_ID the screenroom ID to set.
-     * @throws IllegalArgumentException if the screenroom ID is null or empty.
+     * @return the Screenroom name.
+     * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
      */
-    public void setAScreenroom_ID(String pScreenroom_ID) {
-        if (pScreenroom_ID == null || pScreenroom_ID.trim().isEmpty()) {
-            throw new IllegalArgumentException("Screenroom ID cannot be null or empty.");
-        }
-        this.aScreenroom_ID = pScreenroom_ID;
-    }
-
-    /**
-     * Gets the name of the screenroom.
-     *
-     * @return the screenroom name.
-     * @throws IllegalArgumentException if the screenroom name is null or empty.
-     * @author Jarvy Lazan
-     */
-    public String getAScreenroom_Name() {
+    public String getScreenroom_Name() {
         return this.aScreenroom_Name;
     }
 
     /**
-     * Sets the name of the screenroom. Cannot be null or empty.
+     * Sets the name of the Screenroom. Cannot be null or empty.
      *
      * @param pScreenroom_Name the screenroom name to set.
-     * @throws IllegalArgumentException if the screenroom name is null or empty.
+     * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
      */
-    public void setAScreenroom_Name(String pScreenroom_Name) {
+    public void setScreenroom_Name(String pScreenroom_Name) {
         if (pScreenroom_Name == null || pScreenroom_Name.trim().isEmpty()) {
             throw new IllegalArgumentException("Screenroom Name cannot be null or empty.");
         }
