@@ -1,50 +1,74 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Show {
+public class Show implements Serializable{
 
     private static int aShowIDCounter = 1;
+    private final String aShowID;
+    private Movie aMovie;
+    private Screenroom aScreenroom;
+    private Showtime aShowtime;
+    private ETicket aTicket;
 
-    private String aShow_ID;
-    private LocalDate aShow_Date;
-    private String aClient_Name;
-    private String aMovie_Title;
-    private String aScreenroom_Name;
-    private String aShowtime_Time;
-
-    public Show() {}
-
-    public Show(LocalDate pShow_Date, String pClient_Name, String pMovie_Title, String pScreenroom_Name, String pShowtime_Time) {
-        this.aShow_ID = setaShowID();
-        this.aShow_Date = pShow_Date;
-        this.aClient_Name = pClient_Name;
-        this.aMovie_Title = pMovie_Title;
-        this.aScreenroom_Name = pScreenroom_Name;
-        this.aShowtime_Time = pShowtime_Time;
+    public Show() {
+        this.aShowID = generateShowID();
     }
 
-    public String getaShowID() {
-        return this.aShow_ID;
+    public Show(Movie pMovie, Screenroom pScreenroom, Showtime pShowtime, ETicket pTicket) {
+        this.aShowID = generateShowID();
+        setMovie(pMovie);
+        setScreenroom(pScreenroom);
+        setShowtime(pShowtime);
+        setETicket(pTicket);
     }
 
-    private static synchronized String setaShowID() {
+    private static synchronized String generateShowID() {
         return "S" + aShowIDCounter++;
     }
 
-    public LocalDate getaShowDate() {
-        return this.aShow_Date;
+    private Movie getMovie() {
+        return aMovie;
     }
 
-    public void setaShowDate(LocalDate pShow_Date) {
-        if (pShow_Date == null) {
-            throw new IllegalArgumentException("Show date cannot be null.");
+    private void setMovie(Movie pMovie) {
+        if (pMovie == null) {
+            throw new IllegalArgumentException("Movie cannot be null.");
         }
+        aMovie = pMovie;
+    }
 
-        if (pShow_Date.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Show date cannot be in the past.");
+    private Screenroom getScreenroom() {
+        return aScreenroom;
+    }
+
+    private void setScreenroom(Screenroom pScreenroom) {
+        if (pScreenroom == null) {
+            throw new IllegalArgumentException("Screenroom cannot be null.");
         }
+        aScreenroom = pScreenroom;
+    }
 
-        this.aShow_Date = pShow_Date;
+    private Showtime getShowtime() {
+        return aShowtime;
+    }
+
+    private void setShowtime(Showtime pShowtime) {
+        if (pShowtime == null) {
+            throw new IllegalArgumentException("Showtime cannot be null.");
+        }
+        aShowtime = pShowtime;
+    }
+
+    private ETicket getTicket() {
+        return aTicket;
+    }
+
+    private void setETicket(ETicket pTicket) {
+        if (pTicket == null) {
+            throw new IllegalArgumentException("ETicket cannot be null.");
+        }
+        aTicket = pTicket;
     }
 }
