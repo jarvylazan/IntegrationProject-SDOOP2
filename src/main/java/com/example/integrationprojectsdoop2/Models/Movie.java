@@ -28,13 +28,24 @@ public class Movie implements Serializable {
     private String aMovie_Synopsis;
 
     /**
+     * Default constructor for the Movie class.
+     * Automatically generates a unique Movie ID.
+     * Other attributes (title, genre, synopsis) can be set using setter methods.
+     *
+     * @author Jarvy Lazan
+     */
+    public Movie() {
+        this.aMovie_ID = generateMovieID();
+    }
+
+    /**
      * Constructs a Movie with the specified title, genre, and synopsis.
      *
      * @param pMovie_Title   the title of the movie (cannot be null or empty).
      * @param pMovie_Genre   the genre of the movie (cannot be null or empty).
      * @param pMovie_Synopsis the synopsis of the movie (cannot be null or empty).
      * @throws IllegalArgumentException if any parameter is null or empty.
-     * @author Jarvy
+     * @author Jarvy Lazan
      */
     public Movie(String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
         this.aMovie_ID = generateMovieID();
