@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +12,11 @@ import java.time.format.DateTimeFormatter;
  * @author Samuel
  */
 public class Client extends User {
+
+    /** The serialID for the files. */
+    @Serial
+    private static final long serialVersionUID = -5727091206595037865L;
+
 
     /** Counter for generating unique Client IDs. */
     private static int clientIDCounter = 1;
