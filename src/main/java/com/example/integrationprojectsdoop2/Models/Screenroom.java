@@ -30,7 +30,7 @@ public class Screenroom implements Serializable {
      * */
     public Screenroom(String pScreenroom_Name) {
         this.aScreenroom_ID = generateScreenroomID();
-        this.setAScreenroom_Name(pScreenroom_Name);
+        this.setScreenroom_Name(pScreenroom_Name);
     }
 
     /**
@@ -60,7 +60,7 @@ public class Screenroom implements Serializable {
      * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
      */
-    public String getAScreenroom_Name() {
+    public String getScreenroom_Name() {
         return this.aScreenroom_Name;
     }
 
@@ -71,7 +71,7 @@ public class Screenroom implements Serializable {
      * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
      */
-    public void setAScreenroom_Name(String pScreenroom_Name) {
+    public void setScreenroom_Name(String pScreenroom_Name) {
         if (pScreenroom_Name == null || pScreenroom_Name.trim().isEmpty()) {
             throw new IllegalArgumentException("Screenroom Name cannot be null or empty.");
         }
