@@ -21,6 +21,10 @@ public class Screenroom implements Serializable {
     /** Name of the Screenroom. */
     private String aScreenroom_Name;
 
+    public Screenroom() {
+        this.aScreenroom_ID = generateScreenroomID();
+    }
+
     /**
      * Constructs a Screenroom with the specified name.
      *
