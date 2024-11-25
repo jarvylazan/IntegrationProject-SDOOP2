@@ -7,8 +7,8 @@ package com.example.integrationprojectsdoop2.Models;
  * @author Jarvy Lazan
  */
 public class Screenroom {
-    private int screenroom_ID;
-    private String screenroom_Name;
+    private int aScreenroom_ID;
+    private String aScreenroom_Name;
 
     /**
      * Default constructor for creating a Screenroom instance without initializing fields.
@@ -22,14 +22,14 @@ public class Screenroom {
      * Parameterized constructor for creating a Screenroom instance with specified values.
      * Uses setters for validation.
      *
-     * @param screenroom_ID   the unique identifier of the screenroom (must be positive).
-     * @param screenroom_Name the name of the screenroom (cannot be null or empty).
+     * @param pScreenroom_ID   the unique identifier of the screenroom (must be positive).
+     * @param pScreenroom_Name the name of the screenroom (cannot be null or empty).
      * @throws IllegalArgumentException if any parameter is invalid.
      * @author Jarvy Lazan
      */
-    public Screenroom(int screenroom_ID, String screenroom_Name) {
-        setScreenroom_ID(screenroom_ID);
-        setScreenroom_Name(screenroom_Name);
+    public Screenroom(int pScreenroom_ID, String pScreenroom_Name) {
+        setAScreenroom_ID(pScreenroom_ID);
+        setAScreenroom_Name(pScreenroom_Name);
     }
 
     /**
@@ -38,22 +38,22 @@ public class Screenroom {
      * @return the screenroom ID.
      * @author Jarvy Lazan
      */
-    public int getScreenroom_ID() {
-        return screenroom_ID;
+    public int getAScreenroom_ID() {
+        return aScreenroom_ID;
     }
 
     /**
      * Sets the unique identifier of the screenroom. Must be positive.
      *
-     * @param screenroom_ID the screenroom ID to set.
+     * @param pScreenroom_ID the screenroom ID to set.
      * @throws IllegalArgumentException if the screenroom ID is not positive.
      * @author Jarvy Lazan
      */
-    public void setScreenroom_ID(int screenroom_ID) {
-        if (screenroom_ID <= 0) {
+    public void setAScreenroom_ID(int pScreenroom_ID) {
+        if (pScreenroom_ID <= 0) {
             throw new IllegalArgumentException("Screenroom ID must be a positive integer.");
         }
-        this.screenroom_ID = screenroom_ID;
+        this.aScreenroom_ID = pScreenroom_ID;
     }
 
     /**
@@ -63,21 +63,21 @@ public class Screenroom {
      * @throws IllegalArgumentException if the screenroom name is null or empty.
      * @author Jarvy Lazan
      */
-    public String getScreenroom_Name() {
-        return screenroom_Name;
+    public String getAScreenroom_Name() {
+        return aScreenroom_Name;
     }
 
     /**
      * Sets the name of the screenroom. Cannot be null or empty.
      *
-     * @param screenroom_Name the screenroom name to set.
+     * @param pScreenroom_Name the screenroom name to set.
      * @throws IllegalArgumentException if the screenroom name is null or empty.
      * @author Jarvy Lazan
      */
-    public void setScreenroom_Name(String screenroom_Name) {
-        if (screenroom_Name == null || screenroom_Name.trim().isEmpty()) {
+    public void setAScreenroom_Name(String pScreenroom_Name) {
+        if (pScreenroom_Name == null || pScreenroom_Name.trim().isEmpty()) {
             throw new IllegalArgumentException("Screenroom Name cannot be null or empty.");
         }
-        this.screenroom_Name = screenroom_Name;
+        this.aScreenroom_Name = pScreenroom_Name;
     }
 }
