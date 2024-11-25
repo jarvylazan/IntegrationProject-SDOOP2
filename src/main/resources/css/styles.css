@@ -1,0 +1,4 @@
+.hover-label:hover {
+    -fx-underline: true;
+    -fx-cursor: hand; /* Optional: change cursor to pointer */
+}
