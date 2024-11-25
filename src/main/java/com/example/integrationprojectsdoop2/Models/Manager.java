@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,6 +11,10 @@ import java.io.Serializable;
  * @author Samuel
  */
 public class Manager extends User {
+
+    /** The serialID for the files. */
+    @Serial
+    private static final long serialVersionUID = 1824568323534453788L;
 
     /** Counter for generating unique Manager IDs. */
     private static int aManagerIDCounter = 1;
