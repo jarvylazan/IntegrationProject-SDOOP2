@@ -32,10 +32,10 @@ public class Movie {
      * @author Jarvy Lazan
      */
     public Movie(String pMovie_ID, String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
-        setAMovie_ID(pMovie_ID);
-        setAMovie_Title(pMovie_Title);
-        setAMovie_Genre(pMovie_Genre);
-        setAMovie_Synopsis(pMovie_Synopsis);
+        this.setAMovie_ID(pMovie_ID);
+        this.setAMovie_Title(pMovie_Title);
+        this.setAMovie_Genre(pMovie_Genre);
+        this.setAMovie_Synopsis(pMovie_Synopsis);
     }
 
     /**
