@@ -2,20 +2,16 @@ package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Models.User;
-import com.example.integrationprojectsdoop2.MovieTheatreApplication;
+import com.example.integrationprojectsdoop2.Models.UserManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class LoginController {
 
@@ -25,14 +21,9 @@ public class LoginController {
     @FXML
     private PasswordField loginPasswordField;
 
-    private List<User> aManagersList;
+    private final List<User> aManagersList = UserManager.getInstance().getaManagersList();
 
-    private List<User> aClientsList;
-
-    public void initialize() {
-        aClientsList = loginReader("clients.ser");
-        aManagersList = loginReader("managers.ser");
-    }
+    private final List<User> aClientsList = UserManager.getInstance().getaClientsList();
 
     @FXML
     protected void onLoginButtonClicked(javafx.event.ActionEvent pEvent) {
@@ -104,7 +95,7 @@ public class LoginController {
 
     public void onSignUpClick(MouseEvent mouseEvent){
         try{
-            FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/SignUp-View.fxml"));
+            FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/sign-up-view.fxml"));
             Parent signUpView = SignUpfxmlLoader.load();
             emailLoginTextField.getScene().setRoot(signUpView);
         } catch (IOException e) {

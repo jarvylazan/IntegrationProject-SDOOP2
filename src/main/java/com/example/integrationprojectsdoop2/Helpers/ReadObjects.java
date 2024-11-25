@@ -21,17 +21,22 @@ import java.util.List;
  * }
  * }
  * </pre>
+ *
+ * @author Samuel
  */
 public class ReadObjects {
 
-    /** The name of the file from which objects are read. */
-    private String aFileName;
+    /**
+     * The name of the file from which objects are read.
+     */
+    private final String aFileName;
 
     /**
      * Constructs a new instance of {@code ReadObjects} with the specified file name.
      *
      * @param pFileName the name of the file to read objects from.
      *                  Must not be {@code null} or empty.
+     * @author Samuel
      */
     public ReadObjects(String pFileName) {
         if (pFileName == null || pFileName.isEmpty()) {
@@ -50,6 +55,7 @@ public class ReadObjects {
      * @throws FileNotFoundException  if the specified file does not exist.
      * @throws IOException            if an I/O error occurs while reading the file.
      * @throws ClassNotFoundException if a class of a serialized object cannot be found.
+     * @author Samuel
      */
     public List<Object> read() throws IOException, ClassNotFoundException {
         List<Object> objectsList = new ArrayList<>();
@@ -64,7 +70,7 @@ public class ReadObjects {
                     Object obj = os.readObject();
                     objectsList.add(obj);
                 } catch (EOFException e) {
-                    break; // End of file reached
+                    break; // End of the file reached
                 }
             }
 
@@ -78,14 +84,5 @@ public class ReadObjects {
 
         System.out.println("Successfully read " + objectsList.size() + " objects.");
         return objectsList;
-    }
-
-    /**
-     * Gets the name of the file being read.
-     *
-     * @return the file name.
-     */
-    public String getaFileName() {
-        return aFileName;
     }
 }
