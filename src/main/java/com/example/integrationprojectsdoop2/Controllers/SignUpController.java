@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
+import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.User;
 import com.example.integrationprojectsdoop2.Models.UserManager;
@@ -15,65 +16,90 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Controller for the Sign-Up view.
+ * Handles user sign-up operations such as validating input, creating new users, and navigating between views.
+ * Implements encapsulation and includes detailed Javadoc for maintainability.
+ *
+ * @author Samuel
+ */
 public class SignUpController {
+
+    /** Text field for entering the user's full name. */
     @FXML
-    private TextField SignUpName;
+    private TextField signUpName;
 
+    /** Text field for entering the user's email address. */
     @FXML
-    private TextField SignUpEmail;
+    private TextField signUpEmail;
 
+    /** Password field for entering the user's password. */
     @FXML
-    private PasswordField SignUpPassword;
+    private PasswordField signUpPassword;
 
+    /** Password field for confirming the user's password. */
     @FXML
-    private PasswordField SignUpConfirmPassword;
+    private PasswordField signUpConfirmPassword;
 
-
-    public void onSighOnClickButton(ActionEvent pActionEvent) throws IOException {
+    /**
+     * Handles the "Sign Up" button click event.
+     * Validates the user's input, creates a new client, and adds it to the UserManager.
+     * If the sign-up is successful, navigate to the client dashboard.
+     *
+     * @param pActionEvent the action event triggered by the button click.
+     * @throws IOException if there is an issue navigating to the new view or saving user data.
+     * @author Samuel
+     */
+    public void onSignUpClickButton(ActionEvent pActionEvent) throws IOException {
         try {
-            boolean flag = false;
-
-            String fullName = SignUpName.getText().trim();
-            if (fullName.isEmpty() || !fullName.matches("^[a-zA-Z]+ [a-zA-Z]+$")) {
-                throw new Exception("You need to provide your full name. eg: John Doe");
+            // Validate the user's full name
+            String fullName = signUpName.getText().trim();
+            if (fullName.isEmpty() || !fullName.matches("^[a-zA-Z-]+ [a-zA-Z-]+$")) {
+                throw new IllegalArgumentException("You need to provide your full name. \neg: John Doe");
             }
             if (fullName.length() < 3 || fullName.length() > 100) {
-                throw new Exception("You need to provide at least 3 characters long and no longer than 100 characters.");
+                throw new IllegalArgumentException("You need to provide at least 3 characters and no more than 100 characters.");
             }
 
-            String email = SignUpEmail.getText().trim();
+            // Validate the user's email
+            String email = signUpEmail.getText().trim();
             if (email.isEmpty() || !email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-                throw new Exception("You need to provide a valid email address. eg: example@example.com");
+                throw new IllegalArgumentException("You need to provide a valid email address. \neg: example@example.com");
             }
-
-            for(User clients: UserManager.getInstance().getaClientsList()){
-                if(email.equals(clients.getaUser_Email())){
-                    throw new Exception("This email is already subscribe. Please try again.");
+            for (User client : UserManager.getInstance().getaClientsList()) {
+                if (email.equals(client.getaUser_Email())) {
+                    throw new IllegalArgumentException("This email is already subscribed. Please try again.");
                 }
             }
 
-            String ConfirmPassword = SignUpConfirmPassword.getText().trim();
-            if (ConfirmPassword.isEmpty()) {
-                throw new Exception("You need to provide a Confirmation password");
+            // Validate the user's password
+            String confirmPassword = signUpConfirmPassword.getText().trim();
+            if (confirmPassword.isEmpty()) {
+                throw new IllegalArgumentException("You need to provide a confirmation password.");
+            }
+            String password = signUpPassword.getText().trim();
+            if (password.isEmpty()) {
+                throw new IllegalArgumentException("You need to enter a password.");
+            }
+            if (password.length() > 8) {
+                throw new IllegalArgumentException("Your password must be no more than 8 characters.");
+            }
+            if (!password.equals(confirmPassword)) {
+                throw new IllegalArgumentException("Passwords do not match.");
             }
 
-            String signUpPassword = SignUpPassword.getText().trim();
-            if (signUpPassword.isEmpty()) {
-                throw new Exception("You need to enter a password.");
-            }
-            if (signUpPassword.length() > 8) {
-                throw new Exception("You need to provide a password no more than 8 characters.");
-            }
-            if (!signUpPassword.equals(SignUpConfirmPassword.getText())) {
-                throw new Exception("Passwords do not match.");
-            }
-
-
-            User newClient = new Client(fullName, email, signUpPassword);
+            // Create a new client and add to UserManager
+            User newClient = new Client(fullName, email, password);
             UserManager.getInstance().addClient(newClient);
-            System.out.println(((Client) newClient).getClientID() + ", " + newClient.getaUser_Name() + ", " + newClient.getaUser_Email() + ", " + newClient.getaUser_Password() + ", " + (((Client) newClient).getFormattedSubscriptionDate()));
-            System.out.println("New client created."); // add a success MESSAGE INSTEAD.
-/* TO BE DONE once the controller is done for the view.
+            System.out.println("New client created: " +
+                    ((Client) newClient).getClientID() + ", " +
+                    newClient.getaUser_Name() + ", " +
+                    newClient.getaUser_Email() + ", " +
+                    newClient.getaUser_Password() + ", " +
+                    ((Client) newClient).getFormattedSubscriptionDate());
+            // Success message
+
+            /* TO BE DONE once the controller is done for the view.
             FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/client-dashboard-view.fxml"));
             Parent clientDashboardView = SignUpfxmlLoader.load();
 
@@ -81,31 +107,40 @@ public class SignUpController {
             Stage stage = (Stage) SignUpName.getScene().getWindow();
             stage.setScene(new Scene(clientDashboardView)); // Set the new scene
             stage.show(); // Make sure to show the stage*/
+
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
+            AlertHelper validation = new AlertHelper(e.getMessage());
+            validation.executeWarningAlert();
         }
     }
 
-    public void onCancelClickButton(javafx.event.ActionEvent pActionEvent) {
-        try { // Load the login view FXML
+    /**
+     * Handles the "Cancel" button click event.
+     * Navigates the user back to the login view.
+     *
+     * @param pActionEvent the action event triggered by the button click.
+     * @author Samuel
+     */
+    public void onCancelClickButton(ActionEvent pActionEvent) {
+        try {
+            // Load the login view FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/Login-View.fxml"));
             Parent loginView = loader.load();
 
             // Create a new scene for the login view
-            javafx.scene.Scene newScene = new javafx.scene.Scene(loginView);
-
-            // Apply the stylesheet to the new scene
+            Scene newScene = new Scene(loginView);
             newScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
 
-            // Get the current stage and set the new scene
-            javafx.stage.Stage currentStage = (javafx.stage.Stage) ((javafx.scene.Node) pActionEvent.getSource()).getScene().getWindow();
+            // Set the new scene to the current stage
+            Stage currentStage = (Stage) ((javafx.scene.Node) pActionEvent.getSource()).getScene().getWindow();
             currentStage.setScene(newScene);
             currentStage.show();
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error loading the Login-View.fxml: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error loading the Login-View.fxml: " + e.getMessage());
+            AlertHelper errorCatch = new AlertHelper(e.getMessage());
+            errorCatch.executeErrorAlert();
         }
     }
 }

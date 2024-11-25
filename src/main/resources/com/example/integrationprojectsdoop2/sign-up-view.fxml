@@ -26,31 +26,31 @@
             </font>
          </Label>
          <VBox prefHeight="11.0" prefWidth="408.0" />
-         <TextField fx:id="SignUpName" prefHeight="36.0" prefWidth="386.0" promptText="John Doe">
+         <TextField fx:id="signUpName" prefHeight="36.0" prefWidth="386.0" promptText="John Doe">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>
          </TextField>
          <VBox prefHeight="15.0" prefWidth="408.0" />
-         <TextField fx:id="SignUpEmail" prefHeight="36.0" prefWidth="410.0" promptText="email">
+         <TextField fx:id="signUpEmail" prefHeight="36.0" prefWidth="410.0" promptText="email">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>
          </TextField>
          <VBox prefHeight="15.0" prefWidth="408.0" />
-         <PasswordField fx:id="SignUpPassword" prefHeight="36.0" prefWidth="410.0" promptText="Password">
+         <PasswordField fx:id="signUpPassword" prefHeight="36.0" prefWidth="410.0" promptText="Password">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>
          </PasswordField>
          <VBox prefHeight="15.0" prefWidth="408.0" />
-         <PasswordField fx:id="SignUpConfirmPassword" prefHeight="36.0" prefWidth="410.0" promptText="Retype Password">
+         <PasswordField fx:id="signUpConfirmPassword" prefHeight="36.0" prefWidth="410.0" promptText="Retype Password">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>
          </PasswordField>
          <VBox prefHeight="23.0" prefWidth="408.0" />
-          <Button defaultButton="true" onAction="#onSighOnClickButton" prefHeight="36.0" prefWidth="388.0" style="-fx-background-color: #82d669; -fx-text-fill: white;" text="Sign Up">
+          <Button defaultButton="true" onAction="#onSignUpClickButton" prefHeight="36.0" prefWidth="388.0" style="-fx-background-color: #82d669; -fx-text-fill: white;" text="Sign Up">
             <font>
                <Font name="System Bold" size="13.0" />
             </font>
