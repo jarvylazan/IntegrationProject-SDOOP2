@@ -7,7 +7,7 @@ package com.example.integrationprojectsdoop2.Models;
  * @author Jarvy Lazan
  */
 public class Movie {
-    private int aMovie_ID;
+    private String aMovie_ID;
     private String aMovie_Title;
     private String aMovie_Genre;
     private String aMovie_Synopsis;
@@ -24,14 +24,14 @@ public class Movie {
      * Parameterized constructor for creating a Movie instance with specified values.
      * Uses setters for validation.
      *
-     * @param pMovie_ID      the unique identifier of the movie (must be positive).
+     * @param pMovie_ID      the unique identifier of the movie (cannot be null or empty).
      * @param pMovie_Title   the title of the movie (cannot be null or empty).
      * @param pMovie_Genre   the genre of the movie (cannot be null or empty).
      * @param pMovie_Synopsis the synopsis of the movie (cannot be null or empty).
      * @throws IllegalArgumentException if any parameter is invalid.
      * @author Jarvy Lazan
      */
-    public Movie(int pMovie_ID, String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
+    public Movie(String pMovie_ID, String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
         setAMovie_ID(pMovie_ID);
         setAMovie_Title(pMovie_Title);
         setAMovie_Genre(pMovie_Genre);
@@ -42,22 +42,23 @@ public class Movie {
      * Gets the unique identifier of the movie.
      *
      * @return the movie ID.
+     * @throws IllegalArgumentException if the movie ID is null or empty.
      * @author Jarvy Lazan
      */
-    public int getAMovie_ID() {
-        return aMovie_ID;
+    public String getAMovie_ID() {
+        return this.aMovie_ID;
     }
 
     /**
-     * Sets the unique identifier of the movie. Must be positive.
+     * Sets the unique identifier of the movie. Cannot be null or empty.
      *
      * @param pMovie_ID the movie ID to set.
-     * @throws IllegalArgumentException if the movie ID is not positive.
+     * @throws IllegalArgumentException if the movie ID is null or empty.
      * @author Jarvy Lazan
      */
-    public void setAMovie_ID(int pMovie_ID) {
-        if (pMovie_ID <= 0) {
-            throw new IllegalArgumentException("Movie ID must be a positive integer.");
+    public void setAMovie_ID(String pMovie_ID) {
+        if (pMovie_ID == null || pMovie_ID.trim().isEmpty()) {
+            throw new IllegalArgumentException("Movie ID cannot be null or empty.");
         }
         this.aMovie_ID = pMovie_ID;
     }
@@ -69,7 +70,7 @@ public class Movie {
      * @author Jarvy Lazan
      */
     public String getAMovie_Title() {
-        return aMovie_Title;
+        return this.aMovie_Title;
     }
 
     /**
@@ -90,10 +91,11 @@ public class Movie {
      * Gets the genre of the movie.
      *
      * @return the movie genre.
+     * @throws IllegalArgumentException if the genre is null or empty.
      * @author Jarvy Lazan
      */
     public String getAMovie_Genre() {
-        return aMovie_Genre;
+        return this.aMovie_Genre;
     }
 
     /**
@@ -114,10 +116,11 @@ public class Movie {
      * Gets the synopsis of the movie.
      *
      * @return the movie synopsis.
+     * @throws IllegalArgumentException if the synopsis is null or empty.
      * @author Jarvy Lazan
      */
     public String getAMovie_Synopsis() {
-        return aMovie_Synopsis;
+        return this.aMovie_Synopsis;
     }
 
     /**
