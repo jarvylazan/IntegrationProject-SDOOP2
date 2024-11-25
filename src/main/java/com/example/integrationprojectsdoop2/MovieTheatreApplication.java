@@ -18,7 +18,7 @@ import java.util.Objects;
 public class MovieTheatreApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("Login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 450, 513);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
         stage.setTitle("Log in");
