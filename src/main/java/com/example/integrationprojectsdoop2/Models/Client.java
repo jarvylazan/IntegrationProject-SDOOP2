@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
  * A Client has a subscription date and a unique client ID.
  * Implements {@link Serializable} for object serialization.
  */
-public class Client extends User implements Serializable {
+public class Client extends User {
 
     /** Counter for generating unique Client IDs. */
     private static int clientIDCounter = 1;
@@ -39,16 +39,12 @@ public class Client extends User implements Serializable {
      * @param pUser_Name              the name of the user.
      * @param pUser_Email             the email address of the user.
      * @param pUser_Password          the password of the user.
-     * @param pClientSubscriptionDate the subscription date for the client.
      * @throws IllegalArgumentException if the subscription date is null.
      */
-    public Client(String pUser_Name, String pUser_Email, String pUser_Password, LocalDate pClientSubscriptionDate) {
+    public Client(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
         this.clientID = generateClientID();
-        if (pClientSubscriptionDate == null) {
-            throw new IllegalArgumentException("Subscription date cannot be null.");
-        }
-        this.aClientSubscriptionDate = pClientSubscriptionDate;
+        this.aClientSubscriptionDate =  LocalDate.now();
     }
 
     /**

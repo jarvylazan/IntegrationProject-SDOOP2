@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Implements {@link Serializable} for object serialization.
  * Each Manager is assigned a unique manager ID.
  */
-public class Manager extends User implements Serializable {
+public class Manager extends User {
 
     /** Counter for generating unique Manager IDs. */
     private static int managerIDCounter = 1;
