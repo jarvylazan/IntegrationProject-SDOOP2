@@ -33,7 +33,7 @@ public class AlertHelper {
      * @author Jarvy Lazan
      */
     public void executeSuccessAlert() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, aAlertMessage);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, aAlertMessage);
         alert.showAndWait();
     }
 
