@@ -171,7 +171,7 @@ public class LoginController {
                     FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("manager-dashboard.fxml")));
                     Parent root = fxmlLoader.load();
 
-                    Scene scene = new Scene(root, 450, 513);
+                    Scene scene = new Scene(root);
                     Stage stage = new Stage();
                     stage.setTitle("Manager Dashboard");
                     stage.setScene(scene);
