@@ -40,18 +40,18 @@ public class LoginController {
     private PasswordField loginPasswordField;
 
     /** List of managers retrieved from the {@link UserManager} singleton instance. */
-    private final List<User> managersList;
+    private final List<User> aManagersList;
 
     /** List of clients retrieved from the {@link UserManager} singleton instance. */
-    private final List<User> clientsList;
+    private final List<User> aClientsList;
 
     /**
      * Initializes a new instance of the {@code LoginController} class.
      * Retrieves the manager and client lists from {@link UserManager}.
      */
     public LoginController() {
-        this.managersList = UserManager.getInstance().getaManagersList();
-        this.clientsList = UserManager.getInstance().getaClientsList();
+        this.aManagersList = UserManager.getInstance().getaManagersList();
+        this.aClientsList = UserManager.getInstance().getaClientsList();
     }
 
     /**
@@ -88,6 +88,7 @@ public class LoginController {
             Parent signUpView = signUpLoader.load();
             emailLoginTextField.getScene().setRoot(signUpView);
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("Error loading Sign-Up view: " + e.getMessage());
         }
     }
@@ -99,7 +100,7 @@ public class LoginController {
      * @author Samuel
      */
     private void validateManagersExist() throws Exception {
-        if (managersList == null || managersList.isEmpty()) {
+        if (aManagersList == null || aManagersList.isEmpty()) {
             throw new Exception("No manager to manage the system. Please add at least one manager to the system.");
         }
     }
@@ -153,7 +154,7 @@ public class LoginController {
         boolean isUserAuthenticated = false;
 
         // Check in the client list
-        for (User client : clientsList) {
+        for (User client : aClientsList) {
             if (client.getaUser_Email().equals(pEmail) && client.getaUser_Password().equals(pPassword)) {
                 System.out.println("The Client dashboard view");
                 // TODO: fetch the Client view
@@ -164,7 +165,7 @@ public class LoginController {
 
         // Check in the manager list if not authenticated yet
         if (!isUserAuthenticated) {
-            for (User manager : managersList) {
+            for (User manager : aManagersList) {
                 if (manager.getaUser_Email().equals(pEmail) && manager.getaUser_Password().equals(pPassword)) {
                     System.out.println("The Manager dashboard view");
                     // TODO: fetch the Manager view
