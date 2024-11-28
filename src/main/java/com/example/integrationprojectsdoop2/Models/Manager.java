@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,11 +12,15 @@ import java.io.Serializable;
  */
 public class Manager extends User {
 
+    /** The serialID for the files. */
+    @Serial
+    private static final long serialVersionUID = 1824568323534453788L;
+
     /** Counter for generating unique Manager IDs. */
-    private static int managerIDCounter = 1;
+    private static int aManagerIDCounter = 1;
 
     /** Unique ID for each Manager. */
-    private final String managerID;
+    private final String aManagerID;
 
     /**
      * Constructs a Manager with the specified user details.
@@ -28,7 +33,7 @@ public class Manager extends User {
      */
     public Manager(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
-        this.managerID = generateManagerID();
+        this.aManagerID = generateManagerID();
     }
 
     /**
@@ -38,7 +43,7 @@ public class Manager extends User {
      * @author Samuel
      */
     private static synchronized String generateManagerID() {
-        return "M" + managerIDCounter++;
+        return "M" + aManagerIDCounter++;
     }
 
     /**
@@ -48,6 +53,6 @@ public class Manager extends User {
      * @author Samuel
      */
     public String getManagerID() {
-        return managerID;
+        return aManagerID;
     }
 }

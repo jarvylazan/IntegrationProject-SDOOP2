@@ -1,65 +1,77 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serializable;
+
 /**
  * Represents a Movie with attributes such as ID, title, genre, and synopsis.
- * Provides validation for attribute values to ensure data integrity.
+ * Implements {@link Serializable} for object serialization.
+ * Each Movie is assigned a unique Movie ID.
+ * Provides validation for input values to ensure data integrity.
  *
  * @author Jarvy Lazan
  */
-public class Movie {
-    private int movie_ID;
-    private String movie_Title;
-    private String movie_Genre;
-    private String movie_Synopsis;
+public class Movie implements Serializable {
+
+    /** Counter for generating unique Movie IDs. */
+    private static int movieIDCounter = 1;
+
+    /** Unique ID for each Movie. */
+    private final String aMovie_ID;
+
+    /** Title of the Movie. */
+    private String aMovie_Title;
+
+    /** Genre of the Movie. */
+    private String aMovie_Genre;
+
+    /** Synopsis of the Movie. */
+    private String aMovie_Synopsis;
 
     /**
-     * Default constructor for creating a Movie instance without initializing fields.
+     * Default constructor for the Movie class.
+     * Automatically generates a unique Movie ID.
+     * Other attributes (title, genre, synopsis) can be set using setter methods.
      *
      * @author Jarvy Lazan
      */
     public Movie() {
+        this.aMovie_ID = generateMovieID();
     }
 
     /**
-     * Parameterized constructor for creating a Movie instance with specified values.
-     * Uses setters for validation.
+     * Constructs a Movie with the specified title, genre, and synopsis.
      *
-     * @param movie_ID      the unique identifier of the movie (must be positive).
-     * @param movie_Title   the title of the movie (cannot be null or empty).
-     * @param movie_Genre   the genre of the movie (cannot be null or empty).
-     * @param movie_Synopsis the synopsis of the movie (cannot be null or empty).
-     * @throws IllegalArgumentException if any parameter is invalid.
+     * @param pMovie_Title   the title of the movie (cannot be null or empty).
+     * @param pMovie_Genre   the genre of the movie (cannot be null or empty).
+     * @param pMovie_Synopsis the synopsis of the movie (cannot be null or empty).
+     * @throws IllegalArgumentException if any parameter is null or empty.
      * @author Jarvy Lazan
      */
-    public Movie(int movie_ID, String movie_Title, String movie_Genre, String movie_Synopsis) {
-        setMovie_ID(movie_ID);
-        setMovie_Title(movie_Title);
-        setMovie_Genre(movie_Genre);
-        setMovie_Synopsis(movie_Synopsis);
+    public Movie(String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
+        this.aMovie_ID = generateMovieID();
+        this.setAMovie_Title(pMovie_Title);
+        this.setAMovie_Genre(pMovie_Genre);
+        this.setAMovie_Synopsis(pMovie_Synopsis);
     }
 
     /**
-     * Gets the unique identifier of the movie.
+     * Generates a unique Movie ID by incrementing the counter.
      *
-     * @return the movie ID.
+     * @return the generated Movie ID in the format "MOV<number>".
      * @author Jarvy Lazan
      */
-    public int getMovie_ID() {
-        return movie_ID;
+    private static synchronized String generateMovieID() {
+        return "MOV" + movieIDCounter++;
     }
 
     /**
-     * Sets the unique identifier of the movie. Must be positive.
+     * Gets the unique Movie ID.
      *
-     * @param movie_ID the movie ID to set.
-     * @throws IllegalArgumentException if the movie ID is not positive.
+     * @return the Movie ID.
      * @author Jarvy Lazan
      */
-    public void setMovie_ID(int movie_ID) {
-        if (movie_ID <= 0) {
-            throw new IllegalArgumentException("Movie ID must be a positive integer.");
-        }
-        this.movie_ID = movie_ID;
+    public String getAMovie_ID() {
+        return this.aMovie_ID;
     }
 
     /**
@@ -68,69 +80,71 @@ public class Movie {
      * @return the movie title.
      * @author Jarvy Lazan
      */
-    public String getMovie_Title() {
-        return movie_Title;
+    public String getAMovie_Title() {
+        return this.aMovie_Title;
     }
 
     /**
      * Sets the title of the movie. Cannot be null or empty.
      *
-     * @param movie_Title the movie title to set.
+     * @param pMovie_Title the movie title to set.
      * @throws IllegalArgumentException if the title is null or empty.
      * @author Jarvy Lazan
      */
-    public void setMovie_Title(String movie_Title) {
-        if (movie_Title == null || movie_Title.trim().isEmpty()) {
+    public void setAMovie_Title(String pMovie_Title) {
+        if (pMovie_Title == null || pMovie_Title.trim().isEmpty()) {
             throw new IllegalArgumentException("Movie Title cannot be null or empty.");
         }
-        this.movie_Title = movie_Title;
+        this.aMovie_Title = pMovie_Title;
     }
 
     /**
      * Gets the genre of the movie.
      *
      * @return the movie genre.
+     * @throws IllegalArgumentException if the genre is null or empty.
      * @author Jarvy Lazan
      */
-    public String getMovie_Genre() {
-        return movie_Genre;
+    public String getAMovie_Genre() {
+        return this.aMovie_Genre;
     }
 
     /**
      * Sets the genre of the movie. Cannot be null or empty.
      *
-     * @param movie_Genre the movie genre to set.
+     * @param pMovie_Genre the movie genre to set.
      * @throws IllegalArgumentException if the genre is null or empty.
      * @author Jarvy Lazan
      */
-    public void setMovie_Genre(String movie_Genre) {
-        if (movie_Genre == null || movie_Genre.trim().isEmpty()) {
+    public void setAMovie_Genre(String pMovie_Genre) {
+        if (pMovie_Genre == null || pMovie_Genre.trim().isEmpty()) {
             throw new IllegalArgumentException("Movie Genre cannot be null or empty.");
         }
-        this.movie_Genre = movie_Genre;
+        this.aMovie_Genre = pMovie_Genre;
     }
 
     /**
      * Gets the synopsis of the movie.
      *
      * @return the movie synopsis.
+     * @throws IllegalArgumentException if the synopsis is null or empty.
      * @author Jarvy Lazan
      */
-    public String getMovie_Synopsis() {
-        return movie_Synopsis;
+    public String getAMovie_Synopsis() {
+        return this.aMovie_Synopsis;
     }
 
     /**
      * Sets the synopsis of the movie. Cannot be null or empty.
      *
-     * @param movie_Synopsis the movie synopsis to set.
+     * @param pMovie_Synopsis the movie synopsis to set.
      * @throws IllegalArgumentException if the synopsis is null or empty.
      * @author Jarvy Lazan
      */
-    public void setMovie_Synopsis(String movie_Synopsis) {
-        if (movie_Synopsis == null || movie_Synopsis.trim().isEmpty()) {
+    public void setAMovie_Synopsis(String pMovie_Synopsis) {
+        if (pMovie_Synopsis == null || pMovie_Synopsis.trim().isEmpty()) {
             throw new IllegalArgumentException("Movie Synopsis cannot be null or empty.");
         }
-        this.movie_Synopsis = movie_Synopsis;
+        this.aMovie_Synopsis = pMovie_Synopsis;
     }
 }
