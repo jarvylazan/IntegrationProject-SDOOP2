@@ -85,6 +85,7 @@ public class LoginController {
             Parent signUpView = signUpLoader.load();
             emailLoginTextField.getScene().setRoot(signUpView);
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("Error loading Sign-Up view: " + e.getMessage());
         }
     }

@@ -17,7 +17,7 @@ public class Manager extends User {
     @Serial
     private static final long serialVersionUID = 1824568323534453788L;
 
-    private final List<User> aManagersList;
+    private final List<User> aManagersList  = UserManager.getInstance().getaManagersList();
 
     /** Counter for generating unique Manager IDs. */
     private int aManagerIDCounter = lastIncrement();
@@ -37,7 +37,6 @@ public class Manager extends User {
     public Manager(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
         this.aManagerID = generateManagerID();
-        this.aManagersList = UserManager.getInstance().getaManagersList();
     }
 
     /**
@@ -61,13 +60,11 @@ public class Manager extends User {
     }
 
     private int lastIncrement() {
-        if(aManagersList == null){
-            throw new NullPointerException("Managers list is null");
+        if (this.aManagersList == null || this.aManagersList.isEmpty()) {
+            return 1;  // Start at 1 if the list is empty or uninitialized
         }
-            int lastIncrement;
-            Manager lastManager = (Manager) aManagersList.getLast();
-
-            lastIncrement = Integer.parseInt(lastManager.getManagerID().substring(1));
-            return lastIncrement + 1;
+        Client lastClient = (Client) this.aManagersList.getLast();  // Get the last client
+        int lastIncrement = Integer.parseInt(lastClient.getClientID().substring(1));
+        return lastIncrement + 1;
     }
 }

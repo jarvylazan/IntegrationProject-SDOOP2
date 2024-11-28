@@ -45,7 +45,9 @@ public class SignUpController {
     /** List of clients retrieved from the {@link UserManager} singleton instance. */
     private final List<User> aClientsList;
 
-    public SignUpController(List<User> aClientsList) {
+
+
+    public SignUpController() {
         this.aClientsList = UserManager.getInstance().getaClientsList();
     }
 
@@ -97,7 +99,7 @@ public class SignUpController {
             }
 
             // Create a new client and add to UserManager
-            User newClient = new Client(fullName, email, password,this.aClientsList);
+            User newClient = new Client(fullName, email, password);
             UserManager.getInstance().addClient(newClient);
             System.out.println("New client created: " +
                     ((Client) newClient).getClientID() + ", " +
@@ -105,8 +107,12 @@ public class SignUpController {
                     newClient.getaUser_Email() + ", " +
                     newClient.getaUser_Password() + ", " +
                     ((Client) newClient).getFormattedSubscriptionDate());
-            // Success message
+            // TODO: might want to change the title and message inside the alert. ( need to change the AlertHelper)
+            AlertHelper clientAdd = new AlertHelper("Client Added: "+ newClient.getaUser_Email());
+            clientAdd.executeSuccessAlert();
 
+
+            // TODO: connect the client dashboard controller.
             /* TO BE DONE once the controller is done for the view.
             FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/client-dashboard-view.fxml"));
             Parent clientDashboardView = SignUpfxmlLoader.load();

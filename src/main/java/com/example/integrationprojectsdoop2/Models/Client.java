@@ -19,7 +19,7 @@ public class Client extends User {
     @Serial
     private static final long serialVersionUID = -5727091206595037865L;
 
-    private final List<User> aClientsList;
+    private final List<User> aClientsList = UserManager.getInstance().getaClientsList();
 
     /** Counter for generating unique Client IDs. */
     private int aClientIDCounter = lastIncrement();
@@ -40,9 +40,8 @@ public class Client extends User {
      */
     public Client() {
         super(); // Calls the default constructor of User
-        this.aClientID = generateClientID();
         this.aClientSubscriptionDate = LocalDate.now();
-        this.aClientsList = new ArrayList<>();
+        this.aClientID = generateClientID();
     }
 
     /**
@@ -54,11 +53,10 @@ public class Client extends User {
      * @throws IllegalArgumentException if the subscription date is null.
      * @author Samuel
      */
-    public Client(String pUser_Name, String pUser_Email, String pUser_Password, List<User> pClientList) {
+    public Client(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
-        this.aClientID = generateClientID();
         this.aClientSubscriptionDate =  LocalDate.now();
-        this.aClientsList = pClientList;
+        this.aClientID = generateClientID();
     }
 
     /**
