@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +41,15 @@ public class SignUpController {
     /** Password field for confirming the user's password. */
     @FXML
     private PasswordField signUpConfirmPassword;
+
+    /** List of clients retrieved from the {@link UserManager} singleton instance. */
+    private final List<User> aClientsList;
+
+
+
+    public SignUpController() {
+        this.aClientsList = UserManager.getInstance().getaClientsList();
+    }
 
     /**
      * Handles the "Sign Up" button click event.
@@ -97,8 +107,12 @@ public class SignUpController {
                     newClient.getaUser_Email() + ", " +
                     newClient.getaUser_Password() + ", " +
                     ((Client) newClient).getFormattedSubscriptionDate());
-            // Success message
+            // TODO: might want to change the title and message inside the alert. ( need to change the AlertHelper)
+            AlertHelper clientAdd = new AlertHelper("Client Added: "+ newClient.getaUser_Email());
+            clientAdd.executeSuccessAlert();
 
+
+            // TODO: connect the client dashboard controller.
             /* TO BE DONE once the controller is done for the view.
             FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/client-dashboard-view.fxml"));
             Parent clientDashboardView = SignUpfxmlLoader.load();

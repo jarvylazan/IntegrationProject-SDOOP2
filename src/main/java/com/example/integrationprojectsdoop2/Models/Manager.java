@@ -1,6 +1,8 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a Manager, which is a type of {@link User}.
@@ -11,11 +13,17 @@ import java.io.Serializable;
  */
 public class Manager extends User {
 
+    /** The serialID for the files. */
+    @Serial
+    private static final long serialVersionUID = 1824568323534453788L;
+
+    private final List<User> aManagersList  = UserManager.getInstance().getaManagersList();
+
     /** Counter for generating unique Manager IDs. */
-    private static int managerIDCounter = 1;
+    private int aManagerIDCounter = lastIncrement();
 
     /** Unique ID for each Manager. */
-    private final String managerID;
+    private final String aManagerID;
 
     /**
      * Constructs a Manager with the specified user details.
@@ -28,7 +36,7 @@ public class Manager extends User {
      */
     public Manager(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
-        this.managerID = generateManagerID();
+        this.aManagerID = generateManagerID();
     }
 
     /**
@@ -37,8 +45,8 @@ public class Manager extends User {
      * @return the generated Manager ID in the format "M<number>".
      * @author Samuel
      */
-    private static synchronized String generateManagerID() {
-        return "M" + managerIDCounter++;
+    private synchronized String generateManagerID() {
+        return "M" + aManagerIDCounter++;
     }
 
     /**
@@ -48,6 +56,15 @@ public class Manager extends User {
      * @author Samuel
      */
     public String getManagerID() {
-        return managerID;
+        return aManagerID;
+    }
+
+    private int lastIncrement() {
+        if (this.aManagersList == null || this.aManagersList.isEmpty()) {
+            return 1;  // Start at 1 if the list is empty or uninitialized
+        }
+        Client lastClient = (Client) this.aManagersList.getLast();  // Get the last client
+        int lastIncrement = Integer.parseInt(lastClient.getClientID().substring(1));
+        return lastIncrement + 1;
     }
 }
