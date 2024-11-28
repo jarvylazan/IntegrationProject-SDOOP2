@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="513.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="513.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.ReportViewController">
    <children>
       <VBox prefHeight="513.0" prefWidth="450.0" />
       <Button layoutX="319.0" layoutY="436.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="95.0" text="Back">
