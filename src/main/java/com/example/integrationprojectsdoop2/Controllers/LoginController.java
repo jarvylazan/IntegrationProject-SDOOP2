@@ -2,12 +2,15 @@ package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Models.User;
 import com.example.integrationprojectsdoop2.Models.UserManager;
+import com.example.integrationprojectsdoop2.MovieTheatreApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -165,6 +168,14 @@ public class LoginController {
                 if (manager.getaUser_Email().equals(pEmail) && manager.getaUser_Password().equals(pPassword)) {
                     System.out.println("The Manager dashboard view");
                     // TODO: fetch the Manager view
+                    FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("manager-dashboard.fxml")));
+                    Parent root = fxmlLoader.load();
+
+                    Scene scene = new Scene(root, 450, 513);
+                    Stage stage = new Stage();
+                    stage.setTitle("Manager Dashboard");
+                    stage.setScene(scene);
+                    stage.show();
                     isUserAuthenticated = true;
                     break;
                 }
