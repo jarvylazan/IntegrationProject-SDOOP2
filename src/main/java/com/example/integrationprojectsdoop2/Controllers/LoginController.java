@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
+import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Models.User;
 import com.example.integrationprojectsdoop2.Models.UserManager;
 import com.example.integrationprojectsdoop2.MovieTheatreApplication;
@@ -68,10 +69,11 @@ public class LoginController {
             validateManagersExist();
             String email = validateAndGetEmail();
             String password = validateAndGetPassword();
-            authenticateUser(email, password);
+            authenticateUser(email, password); // TODO:Maybe not creating a new window but using the one we are currently using or closing the back one. See exemple login view -> Singup view
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // TODO: Implement user-facing error display (e.g., showWarning(e.getMessage()))
+            AlertHelper loginError = new AlertHelper(e.getMessage());
+            loginError.executeErrorAlert();
         }
     }
 
@@ -88,8 +90,9 @@ public class LoginController {
             Parent signUpView = signUpLoader.load();
             emailLoginTextField.getScene().setRoot(signUpView);
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("Error loading Sign-Up view: " + e.getMessage());
+            AlertHelper SignupError = new AlertHelper(e.getMessage());
+            SignupError.executeErrorAlert();
         }
     }
 
@@ -168,7 +171,6 @@ public class LoginController {
             for (User manager : aManagersList) {
                 if (manager.getaUser_Email().equals(pEmail) && manager.getaUser_Password().equals(pPassword)) {
                     System.out.println("The Manager dashboard view");
-                    // TODO: fetch the Manager view
                     FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("manager-dashboard.fxml")));
                     Parent root = fxmlLoader.load();
 
