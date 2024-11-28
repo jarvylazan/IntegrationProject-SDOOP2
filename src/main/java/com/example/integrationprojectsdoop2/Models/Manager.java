@@ -2,6 +2,7 @@ package com.example.integrationprojectsdoop2.Models;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a Manager, which is a type of {@link User}.
@@ -16,8 +17,10 @@ public class Manager extends User {
     @Serial
     private static final long serialVersionUID = 1824568323534453788L;
 
+    private final List<User> aManagersList;
+
     /** Counter for generating unique Manager IDs. */
-    private static int aManagerIDCounter = 1;
+    private int aManagerIDCounter = lastIncrement();
 
     /** Unique ID for each Manager. */
     private final String aManagerID;
@@ -34,6 +37,7 @@ public class Manager extends User {
     public Manager(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
         this.aManagerID = generateManagerID();
+        this.aManagersList = UserManager.getInstance().getaManagersList();
     }
 
     /**
@@ -42,7 +46,7 @@ public class Manager extends User {
      * @return the generated Manager ID in the format "M<number>".
      * @author Samuel
      */
-    private static synchronized String generateManagerID() {
+    private synchronized String generateManagerID() {
         return "M" + aManagerIDCounter++;
     }
 
@@ -54,5 +58,16 @@ public class Manager extends User {
      */
     public String getManagerID() {
         return aManagerID;
+    }
+
+    private int lastIncrement() {
+        if(aManagersList == null){
+            throw new NullPointerException("Managers list is null");
+        }
+            int lastIncrement;
+            Manager lastManager = (Manager) aManagersList.getLast();
+
+            lastIncrement = Integer.parseInt(lastManager.getManagerID().substring(1));
+            return lastIncrement + 1;
     }
 }

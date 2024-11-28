@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +41,13 @@ public class SignUpController {
     /** Password field for confirming the user's password. */
     @FXML
     private PasswordField signUpConfirmPassword;
+
+    /** List of clients retrieved from the {@link UserManager} singleton instance. */
+    private final List<User> aClientsList;
+
+    public SignUpController(List<User> aClientsList) {
+        this.aClientsList = UserManager.getInstance().getaClientsList();
+    }
 
     /**
      * Handles the "Sign Up" button click event.
@@ -89,7 +97,7 @@ public class SignUpController {
             }
 
             // Create a new client and add to UserManager
-            User newClient = new Client(fullName, email, password);
+            User newClient = new Client(fullName, email, password,this.aClientsList);
             UserManager.getInstance().addClient(newClient);
             System.out.println("New client created: " +
                     ((Client) newClient).getClientID() + ", " +
