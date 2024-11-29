@@ -63,7 +63,7 @@ public class ManagementDashboardController {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/management-view.fxml")));
         Parent root = fxmlLoader.load();
         ManagementViewController controller = fxmlLoader.getController();
-        controller.setManagementView("Movies","movies.ser");
+        controller.setManagementView("Movies","movies.ser","manager-edit-movie-view.fxml");
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Movies");

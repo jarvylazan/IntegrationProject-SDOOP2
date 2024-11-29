@@ -156,4 +156,10 @@ public class Movie implements Serializable, ShowComponent {
     public String getDisplayName() {
         return aMovie_Title;
     }
+    @Override
+    public String toString(){
+        return "Title: \t" + aMovie_Title+
+                "\nGenre:\t"+aMovie_Genre+
+                " \nSummary:\t"+ aMovie_Synopsis;
+    }
 }

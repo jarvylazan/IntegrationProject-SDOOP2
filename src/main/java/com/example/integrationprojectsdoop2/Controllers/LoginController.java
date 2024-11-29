@@ -88,9 +88,6 @@ public class LoginController {
         try {
             FXMLLoader signUpLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/sign-up-view.fxml"));
             Parent signUpView = signUpLoader.load();
-            
-
-
             emailLoginTextField.getScene().setRoot(signUpView);
         } catch (IOException e) {
             System.out.println("Error loading Sign-Up view: " + e.getMessage());

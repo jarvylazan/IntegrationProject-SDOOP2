@@ -65,11 +65,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <Label fx:id="DisplayManagerLabel" alignment="TOP_LEFT" layoutX="7.0" layoutY="9.0" prefHeight="206.0" prefWidth="260.0" text="Label">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
+                  <Label fx:id="displayManagerLabel" alignment="TOP_LEFT" layoutX="7.0" layoutY="9.0" lineSpacing="0.5" prefHeight="206.0" prefWidth="260.0" text="Label" wrapText="true" />
                </children>
             </AnchorPane>
          </children>

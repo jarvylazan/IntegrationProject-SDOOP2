@@ -4,7 +4,6 @@ import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Models.ModifyController;
 import com.example.integrationprojectsdoop2.Models.ShowComponent;
-import com.example.integrationprojectsdoop2.Models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,12 +38,13 @@ public class ManagementViewController {
         managementListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> onListViewItemSelect()
         );
+        displayManagerLabel.setText("Select an Items from the List to see more details.");
     }
 
-    public void setManagementView(String pTitle, String pAddNModifyViewName) {
+    public void setManagementView(String pTitle, String pFilename, String pAddNModifyViewName) {
 
         this.aAddNModifyViewName = pAddNModifyViewName;
-        this.aManagementList = managmentReader(aAddNModifyViewName);
+        this.aManagementList = managmentReader(pFilename);
         managementTitleViewLabel.setText(pTitle);
 
         // Populate the ListView with display names
@@ -55,7 +56,7 @@ public class ManagementViewController {
     }
 
     public void onAddClickButton(ActionEvent actionEvent) {
-        navigateToView(aAddNModifyViewName);
+        navigateToAdd(aAddNModifyViewName);
     }
 
     public void onDeleteClickButton(ActionEvent actionEvent) {
@@ -69,7 +70,8 @@ public class ManagementViewController {
     }
 
     public void onBackButton(ActionEvent actionEvent) {
-        navigateToView("ManagementDashboard");
+        Stage stage = (Stage) this.managementTitleViewLabel.getScene().getWindow();
+        stage.close();
     }
 
     public void onModifyButton(ActionEvent actionEvent) {
@@ -82,11 +84,11 @@ public class ManagementViewController {
         }
     }
 
-    private void navigateToView(String viewName) {
+    private void navigateToAdd(String viewName) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + viewName + ".fxml"));
-            Parent view = loader.load();
-            managementTitleViewLabel.getScene().setRoot(view);
+            FXMLLoader addLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + viewName));
+            Parent addView = addLoader.load();
+            managementTitleViewLabel.getScene().setRoot(addView);
         } catch (IOException e) {
             new AlertHelper(e.getMessage()).executeErrorAlert();
         }
@@ -94,7 +96,7 @@ public class ManagementViewController {
 
     private void navigateToModifyView(ShowComponent selectedItem) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + aAddNModifyViewName + ".fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + aAddNModifyViewName));
             Parent modifyView = loader.load();
 
             Object controller = loader.getController();
@@ -113,7 +115,7 @@ public class ManagementViewController {
         int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             ShowComponent selectedItem = aManagementList.get(selectedIndex);
-            displayManagerLabel.setText(selectedItem.getDisplayName());
+            displayManagerLabel.setText(selectedItem.toString());
         } else {
             displayManagerLabel.setText("Select an item to view details.");
         }
