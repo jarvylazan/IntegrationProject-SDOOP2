@@ -148,6 +148,7 @@ public class SignUpController {
 
             // Set the new scene to the current stage
             Stage currentStage = (Stage) ((javafx.scene.Node) pActionEvent.getSource()).getScene().getWindow();
+            currentStage.setTitle("Log in");
             currentStage.setScene(newScene);
             currentStage.show();
 

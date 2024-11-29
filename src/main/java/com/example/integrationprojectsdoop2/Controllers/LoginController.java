@@ -88,7 +88,15 @@ public class LoginController {
         try {
             FXMLLoader signUpLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/sign-up-view.fxml"));
             Parent signUpView = signUpLoader.load();
-            emailLoginTextField.getScene().setRoot(signUpView);
+            // Get the current stage from the emailLoginTextField's scene
+            Stage currentStage = (Stage) emailLoginTextField.getScene().getWindow();
+
+            // Set the new title for the stage (Change from "Login" to "Sign-Up")
+            currentStage.setTitle("Sign-Up");
+
+            // Set the new scene to the sign-up view
+            Scene signUpScene = new Scene(signUpView);
+            currentStage.setScene(signUpScene);
         } catch (IOException e) {
             System.out.println("Error loading Sign-Up view: " + e.getMessage());
             AlertHelper SignupError = new AlertHelper(e.getMessage());
