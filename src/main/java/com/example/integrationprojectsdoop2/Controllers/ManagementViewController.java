@@ -40,14 +40,10 @@ public class ManagementViewController {
         );
     }
 
-    public ManagementViewController(){
-        this.aManagementList = managmentReader(aAddNModifyViewName);
-    }
-
     public void setManagementView(String pTitle, String pAddNModifyViewName) {
 
         this.aAddNModifyViewName = pAddNModifyViewName;
-
+        this.aManagementList = managmentReader(aAddNModifyViewName);
         managementTitleViewLabel.setText(pTitle);
 
         // Populate the ListView with display names
@@ -138,7 +134,7 @@ public class ManagementViewController {
             e.printStackTrace(); // Log exceptions for debugging
         }
 
-        assert components instanceof ObservableList<ShowComponent>;
-        return (ObservableList<ShowComponent>) components;
+        return FXCollections.observableArrayList(components);
     }
+
 }
