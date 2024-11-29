@@ -58,6 +58,10 @@ public class ManagementDashboardController {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("sales-report-view.fxml")));
         Parent root = fxmlLoader.load();
 
+
+        ReportViewController controller = fxmlLoader.getController();
+        controller.setHeaderName("TJS Sales Report");
+
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Sales Report");
@@ -77,7 +81,18 @@ public class ManagementDashboardController {
         stage.show();
     }
 
-    public void onClientListButtonClick() {
+    public void onClientListButtonClick() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("sales-report-view.fxml")));
+        Parent root = fxmlLoader.load();
+
+        ReportViewController controller = fxmlLoader.getController();
+        controller.setHeaderName("TJS User Report");
+
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Sales Report");
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void onBackButtonClick(ActionEvent actionEvent) {
