@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,8 @@ import java.io.Serializable;
  */
 public class Show implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 11L;
     /**
      * Counter for generating unique Show IDs.
      */

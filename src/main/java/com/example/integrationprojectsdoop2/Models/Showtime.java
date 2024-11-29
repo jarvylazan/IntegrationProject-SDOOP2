@@ -1,5 +1,8 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Represents a Showtime with a unique identifier and a specific time.
  *
@@ -8,7 +11,10 @@ package com.example.integrationprojectsdoop2.Models;
  *
  * @author Mohammad Tarin Wahidi
  */
-public class Showtime {
+public class Showtime implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 68L;
 
     /** Counter for generating unique showtimes IDs, incremented with each instance. */
     private static int aShowtimeIDCounter = 1;
