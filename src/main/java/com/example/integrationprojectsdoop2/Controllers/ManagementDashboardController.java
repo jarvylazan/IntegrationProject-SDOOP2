@@ -62,7 +62,8 @@ public class ManagementDashboardController {
     public void onMoviesButtonClick() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("management-view.fxml")));
         Parent root = fxmlLoader.load();
-
+        ManagementViewController controller = fxmlLoader.getController();
+        controller.setManagementView("Movies","movies.ser");
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Movies");

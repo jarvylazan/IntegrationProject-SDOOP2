@@ -34,15 +34,15 @@
             <RowConstraints maxHeight="312.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ListView fx:id="ManagementListView" prefHeight="200.0" prefWidth="270.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ListView fx:id="managementListView" prefHeight="200.0" prefWidth="270.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                  <Button layoutX="32.0" layoutY="127.0" mnemonicParsing="false" onAction="#OnDeleteClickButton" prefHeight="43.0" prefWidth="95.0" text="Delete">
+                  <Button layoutX="32.0" layoutY="127.0" mnemonicParsing="false" onAction="#onDeleteClickButton" prefHeight="43.0" prefWidth="95.0" text="Delete">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button layoutX="32.0" layoutY="35.0" mnemonicParsing="false" onAction="#OnAddClickButton" prefHeight="43.0" prefWidth="95.0" text="Add">
+                  <Button layoutX="32.0" layoutY="35.0" mnemonicParsing="false" onAction="#onAddClickButton" prefHeight="43.0" prefWidth="95.0" text="Add">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -51,12 +51,12 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
-                  <Button layoutX="32.0" layoutY="109.0" mnemonicParsing="false" onAction="#OnBackButton" prefHeight="43.0" prefWidth="95.0" text="Back">
+                  <Button layoutX="32.0" layoutY="109.0" mnemonicParsing="false" onAction="#onBackButton" prefHeight="43.0" prefWidth="95.0" text="Back">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button layoutX="32.0" layoutY="14.0" mnemonicParsing="false" onAction="#OnModifiyButton" prefHeight="43.0" prefWidth="95.0" text="Modify">
+                  <Button layoutX="32.0" layoutY="14.0" mnemonicParsing="false" onAction="#onModifyButton" prefHeight="43.0" prefWidth="95.0" text="Modify">
                      <font>
                         <Font size="16.0" />
                      </font>

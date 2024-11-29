@@ -1,8 +1,10 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
+import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Models.ModifyController;
 import com.example.integrationprojectsdoop2.Models.ShowComponent;
+import com.example.integrationprojectsdoop2.Models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagementViewController {
 
@@ -36,8 +40,12 @@ public class ManagementViewController {
         );
     }
 
-    public void setManagementView(String pTitle, ObservableList<ShowComponent> pManagementList, String pAddNModifyViewName) {
-        this.aManagementList = pManagementList;
+    public ManagementViewController(){
+        this.aManagementList = managmentReader(aAddNModifyViewName);
+    }
+
+    public void setManagementView(String pTitle, String pAddNModifyViewName) {
+
         this.aAddNModifyViewName = pAddNModifyViewName;
 
         managementTitleViewLabel.setText(pTitle);
@@ -113,5 +121,24 @@ public class ManagementViewController {
         } else {
             displayManagerLabel.setText("Select an item to view details.");
         }
+    }
+
+    private ObservableList<ShowComponent> managmentReader(String pAddNModifyViewName) {
+        List<ShowComponent> components = new ArrayList<>();
+        try {
+            ReadObjects readObjects = new ReadObjects(pAddNModifyViewName);
+            List<Object> rawObjects = readObjects.read();
+
+            // Safely cast raw objects to User instances
+            components = rawObjects.stream()
+                    .filter(ShowComponent.class::isInstance)
+                    .map(ShowComponent.class::cast)
+                    .toList();
+        } catch (Exception e) {
+            e.printStackTrace(); // Log exceptions for debugging
+        }
+
+        assert components instanceof ObservableList<ShowComponent>;
+        return (ObservableList<ShowComponent>) components;
     }
 }
