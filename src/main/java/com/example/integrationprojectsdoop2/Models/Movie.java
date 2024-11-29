@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,7 +11,10 @@ import java.io.Serializable;
  *
  * @author Jarvy Lazan
  */
-public class Movie implements Serializable {
+public class Movie implements Serializable, ShowComponent {
+
+    @Serial
+    private static final long serialVersionUID = 69L;
 
     /** Counter for generating unique Movie IDs. */
     private static int movieIDCounter = 1;
@@ -146,5 +150,10 @@ public class Movie implements Serializable {
             throw new IllegalArgumentException("Movie Synopsis cannot be null or empty.");
         }
         this.aMovie_Synopsis = pMovie_Synopsis;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return aMovie_Title;
     }
 }

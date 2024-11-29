@@ -2,9 +2,7 @@ package com.example.integrationprojectsdoop2;
 
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
-import com.example.integrationprojectsdoop2.Models.Client;
-import com.example.integrationprojectsdoop2.Models.Manager;
-import com.example.integrationprojectsdoop2.Models.User;
+import com.example.integrationprojectsdoop2.Models.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -29,6 +27,21 @@ public class MovieTheatreApplication extends Application {
     public static void main(String[] args) {
 
 
+        Show manager = new Show(new Movie("Jaws","Suspense","Dont watch alone in at Sea"),
+                new Screenroom("Mocho Grander"),
+                new Showtime("14:30"),
+                new ETicket("S1","C1"));
+
+        // Write manager to manager.ser
+        try {
+            WriteObjects managerWriter = new WriteObjects("shows.ser");
+            List<Object> managers = new ArrayList<>();
+            managers.add(manager);
+            managerWriter.write(managers);
+            System.out.println("Manager data written successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
 

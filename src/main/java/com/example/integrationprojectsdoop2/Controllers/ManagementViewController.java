@@ -1,8 +1,9 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
-import com.example.integrationprojectsdoop2.Models.Movie;
-import com.example.integrationprojectsdoop2.Models.Show;
+import com.example.integrationprojectsdoop2.Models.ModifyController;
+import com.example.integrationprojectsdoop2.Models.ShowComponent;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,17 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
 import java.io.IOException;
-import java.util.List;
 
-public class ManagementViewController<T> {
+public class ManagementViewController {
 
-    private ObservableList<T> aManagementList;
-
+    private ObservableList<ShowComponent> aManagementList;
     private String aAddNModifyViewName;
-
-    ObservableList<Movie> aMoviesList = Movie.getInstance().getMovies();
-    ObservableList<Show> aShowsList = Show.getInstance().getShows();
-
 
     @FXML
     private Label managementTitleViewLabel;
@@ -31,88 +26,92 @@ public class ManagementViewController<T> {
     private Label displayManagerLabel;
 
     @FXML
-    private ListView<T> managementListView;
+    private ListView<String> managementListView;
 
-    public ManagementViewController(ObservableList<T> pManagementList, String pAddNModifyViewName) {
-        aManagementList = pManagementList;
-        aAddNModifyViewName = pAddNModifyViewName;
+    // Called automatically after FXML loading
+    @FXML
+    public void initialize() {
+        managementListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> onListViewItemSelect()
+        );
     }
 
-    public void OnAddClickButton(ActionEvent actionEvent) {
-        // Navigate to the add/modify view
-        try {
-            FXMLLoader addModifyLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + aAddNModifyViewName + ".fxml"));
-            Parent addModifyView = addModifyLoader.load();
-            displayManagerLabel.getScene().setRoot(addModifyView);
-        } catch (IOException e) {
-            AlertHelper signupError = new AlertHelper(e.getMessage());
-            signupError.executeErrorAlert();
-        }
-    }
-
-    public void OnDeleteClickButton(ActionEvent actionEvent) {
-        // Remove the selected object from the ListView
-        T selectedItem = managementListView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            aManagementList.remove(selectedItem);
-        } else {
-            AlertHelper deleteError = new AlertHelper("No item selected for deletion.");
-            deleteError.executeErrorAlert();
-        }
-    }
-
-    public void OnBackButton(ActionEvent actionEvent) {
-        // Navigate back to the dashboard (or previous view)
-        try {
-            FXMLLoader dashboardLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/ManagementDashboard.fxml"));
-            Parent dashboardView = dashboardLoader.load();
-            displayManagerLabel.getScene().setRoot(dashboardView);
-        } catch (IOException e) {
-            AlertHelper backError = new AlertHelper(e.getMessage());
-            backError.executeErrorAlert();
-        }
-    }
-
-    public void OnModifyButton(ActionEvent actionEvent) {
-        // Navigate to the add/modify view, pre-filled with the selected item
-        T selectedItem = managementListView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            try {
-                FXMLLoader modifyLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + aAddNModifyViewName + ".fxml"));
-                Parent modifyView = modifyLoader.load();
-
-                // Pass the selected item to the modify controller (if applicable)
-                Object controller = modifyLoader.getController();
-                if (controller instanceof ModifyController) {
-                    ((ModifyController<T>) controller).initializeData(selectedItem);
-                }
-
-                displayManagerLabel.getScene().setRoot(modifyView);
-            } catch (IOException e) {
-                AlertHelper modifyError = new AlertHelper(e.getMessage());
-                modifyError.executeErrorAlert();
-            }
-        } else {
-            AlertHelper modifyError = new AlertHelper("No item selected for modification.");
-            modifyError.executeErrorAlert();
-        }
-    }
-
-    public void setManagementView(String pTitle, ObservableList<T> pManagementList) {
-        managementTitleViewLabel.setText(pTitle);
+    public void setManagementView(String pTitle, ObservableList<ShowComponent> pManagementList, String pAddNModifyViewName) {
         this.aManagementList = pManagementList;
-        managementListView.setItems(aManagementList);
+        this.aAddNModifyViewName = pAddNModifyViewName;
+
+        managementTitleViewLabel.setText(pTitle);
+
+        // Populate the ListView with display names
+        ObservableList<String> displayList = FXCollections.observableArrayList();
+        for (ShowComponent component : aManagementList) {
+            displayList.add(component.getDisplayName());
+        }
+        managementListView.setItems(displayList);
+    }
+
+    public void onAddClickButton(ActionEvent actionEvent) {
+        navigateToView(aAddNModifyViewName);
+    }
+
+    public void onDeleteClickButton(ActionEvent actionEvent) {
+        int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            aManagementList.remove(selectedIndex);
+            managementListView.getItems().remove(selectedIndex);
+        } else {
+            new AlertHelper("No item selected for deletion.").executeErrorAlert();
+        }
+    }
+
+    public void onBackButton(ActionEvent actionEvent) {
+        navigateToView("ManagementDashboard");
+    }
+
+    public void onModifyButton(ActionEvent actionEvent) {
+        int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            ShowComponent selectedItem = aManagementList.get(selectedIndex);
+            navigateToModifyView(selectedItem);
+        } else {
+            new AlertHelper("No item selected for modification.").executeErrorAlert();
+        }
+    }
+
+    private void navigateToView(String viewName) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + viewName + ".fxml"));
+            Parent view = loader.load();
+            managementTitleViewLabel.getScene().setRoot(view);
+        } catch (IOException e) {
+            new AlertHelper(e.getMessage()).executeErrorAlert();
+        }
+    }
+
+    private void navigateToModifyView(ShowComponent selectedItem) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + aAddNModifyViewName + ".fxml"));
+            Parent modifyView = loader.load();
+
+            Object controller = loader.getController();
+            if (controller instanceof ModifyController) {
+                ((ModifyController<ShowComponent>) controller).initializeData(selectedItem);
+            }
+
+            managementTitleViewLabel.getScene().setRoot(modifyView);
+        } catch (IOException e) {
+            new AlertHelper(e.getMessage()).executeErrorAlert();
+        }
     }
 
     @FXML
     private void onListViewItemSelect() {
-        T selectedItem = managementListView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            displayManagerLabel.setText(selectedItem.toString()); // Customize this for specific object details
+        int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            ShowComponent selectedItem = aManagementList.get(selectedIndex);
+            displayManagerLabel.setText(selectedItem.getDisplayName());
         } else {
             displayManagerLabel.setText("Select an item to view details.");
         }
     }
-
-
 }
