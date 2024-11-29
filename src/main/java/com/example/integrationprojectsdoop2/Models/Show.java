@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Jarvy Lazan
  */
-public class Show implements Serializable {
+public class Show implements Serializable, ShowComponent {
 
     @Serial
     private static final long serialVersionUID = 11L;
@@ -177,5 +177,19 @@ public class Show implements Serializable {
             throw new IllegalArgumentException("ETicket cannot be null.");
         }
         aTicket = pTicket;
+    }
+
+    @Override
+    public String getDisplayName() {
+        //TODO: Need to find a better way to display a show: either
+        return aMovie.getAMovie_Title()+aShowtime.getaShowtimeTime()+aScreenroom.getScreenroom_Name();
+    }
+
+    @Override
+    public String toString() {
+        return "The Show have:"+
+                "\n\nMovie: \t"+ aMovie.getAMovie_Title()+
+                "\nStart at:\t"+aShowtime.getaShowtimeTime()+
+                "\nIn Screenroom:\t"+ aScreenroom.getScreenroom_Name();
     }
 }

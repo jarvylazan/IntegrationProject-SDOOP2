@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Mohammad Tarin Wahidi
  */
-public class Showtime implements Serializable {
+public class Showtime implements Serializable, ShowComponent {
 
     @Serial
     private static final long serialVersionUID = 68L;
@@ -88,5 +88,15 @@ public class Showtime implements Serializable {
         }
 
         this.aShowtime_Time = pShowtime_Time;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return aShowtime_Time;
+    }
+
+    @Override
+    public String toString() {
+        return "The movie will start at: "+ aShowtime_Time;
     }
 }

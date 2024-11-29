@@ -17,8 +17,10 @@ public class ManagementDashboardController {
     public AnchorPane editMovieView;
 
     public void onShowsButtonClick() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("management-view.fxml")));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/management-view.fxml")));
         Parent root = fxmlLoader.load();
+        ManagementViewController controller = fxmlLoader.getController();
+        controller.setManagementView("Shows","shows.ser","manager-show-add-modify-view.fxml");
 
         Scene scene = new Scene(root);
         Stage stage = new Stage();
@@ -27,8 +29,10 @@ public class ManagementDashboardController {
         stage.show();
     }
     public void onScreeningRoomsButtonClick() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("management-view.fxml")));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/management-view.fxml")));
         Parent root = fxmlLoader.load();
+        ManagementViewController controller = fxmlLoader.getController();
+        controller.setManagementView("Screening Rooms","screenrooms.ser","manager-screen-room-add-modify-view.fxml");
 
         Scene scene = new Scene(root);
         Stage stage = new Stage();
@@ -38,9 +42,11 @@ public class ManagementDashboardController {
     }
 
     public void onShowtimesButtonClick() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("management-view.fxml")));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/management-view.fxml")));
         Parent root = fxmlLoader.load();
 
+        ManagementViewController controller = fxmlLoader.getController();
+        controller.setManagementView("Showtimes","showtimes.ser","manager-showtime-add-modify-view.fxml");
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Showtimes");

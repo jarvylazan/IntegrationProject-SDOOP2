@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,7 +11,9 @@ import java.io.Serializable;
  *
  * @author Jarvy Lazan
  */
-public class Screenroom implements Serializable {
+public class Screenroom implements Serializable, ShowComponent {
+    @Serial
+    private static final long serialVersionUID = 34L;
 
     /** Counter for generating unique Screenroom IDs. */
     private static int screenroomIDCounter = 1;
@@ -86,5 +89,16 @@ public class Screenroom implements Serializable {
             throw new IllegalArgumentException("Screenroom Name cannot be null or empty.");
         }
         this.aScreenroom_Name = pScreenroom_Name;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return aScreenroom_Name;
+    }
+
+    @Override
+    public String toString() {
+        //TODO: we could add more info. Number of place. etc...
+        return "The Name: "+aScreenroom_Name;
     }
 }
