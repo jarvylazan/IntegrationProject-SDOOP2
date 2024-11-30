@@ -3,34 +3,29 @@ package com.example.integrationprojectsdoop2.Controllers;
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Models.ModifyController;
 import com.example.integrationprojectsdoop2.Models.Movie;
+import com.example.integrationprojectsdoop2.Models.Show;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-
-public class ManagerEditMovieController implements ModifyController<Movie>{
+public class ManagerShowAddModifyController implements ModifyController<Show>{
 
     @FXML
-    public TextField TitleTextField;
-
+    public ComboBox MovieComboBox;
     @FXML
-    public TextField genreTextField;
-
+    public ComboBox ShowtimeComboBox;
     @FXML
-    public TextArea synopsisTExtArea;
-
+    public ComboBox ScreenroomComboBox;
 
     @Override
-    public void initializeData(Movie movie) {
-        TitleTextField.setText(movie.getAMovie_Title());
-        genreTextField.setText(movie.getAMovie_Genre());
-        synopsisTExtArea.setText(movie.getAMovie_Synopsis());
+    public void initializeData(Show show) {
+        //MovieComboBox.getItems()
     }
 
     public void onSaveButtonClick(ActionEvent actionEvent) {

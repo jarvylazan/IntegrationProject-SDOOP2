@@ -89,7 +89,7 @@ public class Show implements Serializable, ShowComponent {
      * @return The movie for this Show.
      * @author Jarvy Lazan
      */
-    private Movie getMovie() {
+    public Movie getMovie() {
         return aMovie;
     }
 
