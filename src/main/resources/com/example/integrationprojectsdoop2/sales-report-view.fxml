@@ -28,8 +28,8 @@
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ListView layoutY="81.0" prefHeight="312.0" prefWidth="380.0" />
-                  <ComboBox layoutX="14.0" layoutY="49.0" prefWidth="150.0" promptText="Sort by" />
+                  <ListView fx:id="reportListView" layoutY="81.0" prefHeight="312.0" prefWidth="380.0" />
+                  <ComboBox fx:id="reportComboBox" layoutX="14.0" layoutY="49.0" prefWidth="150.0" promptText="Sort by" />
                   <Label fx:id="headerName" alignment="CENTER" layoutX="-1.0" prefHeight="41.0" prefWidth="408.0" text="TJS Sales Report">
                      <font>
                         <Font name="System Bold" size="31.0" />
