@@ -4,6 +4,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a Client, which is a type of {@link User}.
@@ -17,9 +19,10 @@ public class Client extends User {
     @Serial
     private static final long serialVersionUID = -5727091206595037865L;
 
+    private final List<User> aClientsList = UserManager.getInstance().getaClientsList();
 
     /** Counter for generating unique Client IDs. */
-    private static int aClientIDCounter = 1;
+    private int aClientIDCounter = lastIncrement();
 
     /** Unique ID for each Client. */
     private final String aClientID;
@@ -37,8 +40,8 @@ public class Client extends User {
      */
     public Client() {
         super(); // Calls the default constructor of User
-        this.aClientID = generateClientID();
         this.aClientSubscriptionDate = LocalDate.now();
+        this.aClientID = generateClientID();
     }
 
     /**
@@ -52,8 +55,8 @@ public class Client extends User {
      */
     public Client(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
-        this.aClientID = generateClientID();
         this.aClientSubscriptionDate =  LocalDate.now();
+        this.aClientID = generateClientID();
     }
 
     /**
@@ -62,7 +65,7 @@ public class Client extends User {
      * @return the generated Client ID in the format "C<number>".
      * @author Samuel
      */
-    private static synchronized String generateClientID() {
+    private synchronized String generateClientID() {
         return "C" + aClientIDCounter++;
     }
 
@@ -94,5 +97,14 @@ public class Client extends User {
      */
     public String getFormattedSubscriptionDate() {
         return aClientSubscriptionDate.format(DATE_FORMATTER);
+    }
+
+    private int lastIncrement() {
+        if (this.aClientsList == null || this.aClientsList.isEmpty()) {
+            return 1;  // Start at 1 if the list is empty or uninitialized
+        }
+        Client lastClient = (Client) this.aClientsList.getLast();  // Get the last client
+        int lastIncrement = Integer.parseInt(lastClient.getClientID().substring(1));
+        return lastIncrement + 1;
     }
 }

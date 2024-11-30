@@ -2,9 +2,7 @@ package com.example.integrationprojectsdoop2;
 
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
-import com.example.integrationprojectsdoop2.Models.Client;
-import com.example.integrationprojectsdoop2.Models.Manager;
-import com.example.integrationprojectsdoop2.Models.User;
+import com.example.integrationprojectsdoop2.Models.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
