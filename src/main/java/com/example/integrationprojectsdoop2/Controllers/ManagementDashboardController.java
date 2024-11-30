@@ -95,7 +95,7 @@ public class ManagementDashboardController {
         stage.show();
     }
 
-    public void onBackButtonClick(ActionEvent actionEvent) {
+    public void onBackButtonClick() {
         Stage stage = (Stage) editMovieView.getScene().getWindow();
         stage.close();
     }
