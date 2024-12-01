@@ -19,7 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.Objects;
 
 public class ClientDashboardController {
 
-    private List<Show> aShowsList;
+    private final List<Show> aShowsList;
 
     private List<User> aClientsList;
 
@@ -44,21 +46,9 @@ public class ClientDashboardController {
      * Constructor initializes the clients list and loads shows from the serialized file.
      */
     public ClientDashboardController() {
+        this.aClientsList = UserManager.getInstance().getaClientsList();
         this.aShowsList = showsReader("shows.ser");
     }
-
-
-    @FXML
-    public void initialize() {
-        ObservableList<String> movieTitles = FXCollections.observableArrayList();
-
-        for (Show show : aShowsList) {
-                movieTitles.add(show.getMovie().getAMovie_Title());
-        }
-
-        this.movieListView.setItems(movieTitles);
-    }
-
 
     private List<Show> showsReader(String pFilename) {
         List<Show> shows = new ArrayList<>();
@@ -77,6 +67,44 @@ public class ClientDashboardController {
         }
 
         return shows;
+    }
+
+
+    @FXML
+    private void initialize() {
+        // Populate ListView with today's shows
+        updateMovieListView(LocalDate.now());
+
+        // Add a listener to DatePicker for dynamically updating the ListView
+        movieDatePicker.valueProperty().addListener((_, _, newValue) -> {
+            if (newValue != null) {
+                updateMovieListView(newValue);
+            }
+        });
+    }
+
+
+    /**
+     * Updates the ListView to display movie titles for the selected date.
+     *
+     * @param selectedDate The date to filter shows.
+     */
+    private void updateMovieListView(LocalDate selectedDate) {
+        ObservableList<String> movieTitles = FXCollections.observableArrayList();
+
+        for (Show show : aShowsList) {
+            if (show.getShowDate().equals(selectedDate)) { // Filter by date
+                movieTitles.add(show.getMovie().getAMovie_Title());
+            }
+        }
+
+        // Show a message if no movies are available for the selected date
+        if (movieTitles.isEmpty()) {
+            AlertHelper alert = new AlertHelper("No movies available for that date.");
+            alert.executeWarningAlert();
+        }
+
+        movieListView.setItems(movieTitles);
     }
 
     public void onSeeShowOptionsButtonClick() {}
