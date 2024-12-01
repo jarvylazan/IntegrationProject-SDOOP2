@@ -2,6 +2,7 @@ package com.example.integrationprojectsdoop2.Models;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * Represents a show in a cinema, including details such as the movie being shown,
@@ -46,6 +47,11 @@ public class Show implements Serializable, ShowComponent {
     private ETicket aTicket;
 
     /**
+     * The date of the Show.
+     */
+    private LocalDate aShowDate;
+
+    /**
      * Default constructor for the Show class.
      * Automatically generates a unique Show ID.
      *
@@ -62,15 +68,17 @@ public class Show implements Serializable, ShowComponent {
      * @param pScreenroom The screen room where the movie is shown.
      * @param pShowtime The scheduled start time for the show.
      * @param pTicket The e-ticket associated with the show.
+     * @param pShowDate The date of the show.
      * @throws IllegalArgumentException if any parameter is null.
      * @author Jarvy Lazan
      */
-    public Show(Movie pMovie, Screenroom pScreenroom, Showtime pShowtime, ETicket pTicket) {
+    public Show(Movie pMovie, Screenroom pScreenroom, Showtime pShowtime, ETicket pTicket, LocalDate pShowDate) {
         this.aShowID = generateShowID();
         this.setMovie(pMovie);
         this.setScreenroom(pScreenroom);
         this.setShowtime(pShowtime);
         this.setETicket(pTicket);
+        this.setShowDate(pShowDate);
     }
 
     /**
@@ -179,6 +187,31 @@ public class Show implements Serializable, ShowComponent {
         aTicket = pTicket;
     }
 
+    /**
+     * Gets the date of the Show.
+     *
+     * @return The date of the show as a LocalDate.
+     */
+    public LocalDate getShowDate() {
+        return this.aShowDate;
+    }
+
+    /**
+     * Sets the date of the Show.
+     *
+     * @param pShowDate The date to set for the show.
+     * @throws IllegalArgumentException if the date is null or in the past.
+     */
+    public void setShowDate(LocalDate pShowDate) {
+        if (pShowDate == null) {
+            throw new IllegalArgumentException("Show date cannot be null.");
+        }
+        if (pShowDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Show date cannot be in the past.");
+        }
+        this.aShowDate = pShowDate;
+    }
+
     @Override
     public String getDisplayName() {
         //TODO: Need to find a better way to display a show: either
@@ -190,6 +223,7 @@ public class Show implements Serializable, ShowComponent {
         return "The Show have:"+
                 "\n\nMovie: \t"+ aMovie.getAMovie_Title()+
                 "\nStart at:\t"+aShowtime.getaShowtimeTime()+
+                "\nOn Date:\t" + aShowDate +
                 "\nIn Screenroom:\t"+ aScreenroom.getScreenroom_Name();
     }
 }
