@@ -2,18 +2,15 @@ package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
+import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.Show;
-import com.example.integrationprojectsdoop2.Models.User;
-import com.example.integrationprojectsdoop2.Models.UserManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -29,10 +26,8 @@ import java.util.Objects;
 
 public class ClientDashboardController {
 
-    private final List<Show> aShowsList;
-
-    private List<User> aClientsList;
-
+    private Client aLoggedClient;
+    private List<Show> aShowsList;
     @FXML
     private Label welcomeLabel;
 
@@ -42,12 +37,10 @@ public class ClientDashboardController {
     @FXML
     private ListView movieListView;
 
-    /**
-     * Constructor initializes the clients list and loads shows from the serialized file.
-     */
-    public ClientDashboardController() {
-        this.aClientsList = UserManager.getInstance().getaClientsList();
-        this.aShowsList = showsReader("shows.ser");
+
+    public void setClientDashboardView(String pSerializedFileName, Client pClient) {
+        this.aShowsList = showsReader(pSerializedFileName);
+        this.aLoggedClient = pClient;
     }
 
     private List<Show> showsReader(String pFilename) {
@@ -72,6 +65,9 @@ public class ClientDashboardController {
 
     @FXML
     private void initialize() {
+        // Update the top label with the user's name
+        updateWelcomeLabel();
+
         // Populate ListView with today's shows
         updateMovieListView(LocalDate.now());
 
@@ -137,5 +133,9 @@ public class ClientDashboardController {
             AlertHelper errorCatch = new AlertHelper(e.getMessage());
             errorCatch.executeErrorAlert();
         }
+    }
+
+    public void updateWelcomeLabel() {
+        this.welcomeLabel.setText("Welcome, " + aLoggedClient.getaUser_Name() + "!");
     }
 }
