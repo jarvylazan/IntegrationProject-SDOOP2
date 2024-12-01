@@ -130,4 +130,9 @@ public abstract class User implements Serializable {
         }
         this.aUser_Password = pUser_Password;
     }
+
+    @Override
+    public String toString() {
+        return "Name: " + this.aUser_Name + ", Email: " + this.aUser_Email; // Customize with actual fields
+    }
 }
