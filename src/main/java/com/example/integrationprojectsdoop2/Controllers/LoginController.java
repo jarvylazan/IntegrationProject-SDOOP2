@@ -29,9 +29,7 @@ import java.util.List;
  * controller.onLoginButtonClicked(event);
  * }
  * </pre>
- *
  * @author Samuel
- * @since 1.0
  */
 public class LoginController {
 
@@ -41,15 +39,21 @@ public class LoginController {
     @FXML
     private PasswordField loginPasswordField;
 
-    /** List of managers retrieved from the {@link UserManager} singleton instance. */
+    /**
+     * List of managers retrieved from the {@link UserManager} singleton instance.
+     */
     private final List<User> aManagersList;
 
-    /** List of clients retrieved from the {@link UserManager} singleton instance. */
+    /**
+     * List of clients retrieved from the {@link UserManager} singleton instance.
+     */
     private final List<User> aClientsList;
 
     /**
      * Initializes a new instance of the {@code LoginController} class.
      * Retrieves the manager and client lists from {@link UserManager}.
+     *
+     * @author Samuel
      */
     public LoginController() {
         this.aManagersList = UserManager.getInstance().getaManagersList();
@@ -58,8 +62,7 @@ public class LoginController {
 
     /**
      * Handles the login button click event.
-     * Validates the user's credentials and determines if the user is a Manager or a Client.
-     * Navigate to the appropriate dashboard based on the user's role.
+     * Validates the user's credentials and navigates to the appropriate dashboard.
      *
      * @param pEvent the event triggered by clicking the login button.
      * @author Samuel
@@ -80,7 +83,7 @@ public class LoginController {
 
     /**
      * Handles the sign-up button click event.
-     * Navigates to the Sign-Up view.
+     * Opens the Sign-Up view and updates the stage title.
      *
      * @param pMouseEvent the mouse event triggered by clicking the sign-up button.
      * @author Samuel
@@ -92,7 +95,7 @@ public class LoginController {
             // Get the current stage from the emailLoginTextField's scene
             Stage currentStage = (Stage) emailLoginTextField.getScene().getWindow();
 
-            // Set the new title for the stage (Change from "Login" to "Sign-Up")
+            // Set the new title for the stage
             currentStage.setTitle("Sign-Up");
 
             // Set the new scene to the sign-up view
@@ -100,8 +103,8 @@ public class LoginController {
             currentStage.setScene(signUpScene);
         } catch (IOException e) {
             System.out.println("Error loading Sign-Up view: " + e.getMessage());
-            AlertHelper SignupError = new AlertHelper(e.getMessage());
-            SignupError.executeErrorAlert();
+            AlertHelper signupError = new AlertHelper(e.getMessage());
+            signupError.executeErrorAlert();
         }
     }
 
@@ -121,7 +124,7 @@ public class LoginController {
      * Validates the email input field and retrieves the entered email.
      *
      * @return the validated email address.
-     * @throws Exception if the email is invalid.
+     * @throws Exception if the email is invalid or empty.
      * @author Samuel
      */
     private String validateAndGetEmail() throws Exception {
@@ -139,7 +142,7 @@ public class LoginController {
      * Validates the password input field and retrieves the entered password.
      *
      * @return the validated password.
-     * @throws Exception if the password is invalid.
+     * @throws Exception if the password is invalid or empty.
      * @author Samuel
      */
     private String validateAndGetPassword() throws Exception {
@@ -155,11 +158,11 @@ public class LoginController {
 
     /**
      * Authenticates the user against the stored client and manager lists.
-     * Navigates to the appropriate dashboard view if authentication succeeds.
+     * Opens the appropriate dashboard view if authentication succeeds.
      *
      * @param pEmail    the user's email address.
      * @param pPassword the user's password.
-     * @throws Exception if authentication fails.
+     * @throws Exception if authentication fails due to invalid credentials.
      * @author Samuel
      */
     private void authenticateUser(String pEmail, String pPassword) throws Exception {
