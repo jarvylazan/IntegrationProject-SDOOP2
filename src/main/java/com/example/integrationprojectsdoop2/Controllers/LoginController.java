@@ -1,6 +1,7 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
+import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.User;
 import com.example.integrationprojectsdoop2.Models.UserManager;
 import com.example.integrationprojectsdoop2.MovieTheatreApplication;
@@ -168,7 +169,16 @@ public class LoginController {
         for (User client : aClientsList) {
             if (client.getaUser_Email().equals(pEmail) && client.getaUser_Password().equals(pPassword)) {
                 System.out.println("The Client dashboard view");
-                // TODO: fetch the Client view
+                FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("client-dashboard-view.fxml")));
+                Parent root = fxmlLoader.load();
+                ClientDashboardController controller = fxmlLoader.getController();
+                controller.setClientDashboardView("shows.ser", (Client) client);
+
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setTitle("Client Dashboard");
+                stage.setScene(scene);
+                stage.show();
                 isUserAuthenticated = true;
                 break;
             }
