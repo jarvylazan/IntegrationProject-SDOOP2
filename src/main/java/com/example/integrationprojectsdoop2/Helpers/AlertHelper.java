@@ -26,14 +26,14 @@ public class AlertHelper {
     }
 
     /**
-     * Displays a success alert (CONFIRMATION type) with the provided message.
+     * Displays a success alert (INFORMATION type) with the provided message.
      * Uses JavaFX's Alert class to show the alert.
      *
      * @throws IllegalStateException if the JavaFX runtime is not initialized properly.
      * @author Jarvy Lazan
      */
     public void executeSuccessAlert() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, aAlertMessage);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, aAlertMessage);
         alert.showAndWait();
     }
 
