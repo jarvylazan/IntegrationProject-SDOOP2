@@ -3,6 +3,7 @@ package com.example.integrationprojectsdoop2.Models;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Represents a show in a cinema, including details such as the movie being shown,
@@ -81,6 +82,14 @@ public class Show implements Serializable, ShowComponent {
         this.setShowDate(pShowDate);
     }
 
+    public Show(Movie pMovie, Screenroom pScreenroom, Showtime pShowtime, LocalDate pShowDate) {
+        this.aShowID = generateShowID();
+        this.setMovie(pMovie);
+        this.setScreenroom(pScreenroom);
+        this.setShowtime(pShowtime);
+        this.setShowDate(pShowDate);
+    }
+
     /**
      * Generates a unique ID for each Show.
      *
@@ -89,6 +98,10 @@ public class Show implements Serializable, ShowComponent {
      */
     private static synchronized String generateShowID() {
         return "S" + aShowIDCounter++;
+    }
+
+    public String getaShowID() {
+        return aShowID;
     }
 
     /**
@@ -108,7 +121,7 @@ public class Show implements Serializable, ShowComponent {
      * @throws IllegalArgumentException if the movie is null.
      * @author Jarvy Lazan
      */
-    private void setMovie(Movie pMovie) {
+    public void setMovie(Movie pMovie) {
         if (pMovie == null) {
             throw new IllegalArgumentException("Movie cannot be null.");
         }
@@ -121,7 +134,7 @@ public class Show implements Serializable, ShowComponent {
      * @return The screen room for this Show.
      * @author Jarvy Lazan
      */
-    private Screenroom getScreenroom() {
+    public Screenroom getScreenroom() {
         return aScreenroom;
     }
 
@@ -132,7 +145,7 @@ public class Show implements Serializable, ShowComponent {
      * @throws IllegalArgumentException if the screen room is null.
      * @author Jarvy Lazan
      */
-    private void setScreenroom(Screenroom pScreenroom) {
+    public void setScreenroom(Screenroom pScreenroom) {
         if (pScreenroom == null) {
             throw new IllegalArgumentException("Screenroom cannot be null.");
         }
@@ -145,7 +158,7 @@ public class Show implements Serializable, ShowComponent {
      * @return The showtime for this Show.
      * @author Jarvy Lazan
      */
-    private Showtime getShowtime() {
+    public Showtime getShowtime() {
         return aShowtime;
     }
 
@@ -156,7 +169,7 @@ public class Show implements Serializable, ShowComponent {
      * @throws IllegalArgumentException if the showtime is null.
      * @author Jarvy Lazan
      */
-    private void setShowtime(Showtime pShowtime) {
+    public void setShowtime(Showtime pShowtime) {
         if (pShowtime == null) {
             throw new IllegalArgumentException("Showtime cannot be null.");
         }
@@ -217,6 +230,36 @@ public class Show implements Serializable, ShowComponent {
         //TODO: Need to find a better way to display a show: either
         return aMovie.getAMovie_Title()+aShowtime.getaShowtimeTime()+aScreenroom.getScreenroom_Name();
     }
+
+    public static void resetMovieIDCounter(List<Movie> existingMovies) {
+        if (existingMovies != null && !existingMovies.isEmpty()) {
+            aShowIDCounter = existingMovies.stream()
+                    .mapToInt(movie -> Integer.parseInt(movie.getAMovie_ID().substring(3)))
+                    .max().orElse(0) + 1;  // Find the max ID and set counter to max + 1
+        }
+    }
+
+    // Make sure to add these methods during the deserialization process
+    @Serial
+    private Object readResolve() {
+        updateMovieIDCounter();  // Ensure the ID counter is correct after deserialization
+        return this;
+    }
+
+    private void updateMovieIDCounter() {
+        if (aShowID != null && aShowID.startsWith("S") && aShowID.length() > 1) {
+            try {
+                int currentID = Integer.parseInt(aShowID.substring(1)); // Extract number part
+                if (currentID >= aShowIDCounter) {
+                    aShowIDCounter = currentID + 1; // Update counter if needed
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid Show ID format: " + aShowID);
+                // Optionally, log or handle invalid IDs
+            }
+        }
+    }
+
 
     @Override
     public String toString() {
