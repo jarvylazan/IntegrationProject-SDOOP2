@@ -172,16 +172,7 @@ public class LoginController {
         for (User client : aClientsList) {
             if (client.getaUser_Email().equals(pEmail) && client.getaUser_Password().equals(pPassword)) {
                 System.out.println("The Client dashboard view");
-                FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("client-dashboard-view.fxml")));
-                Parent root = fxmlLoader.load();
-                ClientDashboardController controller = fxmlLoader.getController();
-                controller.setClientDashboardView("shows.ser", (Client) client);
-
-                Scene scene = new Scene(root);
-                Stage stage = new Stage();
-                stage.setTitle("Client Dashboard");
-                stage.setScene(scene);
-                stage.show();
+                clientDashboard((Client) client, emailLoginTextField);
                 isUserAuthenticated = true;
                 break;
             }
@@ -196,10 +187,10 @@ public class LoginController {
                     Parent root = fxmlLoader.load();
 
                     Scene scene = new Scene(root);
-                    Stage stage = new Stage();
-                    stage.setTitle("Manager Dashboard");
-                    stage.setScene(scene);
-                    stage.show();
+                    Stage currentStage = (Stage) emailLoginTextField.getScene().getWindow();
+                    currentStage.setTitle("Manager Dashboard");
+                    currentStage.setScene(scene);
+                    currentStage.show();
                     isUserAuthenticated = true;
                     break;
                 }
@@ -210,5 +201,18 @@ public class LoginController {
         if (!isUserAuthenticated) {
             throw new Exception("Invalid email or password. Please try again.");
         }
+    }
+
+    static void clientDashboard(Client pClient, TextField pTextfield) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("client-dashboard-view.fxml")));
+        Parent root = fxmlLoader.load();
+        ClientDashboardController controller = fxmlLoader.getController();
+        controller.setClientDashboardView("shows.ser", pClient);
+
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) pTextfield.getScene().getWindow();
+        currentStage.setTitle("Client Dashboard");
+        currentStage.setScene(scene);
+        currentStage.show();
     }
 }
