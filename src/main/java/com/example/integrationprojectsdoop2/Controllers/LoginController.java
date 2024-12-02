@@ -32,10 +32,10 @@ import java.util.List;
  * @author Samuel
  */
 public class LoginController {
-
+    /** Text field for entering the user's email address. */
     @FXML
     private TextField emailLoginTextField;
-
+    /** Password field for entering the user's password. */
     @FXML
     private PasswordField loginPasswordField;
 
@@ -202,6 +202,14 @@ public class LoginController {
             throw new Exception("Invalid email or password. Please try again.");
         }
     }
+    /**
+     * Navigates to the Client Dashboard view and initializes it with the provided client details.
+     *
+     * @param pClient    the {@link Client} instance to be used for initializing the dashboard.
+     * @param pTextfield the {@link TextField} from which the current stage is obtained to display the new scene.
+     * @throws IOException if an error occurs while loading the FXML file.
+     * @author Samuel
+     */
 
     static void clientDashboard(Client pClient, TextField pTextfield) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("client-dashboard-view.fxml")));
