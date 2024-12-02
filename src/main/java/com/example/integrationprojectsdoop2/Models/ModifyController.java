@@ -13,7 +13,7 @@ public interface ModifyController<T extends ShowComponent> {
      * Initializes the controller with the provided data.
      * This method is typically called to pass data into the controller for modification or display.
      *
-     * @param data the data object to be initialized, of type {@code T}.
+     * @param pData the data object to be initialized, of type {@code T}.
      */
-    void initializeData(T data);
+    void initializeData(T pData);
 }
