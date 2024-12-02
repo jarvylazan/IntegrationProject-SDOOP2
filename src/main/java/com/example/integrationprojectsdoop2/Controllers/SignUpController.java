@@ -124,9 +124,6 @@ public class SignUpController {
                     newClient.getaUser_Password() + ", " +
                     ((Client) newClient).getFormattedSubscriptionDate());
             // TODO: might want to change the title and message inside the alert. ( need to change the AlertHelper)
-            AlertHelper clientAdd = new AlertHelper("Client Added: "+ newClient.getaUser_Email());
-            clientAdd.executeSuccessAlert();
-
             // Show success alert
             AlertHelper clientAdd = new AlertHelper("Client Added: " + newClient.getaUser_Email());
             clientAdd.executeSuccessAlert();
