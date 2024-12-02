@@ -9,16 +9,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +63,9 @@ public class ClientDashboardController {
 
     @FXML
     private void initialize() {
+        // Set Date Picker value to today's date.
+        this.movieDatePicker.setValue(LocalDate.now());
+
         // Update the top label with the user's name
         updateWelcomeLabel();
 
@@ -72,7 +73,7 @@ public class ClientDashboardController {
         updateMovieListView(LocalDate.now());
 
         // Add a listener to DatePicker for dynamically updating the ListView
-        movieDatePicker.valueProperty().addListener((_, _, newValue) -> {
+        this.movieDatePicker.valueProperty().addListener((_, _, newValue) -> {
             if (newValue != null) {
                 updateMovieListView(newValue);
             }
@@ -88,7 +89,7 @@ public class ClientDashboardController {
     private void updateMovieListView(LocalDate selectedDate) {
         ObservableList<String> movieTitles = FXCollections.observableArrayList();
 
-        for (Show show : aShowsList) {
+        for (Show show : this.aShowsList) {
             if (show.getShowDate().equals(selectedDate)) { // Filter by date
                 movieTitles.add(show.getMovie().getAMovie_Title());
             }
@@ -100,10 +101,59 @@ public class ClientDashboardController {
             alert.executeWarningAlert();
         }
 
-        movieListView.setItems(movieTitles);
+        this.movieListView.setItems(movieTitles);
     }
 
-    public void onSeeShowOptionsButtonClick() {}
+    @FXML
+    protected void onSeeShowOptionsButtonClick(ActionEvent event) {
+        // Get the selected movie title from the ListView
+        String selectedMovieTitle = (String) this.movieListView.getSelectionModel().getSelectedItem();
+        LocalDate selectedDate = this.movieDatePicker.getValue();
+
+        // Check if a movie title and a valid date are selected
+        if (selectedMovieTitle == null) {
+            AlertHelper alert = new AlertHelper("Please select a movie title from the list. ");
+            alert.executeWarningAlert();
+            return;
+        }
+
+        if (selectedDate == null) {
+            AlertHelper alert = new AlertHelper("Please select a date.");
+            alert.executeWarningAlert();
+            return;
+        }
+
+        // Filter shows based on the selected movie title and date
+        List<Show> filteredShows = this.aShowsList.stream()
+                .filter(show -> show.getMovie().getAMovie_Title().equals(selectedMovieTitle)
+                        && show.getShowDate().equals(selectedDate))
+                .toList();
+
+        // If no shows match, inform the user
+        if (filteredShows.isEmpty()) {
+            System.out.println("No shows available for the selected movie and date.");
+            return;
+        }
+
+        try {
+            // Load the new view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("movie-shows-view.fxml"));
+            Parent showsRoot = loader.load();
+
+            // Pass data to the new controller
+            //MovieShowsViewController controller = loader.getController();
+            //controller.setMovieShowsView(filteredShows);
+
+            // Set the new scene
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(showsRoot));
+            stage.setTitle("Movie Shows");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Handles the "Sign out" button click event.
@@ -136,6 +186,6 @@ public class ClientDashboardController {
     }
 
     public void updateWelcomeLabel() {
-        this.welcomeLabel.setText("Welcome, " + aLoggedClient.getaUser_Name() + "!");
+        this.welcomeLabel.setText("Welcome, " + this.aLoggedClient.getaUser_Name() + "!");
     }
 }
