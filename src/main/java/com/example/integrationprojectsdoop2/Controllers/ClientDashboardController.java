@@ -39,6 +39,8 @@ public class ClientDashboardController {
     public void setClientDashboardView(String pSerializedFileName, Client pClient) {
         this.aShowsList = showsReader(pSerializedFileName);
         this.aLoggedClient = pClient;
+
+        initialize();
     }
 
     private List<Show> showsReader(String pFilename) {
@@ -61,7 +63,6 @@ public class ClientDashboardController {
     }
 
 
-    @FXML
     private void initialize() {
         // Set Date Picker value to today's date.
         this.movieDatePicker.setValue(LocalDate.now());
