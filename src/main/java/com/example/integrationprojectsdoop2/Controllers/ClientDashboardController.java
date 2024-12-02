@@ -91,7 +91,7 @@ public class ClientDashboardController {
         ObservableList<String> movieTitles = FXCollections.observableArrayList();
 
         for (Show show : this.aShowsList) {
-            if (show.getShowDate().equals(selectedDate)) { // Filter by date
+            if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) { // Filter by date
                 movieTitles.add(show.getMovie().getAMovie_Title());
             }
         }
