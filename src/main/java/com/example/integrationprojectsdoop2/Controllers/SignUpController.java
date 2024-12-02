@@ -4,6 +4,7 @@ import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.User;
 import com.example.integrationprojectsdoop2.Models.UserManager;
+import com.example.integrationprojectsdoop2.MovieTheatreApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -113,14 +114,7 @@ public class SignUpController {
 
 
             // TODO: connect the client dashboard controller.
-            /* TO BE DONE once the controller is done for the view.
-            FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/client-dashboard-view.fxml"));
-            Parent clientDashboardView = SignUpfxmlLoader.load();
-
-            // Get the current stage from any component's scene (like SignUpName)
-            Stage stage = (Stage) SignUpName.getScene().getWindow();
-            stage.setScene(new Scene(clientDashboardView)); // Set the new scene
-            stage.show(); // Make sure to show the stage*/
+            LoginController.clientDashboard((Client) newClient, signUpEmail);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
