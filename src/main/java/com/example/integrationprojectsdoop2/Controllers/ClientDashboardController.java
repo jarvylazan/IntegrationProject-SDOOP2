@@ -40,14 +40,15 @@ public class ClientDashboardController {
 
 
     public void setClientDashboardView(String pSerializedFileName, Client pClient) {
+
         this.aShowsList = showsReader(pSerializedFileName);
+
         this.aLoggedClient = pClient;
 
-        initialize();
+        // Update the top label with the user's name
+        updateWelcomeLabel();
 
-        String filePath = "shows.ser"; // Replace with your file's path
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pSerializedFileName))) {
             Object deserializedObject = ois.readObject();
 
             // If the file contains a list
@@ -59,6 +60,16 @@ public class ClientDashboardController {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        // Populate ListView with today's shows
+        updateMovieListView(LocalDate.now());
+
+        // Add a listener to DatePicker for dynamically updating the ListView
+        this.movieDatePicker.valueProperty().addListener((_, _, newValue) -> {
+            if (newValue != null) {
+                updateMovieListView(newValue);
+            }
+        });
     }
 
     private List<Show> showsReader(String pFilename) {
@@ -81,22 +92,10 @@ public class ClientDashboardController {
     }
 
 
-    private void initialize() {
+    @FXML
+    public void initialize() {
         // Set Date Picker value to today's date.
         this.movieDatePicker.setValue(LocalDate.now());
-
-        // Update the top label with the user's name
-        updateWelcomeLabel();
-
-        // Populate ListView with today's shows
-        updateMovieListView(LocalDate.now());
-
-        // Add a listener to DatePicker for dynamically updating the ListView
-        this.movieDatePicker.valueProperty().addListener((_, _, newValue) -> {
-            if (newValue != null) {
-                updateMovieListView(newValue);
-            }
-        });
     }
 
 
@@ -132,12 +131,6 @@ public class ClientDashboardController {
         // Check if a movie title and a valid date are selected
         if (selectedMovieTitle == null) {
             AlertHelper alert = new AlertHelper("Please select a movie title from the list. ");
-            alert.executeWarningAlert();
-            return;
-        }
-
-        if (selectedDate == null) {
-            AlertHelper alert = new AlertHelper("Please select a date.");
             alert.executeWarningAlert();
             return;
         }
