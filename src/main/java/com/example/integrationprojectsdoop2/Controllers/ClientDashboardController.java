@@ -16,7 +16,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,21 @@ public class ClientDashboardController {
         this.aLoggedClient = pClient;
 
         initialize();
+
+        String filePath = "shows.ser"; // Replace with your file's path
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            Object deserializedObject = ois.readObject();
+
+            // If the file contains a list
+            if (deserializedObject instanceof List<?> list) {
+                list.forEach(System.out::println);
+            } else {
+                System.out.println("Deserialized Object: " + deserializedObject);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Show> showsReader(String pFilename) {
