@@ -1,0 +1,8 @@
+user_ID,user_Name,user_Email,user_Password,user_Type
+U001,Alice Johnson,alice.johnson@mail.com,Pass@1234,Manager
+U002,Bob Williams,bob.williams@mail.com,Secure#5678,Manager
+U003,Charlie Brown,charlie.brown@mail.com,Charlie$321,Customer
+U004,Diana Spencer,diana.spencer@mail.com,Diana@9876,Customer
+U005,Ethan Hunt,ethan.hunt@mail.com,Ethan!4567,Customer
+U006,Fiona Gallagher,fiona.gallagher@mail.com,Fiona#7890,Customer
+U007,George Michaels,george.michaels@mail.com,George%1234,Customer

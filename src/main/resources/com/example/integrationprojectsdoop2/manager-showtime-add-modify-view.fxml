@@ -8,20 +8,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="513.0" prefWidth="450.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.ManagerScreenroomAddModifyController">
+<VBox alignment="CENTER" prefHeight="513.0" prefWidth="450.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.ManagerShowtimeAddModifyController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <VBox prefHeight="512.0" prefWidth="410.0" style="-fx-border-color: grey;">
       <children>
          <VBox prefHeight="34.0" prefWidth="408.0" />
-         <Label alignment="CENTER" prefHeight="41.0" prefWidth="408.0" text="Manage Screenroom">
+         <Label alignment="CENTER" prefHeight="41.0" prefWidth="408.0" text="Manage Showtime">
             <font>
                <Font name="System Bold" size="31.0" />
             </font>
          </Label>
          <VBox prefHeight="34.0" prefWidth="408.0" />
-         <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="444.0" text="Screenroom Name:">
+         <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="444.0" text="Showtime:">
             <font>
                <Font size="24.0" />
             </font>
@@ -30,7 +30,7 @@
             </VBox.margin>
          </Label>
          <VBox prefHeight="2.0" prefWidth="408.0" />
-         <TextField fx:id="NameTextField" prefHeight="36.0" prefWidth="386.0" promptText="Zulu">
+         <TextField fx:id="TimeTextField" prefHeight="36.0" prefWidth="386.0" promptText="13:00">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>
@@ -38,7 +38,7 @@
          <VBox prefHeight="217.0" prefWidth="408.0" />
          <HBox prefHeight="44.0" prefWidth="408.0">
             <children>
-                <Button cancelButton="true" contentDisplay="CENTER" prefHeight="36.0" prefWidth="128.0" text="Back">
+                <Button cancelButton="true" contentDisplay="CENTER" onAction="#onBackButtonClick" prefHeight="36.0" prefWidth="128.0" text="Back">
                   <font>
                      <Font name="System Bold" size="13.0" />
                   </font>
@@ -47,7 +47,7 @@
                   </HBox.margin>
                </Button>
                <VBox prefHeight="44.0" prefWidth="120.0" />
-               <Button contentDisplay="CENTER" defaultButton="true" prefHeight="36.0" prefWidth="128.0" text="Save">
+               <Button contentDisplay="CENTER" defaultButton="true" onAction="#onSaveButtonClick" prefHeight="36.0" prefWidth="128.0" text="Save">
                   <font>
                      <Font name="System Bold" size="13.0" />
                   </font>
