@@ -240,10 +240,9 @@ public class ManagementViewController {
      * @throws IOException if an error occurs while writing to the file.
      */
     private void saveManagementListToFile(String pFilename, ObservableList<ShowComponent> pManagementList) throws IOException {
+        List<Object> serializableList = new ArrayList<>(pManagementList);
         WriteObjects writeObjects = new WriteObjects(pFilename);
-        List<Object> components = Collections.singletonList(pManagementList);
-
-        writeObjects.write(components);
+        writeObjects.write(serializableList);
     }
 
     /**
@@ -271,11 +270,25 @@ public class ManagementViewController {
      * @throws IOException if an error occurs while saving the updated list to the file.
      */
     private void deleteItem(int selectedIndex) throws IOException {
-        ShowComponent selectedItem = aManagementList.get(selectedIndex);
-        aManagementList.remove(selectedIndex);
-        managementListView.getItems().remove(selectedIndex);
+        if (selectedIndex < 0 || selectedIndex >= aManagementList.size()) {
+            System.out.println("Invalid selection. No item to delete.");
+            AlertHelper nothingChosen = new AlertHelper( "Invalid selection. No item to delete.");
+            nothingChosen.executeErrorAlert();
 
-        saveManagementListToFile(aFileName, aManagementList);
-        System.out.println("Item deleted successfully.");
+            return;
+        }
+
+        Object selectedItem = aManagementList.get(selectedIndex);
+
+        // Check if the selected item is a ShowComponent
+        if (selectedItem instanceof ShowComponent) {
+            aManagementList.remove(selectedItem);
+            managementListView.getItems().remove(selectedIndex);
+
+            saveManagementListToFile(aFileName, aManagementList);
+            System.out.println("Item deleted successfully.");
+        } else {
+            System.out.println("Selected item is not a ShowComponent. Cannot delete.");
+        }
     }
 }
