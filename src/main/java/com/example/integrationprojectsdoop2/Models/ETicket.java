@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
  * The ticket ID is dynamically generated to ensure uniqueness within each year.
  *
  * Author: Mohammad Tarin Wahidi
- * Created on: November 24th, 2024
  */
 public class ETicket implements Serializable {
     @Serial
@@ -34,9 +33,9 @@ public class ETicket implements Serializable {
     private final String aTicketID;
 
     /**
-     * The ID of the show associated with the ticket.
+     * The show associated with the ticket.
      */
-    private final String aShowID;
+    private final Show aShow;
 
     /**
      * The date and time of the ticket purchase.
@@ -46,18 +45,18 @@ public class ETicket implements Serializable {
     /**
      * The ID of the client who purchased the ticket.
      */
-    private final String aClientID;
+    private final Client aClient;
 
     /**
      * Constructs a new ETicket with the given show ID and client ID.
      *
-     * @param pShowID  the ID of the show associated with the ticket.
-     * @param pClientID the ID of the client purchasing the ticket.
+     * @param pShow  the ID of the show associated with the ticket.
+     * @param pClient the ID of the client purchasing the ticket.
      */
-    public ETicket(String pShowID, String pClientID) {
-        this.aShowID = pShowID;
+    public ETicket(Show pShow, Client pClient) {
+        this.aShow = pShow;
         this.aPurchaseDateTime = LocalDateTime.now();
-        this.aClientID = pClientID;
+        this.aClient = pClient;
         this.aTicketID = setaTicketID();
     }
 
@@ -93,12 +92,12 @@ public class ETicket implements Serializable {
     }
 
     /**
-     * Retrieves the ID of the show associated with the ticket.
+     * Retrieves the show associated with the ticket.
      *
-     * @return the show ID.
+     * @return the show.
      */
-    public String getaShowID() {
-        return this.aShowID;
+    public Show getaShow() {
+        return this.aShow;
     }
 
     /**
@@ -111,11 +110,11 @@ public class ETicket implements Serializable {
     }
 
     /**
-     * Retrieves the ID of the client who purchased the ticket.
+     * Retrieves the client who purchased the ticket.
      *
-     * @return the client ID.
+     * @return the client.
      */
-    public String getaClientID() {
-        return this.aClientID;
+    public Client getaClient() {
+        return this.aClient;
     }
 }

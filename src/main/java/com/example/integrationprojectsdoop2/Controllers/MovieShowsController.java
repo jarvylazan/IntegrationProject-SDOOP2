@@ -85,20 +85,17 @@ public class MovieShowsController {
 
         if (selectedShow != null) {
             // Pass the show ID to the Ticket constructor
-            ETicket ticket = new ETicket(selectedShow.getaShowID(), aLoggedClient.getClientID());
-
-            // Add additional ticket handling logic here
-            System.out.println("Ticket created: " + ticket);
+            ETicket eTicket = new ETicket(selectedShow, aLoggedClient);
 
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/e-ticket-view.fxml")));
                 Parent root = fxmlLoader.load();
-                //ETicketViewController controller = fxmlLoader.getController();
-                // controller.setETicketView(ticket);
+                ETicketViewController controller = fxmlLoader.getController();
+                controller.setETicketView(eTicket);
 
                 Scene scene = new Scene(root);
                 Stage currentStage = (Stage) ((javafx.scene.Node) pEvent.getSource()).getScene().getWindow();
-                currentStage.setTitle("Movie Shows");
+                currentStage.setTitle("ETicket Booking Confirmation");
                 currentStage.setScene(scene);
                 currentStage.show();
             } catch (IOException e) {
