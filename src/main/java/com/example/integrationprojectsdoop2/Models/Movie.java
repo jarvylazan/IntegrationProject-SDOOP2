@@ -2,6 +2,7 @@ package com.example.integrationprojectsdoop2.Models;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a Movie with attributes such as ID, title, genre, and synopsis.
@@ -64,8 +65,8 @@ public class Movie implements Serializable, ShowComponent {
      * @return the generated Movie ID in the format "MOV<number>".
      * @author Jarvy Lazan
      */
-    private static synchronized String generateMovieID() {
-        return "MOV" + movieIDCounter++;
+    private synchronized static String generateMovieID() {
+        return "MOV" + (movieIDCounter);
     }
 
     /**
@@ -160,6 +161,28 @@ public class Movie implements Serializable, ShowComponent {
     public String toString(){
         return "Title: \t" + aMovie_Title+
                 "\nGenre:\t"+aMovie_Genre+
-                " \nSummary:\t"+ aMovie_Synopsis;
+                " \nSynopsis:\t "+ aMovie_Synopsis;
+    }
+
+    public static void resetMovieIDCounter(List<Movie> existingMovies) {
+        if (existingMovies != null && !existingMovies.isEmpty()) {
+            movieIDCounter = existingMovies.stream()
+                    .mapToInt(movie -> Integer.parseInt(movie.getAMovie_ID().substring(3)))
+                    .max().orElse(0) + 1;  // Find the max ID and set counter to max + 1
+        }
+    }
+
+    // Make sure to add these methods during the deserialization process
+    @Serial
+    private Object readResolve() {
+        updateMovieIDCounter();  // Ensure the ID counter is correct after deserialization
+        return this;
+    }
+
+    private void updateMovieIDCounter() {
+        int currentID = Integer.parseInt(this.aMovie_ID.substring(3));
+        if (currentID >= movieIDCounter) {  // Only update if the current ID is greater than the counter
+            movieIDCounter = currentID + 1;
+        }
     }
 }
