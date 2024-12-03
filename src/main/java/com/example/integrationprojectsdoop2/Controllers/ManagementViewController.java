@@ -240,11 +240,9 @@ public class ManagementViewController {
      * @throws IOException if an error occurs while writing to the file.
      */
     private void saveManagementListToFile(String pFilename, ObservableList<ShowComponent> pManagementList) throws IOException {
-        List<ShowComponent> serializableList = new ArrayList<>(pManagementList);
+        List<Object> serializableList = new ArrayList<>(pManagementList);
         WriteObjects writeObjects = new WriteObjects(pFilename);
-        List<Object> components = Collections.singletonList(serializableList);
-
-        writeObjects.write(components);
+        writeObjects.write(serializableList);
     }
 
     /**
