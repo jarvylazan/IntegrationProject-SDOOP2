@@ -127,7 +127,7 @@ public class ClientDashboardController {
     }
 
     @FXML
-    protected void onSeeShowOptionsButtonClick(ActionEvent event) {
+    protected void onSeeShowOptionsButtonClick(ActionEvent pEvent) {
         // Get the selected movie title from the ListView
         String selectedMovieTitle = (String) this.movieListView.getSelectionModel().getSelectedItem();
         LocalDate selectedDate = this.movieDatePicker.getValue();
@@ -156,10 +156,10 @@ public class ClientDashboardController {
             FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/movie-shows-view.fxml")));
             Parent root = fxmlLoader.load();
             MovieShowsController controller = fxmlLoader.getController();
-            controller.setMovieShowsView(filteredShows.getFirst());
+            controller.setMovieShowsView(filteredShows.getFirst(),aLoggedClient);
 
             Scene scene = new Scene(root);
-            Stage currentStage = (Stage) movieListView.getScene().getWindow();
+            Stage currentStage = (Stage) ((javafx.scene.Node) pEvent.getSource()).getScene().getWindow();
             currentStage.setTitle("Movie Shows");
             currentStage.setScene(scene);
             currentStage.show();
