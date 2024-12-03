@@ -22,9 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ClientDashboardController {
 
@@ -108,15 +106,20 @@ public class ClientDashboardController {
     private void updateMovieListView(LocalDate selectedDate) {
         ObservableList<String> movieTitles = FXCollections.observableArrayList();
 
-        boolean pepito = false;
+        Set<String> uniqueMovieTitles = new HashSet<>(); // For unique movie titles
+        boolean hasMoviesForDate = false;
 
         for (Show show : this.aShowsList) {
             if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) {
-                movieTitles.add(show.getMovie().getAMovie_Title());
-                pepito = true;
+                // Filter by date and add unique movie titles
+                if (uniqueMovieTitles.add(show.getMovie().getAMovie_Title())) {
+                    movieTitles.add(show.getMovie().getAMovie_Title());
+                }
+                hasMoviesForDate = true; // At least one movie is available
             }
         }
-        if (movieTitles.isEmpty()) {
+
+        if (!hasMoviesForDate) {
             movieTitles.add("There are no movies available for this date.");
         }
 
