@@ -61,7 +61,7 @@ public class ManagementDashboardController {
 
         ReportViewController controller = fxmlLoader.getController();
         controller.setHeaderName("TJS Sales Report");
-        controller.setManagementView("movies.ser");
+        controller.setManagementView("etickets.ser");
 
         Scene scene = new Scene(root);
         Stage stage = new Stage();
@@ -92,7 +92,7 @@ public class ManagementDashboardController {
 
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        stage.setTitle("Sales Report");
+        stage.setTitle("Client list");
         stage.setScene(scene);
         stage.show();
     }
