@@ -5,7 +5,6 @@ import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
 import com.example.integrationprojectsdoop2.Models.ModifyController;
 import com.example.integrationprojectsdoop2.Models.Screenroom;
-import com.example.integrationprojectsdoop2.Models.Showtime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ManagerScreenroomAddModifyController implements ModifyController<Screenroom>{
+public class ManagerScreenroomAddModifyController implements ModifyController<Screenroom> {
 
     @FXML
     private TextField NameTextField;
@@ -37,7 +36,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
 
     public void onSaveButtonClick(ActionEvent actionEvent) {
         try {
-            // Read the list of existing showtimes
+            // Read the list of existing screenrooms
             ReadObjects reader = new ReadObjects("screenrooms.ser");
             List<Object> rawObjects = reader.read();
             List<Screenroom> screenroomList = rawObjects.stream()
@@ -47,17 +46,30 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
 
             boolean isNewScreenroom = (currentScreenroom == null);
 
+            String enteredName = NameTextField.getText().trim();
+
+            // Check if a screenroom with the same name already exists
+            boolean isDuplicate = screenroomList.stream()
+                    .anyMatch(screenroom -> screenroom.getScreenroom_Name().equalsIgnoreCase(enteredName) &&
+                            (isNewScreenroom || !screenroom.getAScreenroom_ID().equals(currentScreenroom.getAScreenroom_ID())));
+
+            if (isDuplicate) {
+                AlertHelper errorAlert = new AlertHelper("A screenroom with the same name already exists. Please use a unique name.");
+                errorAlert.executeErrorAlert();
+                return;
+            }
+
             if (isNewScreenroom) {
-                // If this is a new showtime, create and add it to the list
+                // If this is a new screenroom, create and add it to the list
                 currentScreenroom = new Screenroom();
                 screenroomList.add(currentScreenroom);
             }
 
-            // Update the details of the current showtime
-            currentScreenroom.setScreenroom_Name(NameTextField.getText().trim());
+            // Update the details of the current screenroom
+            currentScreenroom.setScreenroom_Name(enteredName);
 
             if (!isNewScreenroom) {
-                // Find the existing showtime and replace it
+                // Find the existing screenroom and replace it
                 for (int i = 0; i < screenroomList.size(); i++) {
                     if (screenroomList.get(i).getAScreenroom_ID().equals(currentScreenroom.getAScreenroom_ID())) {
                         screenroomList.set(i, currentScreenroom);
@@ -71,18 +83,17 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             writer.write(screenroomList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 
             // Show success message
-            AlertHelper successAlert = new AlertHelper(isNewScreenroom ? "New showtime added successfully!" : "Showtime updated successfully!");
+            AlertHelper successAlert = new AlertHelper(isNewScreenroom ? "New screenroom added successfully!" : "Screenroom updated successfully!");
             successAlert.executeSuccessAlert();
 
             // Navigate back to the management view
             onBackButtonClick(actionEvent);
 
-        } catch (IOException | ClassNotFoundException e) {
-            AlertHelper errorAlert = new AlertHelper("Error saving showtime: " + e.getMessage());
+        } catch (IOException | IllegalArgumentException | ClassNotFoundException e ) {
+            AlertHelper errorAlert = new AlertHelper("Error saving screenroom: " + e.getMessage());
             errorAlert.executeErrorAlert();
         }
     }
-
 
     public void onBackButtonClick(ActionEvent pActionEvent) {
         try {
@@ -90,7 +101,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/management-view.fxml"));
             Parent managementView = loader.load();
             ManagementViewController controller = loader.getController();
-            controller.setManagementView("Screening Rooms","screenrooms.ser","manager-screen-room-add-modify-view.fxml");
+            controller.setManagementView("Screening Rooms", "screenrooms.ser", "manager-screen-room-add-modify-view.fxml");
 
             // Create a new scene for the view
             Scene newScene = new Scene(managementView);
@@ -101,7 +112,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             currentStage.show();
 
         } catch (Exception e) {
-            System.err.println("Error loading the Login-View.fxml: " + e.getMessage());
+            System.err.println("Error loading the management-view.fxml: " + e.getMessage());
             AlertHelper errorCatch = new AlertHelper(e.getMessage());
             errorCatch.executeErrorAlert();
         }
