@@ -2,11 +2,12 @@ package com.example.integrationprojectsdoop2.Models;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a Showtime with a unique identifier and a specific time.
  *
- * The unique identifier is auto-generated using a static counter. The time is validated
+ * Each Showtime has a unique ID automatically generated. The time is validated
  * to ensure it follows the format HH:mm (e.g., 12:34).
  *
  * @author Mohammad Tarin Wahidi
@@ -16,52 +17,52 @@ public class Showtime implements Serializable, ShowComponent {
     @Serial
     private static final long serialVersionUID = 68L;
 
-    /** Counter for generating unique showtimes IDs, incremented with each instance. */
-    private static int aShowtimeIDCounter = 1;
+    /** Counter for generating unique showtime IDs, incremented with each instance. */
+    private static int showtimeIDCounter = 1;
 
     /** Unique identifier for the showtime, auto-generated. */
-    private String aShowtime_ID;
+    private final String aShowtime_ID;
 
     /** Specific time for the showtime, validated to follow the format HH:mm. */
     private String aShowtime_Time;
 
     /**
      * Default constructor for creating a Showtime instance without initializing fields.
+     * Automatically generates a unique Showtime ID.
      */
-    public Showtime() {}
+    public Showtime() {
+        this.aShowtime_ID = generateShowtimeID();
+    }
 
     /**
      * Parameterized constructor for creating a Showtime instance with a specified time.
-     * <p>
-     * The showtime ID is auto-generated, and the provided time is validated to follow
+     * The Showtime ID is auto-generated, and the provided time is validated to follow
      * the HH:mm format.
      *
      * @param pShowtime_Time the time of the showtime (must follow the format HH:mm).
      * @throws IllegalArgumentException if the showtime time does not match the format HH:mm.
      */
     public Showtime(String pShowtime_Time) {
-        this.aShowtime_ID = setaShowtimeID();
+        this.aShowtime_ID = generateShowtimeID();
         setaShowtimeTime(pShowtime_Time); // Calls setter for validation.
+    }
+
+    /**
+     * Generates a unique Showtime ID by incrementing the counter.
+     *
+     * @return the generated Showtime ID in the format "T<number>".
+     */
+    private static synchronized String generateShowtimeID() {
+        return "T" + (showtimeIDCounter++);
     }
 
     /**
      * Gets the unique identifier of the showtime.
      *
-     * @return the showtime ID.
+     * @return the Showtime ID.
      */
     public String getaShowtimeID() {
         return this.aShowtime_ID;
-    }
-
-    /**
-     * Generates and sets the unique identifier for the showtime.
-     * <p>
-     * The ID is prefixed with 'T' followed by an incrementing counter.
-     *
-     * @return the generated unique showtime ID.
-     */
-    private static synchronized String setaShowtimeID() {
-        return "T" + aShowtimeIDCounter++;
     }
 
     /**
@@ -97,6 +98,33 @@ public class Showtime implements Serializable, ShowComponent {
 
     @Override
     public String toString() {
-        return "The movie will start at: "+ aShowtime_Time;
+        return "Showtime: " + aShowtime_Time;
+    }
+
+    /**
+     * Resets the Showtime ID counter based on the highest existing ID.
+     *
+     * @param existingShowtimes a list of existing Showtime objects.
+     */
+    public static void resetShowtimeIDCounter(List<Showtime> existingShowtimes) {
+        if (existingShowtimes != null && !existingShowtimes.isEmpty()) {
+            showtimeIDCounter = existingShowtimes.stream()
+                    .mapToInt(showtime -> Integer.parseInt(showtime.getaShowtimeID().substring(1)))
+                    .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
+        }
+    }
+
+    // Ensure the ID counter is correct after deserialization
+    @Serial
+    private Object readResolve() {
+        updateShowtimeIDCounter();
+        return this;
+    }
+
+    private void updateShowtimeIDCounter() {
+        int currentID = Integer.parseInt(this.aShowtime_ID.substring(1));
+        if (currentID >= showtimeIDCounter) { // Only update if the current ID is greater than the counter
+            showtimeIDCounter = currentID + 1;
+        }
     }
 }

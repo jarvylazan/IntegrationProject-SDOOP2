@@ -26,38 +26,54 @@ import java.util.Objects;
  */
 public class SignUpController {
 
-    /** Text field for entering the user's full name. */
+    /**
+     * Text field for entering the user's full name.
+     */
     @FXML
     private TextField signUpName;
 
-    /** Text field for entering the user's email address. */
+    /**
+     * Text field for entering the user's email address.
+     */
     @FXML
     private TextField signUpEmail;
 
-    /** Password field for entering the user's password. */
+    /**
+     * Password field for entering the user's password.
+     */
     @FXML
     private PasswordField signUpPassword;
 
-    /** Password field for confirming the user's password. */
+    /**
+     * Password field for confirming the user's password.
+     */
     @FXML
     private PasswordField signUpConfirmPassword;
 
-    /** List of clients retrieved from the {@link UserManager} singleton instance. */
+    /**
+     * List of clients retrieved from the {@link UserManager} singleton instance.
+     * Used for checking existing users and managing sign-ups.
+     */
     private final List<User> aClientsList;
 
-
-
+    /**
+     * Constructs a new SignUpController.
+     * Initializes the clients list by retrieving it from the {@link UserManager} singleton instance.
+     *
+     * @author Samuel
+     */
     public SignUpController() {
         this.aClientsList = UserManager.getInstance().getaClientsList();
     }
 
     /**
      * Handles the "Sign Up" button click event.
-     * Validates the user's input, creates a new client, and adds it to the UserManager.
-     * If the sign-up is successful, navigate to the client dashboard.
+     * Validates the user's input fields including full name, email, and password.
+     * If the input is valid, creates a new {@link Client} object and adds it to the {@link UserManager}.
+     * Navigates the user to the client dashboard view upon successful sign-up.
      *
      * @param pActionEvent the action event triggered by the button click.
-     * @throws IOException if there is an issue navigating to the new view or saving user data.
+     * @throws IOException if there is an issue navigating to the client dashboard view or saving user data.
      * @author Samuel
      */
     public void onSignUpClickButton(ActionEvent pActionEvent) throws IOException {
@@ -108,19 +124,12 @@ public class SignUpController {
                     newClient.getaUser_Password() + ", " +
                     ((Client) newClient).getFormattedSubscriptionDate());
             // TODO: might want to change the title and message inside the alert. ( need to change the AlertHelper)
-            AlertHelper clientAdd = new AlertHelper("Client Added: "+ newClient.getaUser_Email());
+            // Show success alert
+            AlertHelper clientAdd = new AlertHelper("Client Added: " + newClient.getaUser_Email());
             clientAdd.executeSuccessAlert();
 
-
-            // TODO: connect the client dashboard controller.
-            /* TO BE DONE once the controller is done for the view.
-            FXMLLoader SignUpfxmlLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/client-dashboard-view.fxml"));
-            Parent clientDashboardView = SignUpfxmlLoader.load();
-
-            // Get the current stage from any component's scene (like SignUpName)
-            Stage stage = (Stage) SignUpName.getScene().getWindow();
-            stage.setScene(new Scene(clientDashboardView)); // Set the new scene
-            stage.show(); // Make sure to show the stage*/
+            // Navigate to the client dashboard
+            LoginController.clientDashboard((Client) newClient, signUpEmail);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -134,6 +143,7 @@ public class SignUpController {
      * Navigates the user back to the login view.
      *
      * @param pActionEvent the action event triggered by the button click.
+     * @throws IOException if the login view cannot be loaded or displayed correctly.
      * @author Samuel
      */
     public void onCancelClickButton(ActionEvent pActionEvent) {
@@ -148,6 +158,7 @@ public class SignUpController {
 
             // Set the new scene to the current stage
             Stage currentStage = (Stage) ((javafx.scene.Node) pActionEvent.getSource()).getScene().getWindow();
+            currentStage.setTitle("Log in");
             currentStage.setScene(newScene);
             currentStage.show();
 

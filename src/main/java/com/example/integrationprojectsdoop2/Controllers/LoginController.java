@@ -1,6 +1,7 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
+import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.User;
 import com.example.integrationprojectsdoop2.Models.UserManager;
 import com.example.integrationprojectsdoop2.MovieTheatreApplication;
@@ -28,27 +29,31 @@ import java.util.List;
  * controller.onLoginButtonClicked(event);
  * }
  * </pre>
- *
  * @author Samuel
- * @since 1.0
  */
 public class LoginController {
-
+    /** Text field for entering the user's email address. */
     @FXML
     private TextField emailLoginTextField;
-
+    /** Password field for entering the user's password. */
     @FXML
     private PasswordField loginPasswordField;
 
-    /** List of managers retrieved from the {@link UserManager} singleton instance. */
+    /**
+     * List of managers retrieved from the {@link UserManager} singleton instance.
+     */
     private final List<User> aManagersList;
 
-    /** List of clients retrieved from the {@link UserManager} singleton instance. */
+    /**
+     * List of clients retrieved from the {@link UserManager} singleton instance.
+     */
     private final List<User> aClientsList;
 
     /**
      * Initializes a new instance of the {@code LoginController} class.
      * Retrieves the manager and client lists from {@link UserManager}.
+     *
+     * @author Samuel
      */
     public LoginController() {
         this.aManagersList = UserManager.getInstance().getaManagersList();
@@ -57,8 +62,7 @@ public class LoginController {
 
     /**
      * Handles the login button click event.
-     * Validates the user's credentials and determines if the user is a Manager or a Client.
-     * Navigate to the appropriate dashboard based on the user's role.
+     * Validates the user's credentials and navigates to the appropriate dashboard.
      *
      * @param pEvent the event triggered by clicking the login button.
      * @author Samuel
@@ -79,7 +83,7 @@ public class LoginController {
 
     /**
      * Handles the sign-up button click event.
-     * Navigates to the Sign-Up view.
+     * Opens the Sign-Up view and updates the stage title.
      *
      * @param pMouseEvent the mouse event triggered by clicking the sign-up button.
      * @author Samuel
@@ -88,11 +92,19 @@ public class LoginController {
         try {
             FXMLLoader signUpLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/sign-up-view.fxml"));
             Parent signUpView = signUpLoader.load();
-            emailLoginTextField.getScene().setRoot(signUpView);
+            // Get the current stage from the emailLoginTextField's scene
+            Stage currentStage = (Stage) emailLoginTextField.getScene().getWindow();
+
+            // Set the new title for the stage
+            currentStage.setTitle("Sign-Up");
+
+            // Set the new scene to the sign-up view
+            Scene signUpScene = new Scene(signUpView);
+            currentStage.setScene(signUpScene);
         } catch (IOException e) {
             System.out.println("Error loading Sign-Up view: " + e.getMessage());
-            AlertHelper SignupError = new AlertHelper(e.getMessage());
-            SignupError.executeErrorAlert();
+            AlertHelper signupError = new AlertHelper(e.getMessage());
+            signupError.executeErrorAlert();
         }
     }
 
@@ -112,7 +124,7 @@ public class LoginController {
      * Validates the email input field and retrieves the entered email.
      *
      * @return the validated email address.
-     * @throws Exception if the email is invalid.
+     * @throws Exception if the email is invalid or empty.
      * @author Samuel
      */
     private String validateAndGetEmail() throws Exception {
@@ -130,7 +142,7 @@ public class LoginController {
      * Validates the password input field and retrieves the entered password.
      *
      * @return the validated password.
-     * @throws Exception if the password is invalid.
+     * @throws Exception if the password is invalid or empty.
      * @author Samuel
      */
     private String validateAndGetPassword() throws Exception {
@@ -146,11 +158,11 @@ public class LoginController {
 
     /**
      * Authenticates the user against the stored client and manager lists.
-     * Navigates to the appropriate dashboard view if authentication succeeds.
+     * Opens the appropriate dashboard view if authentication succeeds.
      *
      * @param pEmail    the user's email address.
      * @param pPassword the user's password.
-     * @throws Exception if authentication fails.
+     * @throws Exception if authentication fails due to invalid credentials.
      * @author Samuel
      */
     private void authenticateUser(String pEmail, String pPassword) throws Exception {
@@ -160,7 +172,7 @@ public class LoginController {
         for (User client : aClientsList) {
             if (client.getaUser_Email().equals(pEmail) && client.getaUser_Password().equals(pPassword)) {
                 System.out.println("The Client dashboard view");
-                // TODO: fetch the Client view
+                clientDashboard((Client) client, emailLoginTextField);
                 isUserAuthenticated = true;
                 break;
             }
@@ -175,10 +187,10 @@ public class LoginController {
                     Parent root = fxmlLoader.load();
 
                     Scene scene = new Scene(root);
-                    Stage stage = new Stage();
-                    stage.setTitle("Manager Dashboard");
-                    stage.setScene(scene);
-                    stage.show();
+                    Stage currentStage = (Stage) emailLoginTextField.getScene().getWindow();
+                    currentStage.setTitle("Manager Dashboard");
+                    currentStage.setScene(scene);
+                    currentStage.show();
                     isUserAuthenticated = true;
                     break;
                 }
@@ -189,5 +201,26 @@ public class LoginController {
         if (!isUserAuthenticated) {
             throw new Exception("Invalid email or password. Please try again.");
         }
+    }
+    /**
+     * Navigates to the Client Dashboard view and initializes it with the provided client details.
+     *
+     * @param pClient    the {@link Client} instance to be used for initializing the dashboard.
+     * @param pTextfield the {@link TextField} from which the current stage is obtained to display the new scene.
+     * @throws IOException if an error occurs while loading the FXML file.
+     * @author Samuel
+     */
+
+    static void clientDashboard(Client pClient, TextField pTextfield) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("client-dashboard-view.fxml")));
+        Parent root = fxmlLoader.load();
+        ClientDashboardController controller = fxmlLoader.getController();
+        controller.setClientDashboardView("shows.ser", pClient);
+
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) pTextfield.getScene().getWindow();
+        currentStage.setTitle("Client Dashboard");
+        currentStage.setScene(scene);
+        currentStage.show();
     }
 }
