@@ -111,6 +111,10 @@ public class ClientDashboardController {
             if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) { // Filter by date
                 movieTitles.add(show.getMovie().getAMovie_Title());
             }
+            else if (show.getShowDate() == null || !show.getShowDate().equals(selectedDate)) {
+                movieTitles.add("There are no movies available for this date.");
+                break;
+            }
         }
 
         // Show a message if no movies are available for the selected date
