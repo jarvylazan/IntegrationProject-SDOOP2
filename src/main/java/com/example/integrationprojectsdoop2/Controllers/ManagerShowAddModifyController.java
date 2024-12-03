@@ -14,9 +14,12 @@ import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ManagerShowAddModifyController implements ModifyController<Show> {
@@ -96,8 +99,16 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
 
     public void onSaveButtonClick(ActionEvent actionEvent) {
         try {
+            // Ensure the file exists or create it with an empty list
+            String filePath = "shows.ser";
+            if (!Files.exists(Paths.get(filePath))) {
+                System.out.println("File not found: " + filePath + ". Creating a new file...");
+                WriteObjects writer = new WriteObjects(filePath);
+                writer.write(new ArrayList<>()); // Write an empty list to the new file
+            }
+
             // Read the existing list of shows from "shows.ser"
-            ReadObjects reader = new ReadObjects("shows.ser");
+            ReadObjects reader = new ReadObjects(filePath);
             List<Object> rawObjects = reader.read();
             List<Show> showList = rawObjects.stream()
                     .filter(Show.class::isInstance)
@@ -158,7 +169,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
             }
 
             // Write the updated list back to the serialized file
-            WriteObjects writer = new WriteObjects("shows.ser");
+            WriteObjects writer = new WriteObjects(filePath);
             writer.write(showList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 
             // Show a success message
@@ -214,7 +225,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/management-view.fxml"));
             Parent managementView = loader.load();
             ManagementViewController controller = loader.getController();
-            controller.setManagementView("Shows","shows.ser","manager-edit-movie-view.fxml");
+            controller.setManagementView("Shows","shows.ser","manager-show-add-modify-view.fxml");
 
             // Create a new scene for the view
             Scene newScene = new Scene(managementView);
