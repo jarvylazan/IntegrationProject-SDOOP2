@@ -108,19 +108,16 @@ public class ClientDashboardController {
     private void updateMovieListView(LocalDate selectedDate) {
         ObservableList<String> movieTitles = FXCollections.observableArrayList();
 
+        boolean pepito = false;
+
         for (Show show : this.aShowsList) {
-            if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) { // Filter by date
+            if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) {
                 movieTitles.add(show.getMovie().getAMovie_Title());
-            }
-            else if (show.getShowDate() == null || !show.getShowDate().equals(selectedDate)) {
-                movieTitles.add("There are no movies available for this date.");
+                pepito = true;
             }
         }
-
-        // Show a message if no movies are available for the selected date
         if (movieTitles.isEmpty()) {
-            AlertHelper alert = new AlertHelper("No movies available for that date.");
-            alert.executeWarningAlert();
+            movieTitles.add("There are no movies available for this date.");
         }
 
         this.movieListView.setItems(movieTitles);
