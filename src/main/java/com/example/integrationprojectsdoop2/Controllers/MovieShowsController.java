@@ -2,7 +2,11 @@ package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Models.Client;
+import com.example.integrationprojectsdoop2.Models.ETicket;
 import com.example.integrationprojectsdoop2.Models.Show;
+import com.example.integrationprojectsdoop2.MovieTheatreApplication;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +17,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-import java.util.Objects;
+import java.io.IOException;
+import java.util.*;
 
 
 public class MovieShowsController {
+
+    private Map<String, Show> showMap = new HashMap<>();
+
+    private List<Show> aShowOptions = new ArrayList<>();
 
     private Client aLoggedClient;
 
@@ -35,18 +44,70 @@ public class MovieShowsController {
     public void initialize() {
     }
 
-    public void setMovieShowsView(Show pShow, Client pLoggedClient) {
+    public void setMovieShowsView(Show pShow, Client pLoggedClient, List<Show> pShowOptions) {
+        this.aShowOptions = pShowOptions;
         this.aLoggedClient = pLoggedClient;
         this.aShow = pShow;
 
         updateMovieTitleAndDateLabel();
+
+        updateShowListView();
     }
 
     private void updateMovieTitleAndDateLabel() {
-        movieTitleAndDateLabel.setText(aShow.getMovie().getAMovie_Title() + ", " + aShow.getShowDate());
+        this.movieTitleAndDateLabel.setText(this.aShow.getMovie().getAMovie_Title() + ", " + this.aShow.getShowDate());
     }
 
-    public void onBuyTicketButtonClick() {
+    private void updateShowListView() {
+        ObservableList<String> showDetails = FXCollections.observableArrayList();
+        showMap.clear();
+
+        for (Show show : this.aShowOptions) {
+            showDetails.add(show.toString());
+            showMap.put(show.toString(), show);
+        }
+
+        this.showListView.setItems(showDetails);
+    }
+
+    @FXML
+    protected void onBuyTicketButtonClick(ActionEvent pEvent) {
+        String selectedShowDetails = (String) showListView.getSelectionModel().getSelectedItem();
+
+        if (selectedShowDetails == null) {
+            AlertHelper alert = new AlertHelper("Please select a show before buying a ticket.");
+            alert.executeWarningAlert();
+            return;
+        }
+
+        // Get the corresponding Show object
+        Show selectedShow = showMap.get(selectedShowDetails);
+
+        if (selectedShow != null) {
+            // Pass the show ID to the Ticket constructor
+            ETicket ticket = new ETicket(selectedShow.getaShowID(), aLoggedClient.getClientID());
+
+            // Add additional ticket handling logic here
+            System.out.println("Ticket created: " + ticket);
+
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/e-ticket-view.fxml")));
+                Parent root = fxmlLoader.load();
+                //ETicketViewController controller = fxmlLoader.getController();
+                // controller.setETicketView(ticket);
+
+                Scene scene = new Scene(root);
+                Stage currentStage = (Stage) ((javafx.scene.Node) pEvent.getSource()).getScene().getWindow();
+                currentStage.setTitle("Movie Shows");
+                currentStage.setScene(scene);
+                currentStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            AlertHelper alert = new AlertHelper("Selected show not found. Please try again.");
+            alert.executeWarningAlert();
+        }
     }
 
     public void onBackButtonClick(ActionEvent pActionEvent) {

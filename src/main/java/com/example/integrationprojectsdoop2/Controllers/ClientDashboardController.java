@@ -156,7 +156,7 @@ public class ClientDashboardController {
             FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/movie-shows-view.fxml")));
             Parent root = fxmlLoader.load();
             MovieShowsController controller = fxmlLoader.getController();
-            controller.setMovieShowsView(filteredShows.getFirst(),aLoggedClient);
+            controller.setMovieShowsView(filteredShows.getFirst(), aLoggedClient, filteredShows);
 
             Scene scene = new Scene(root);
             Stage currentStage = (Stage) ((javafx.scene.Node) pEvent.getSource()).getScene().getWindow();
