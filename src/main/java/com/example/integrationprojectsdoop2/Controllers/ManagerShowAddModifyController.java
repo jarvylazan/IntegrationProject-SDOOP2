@@ -117,12 +117,6 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
 
             boolean isNewShow = (currentShow == null);
 
-            if (isNewShow) {
-                // If it's a new show, create an instance and add it to the list
-                currentShow = new Show();
-                showList.add(currentShow);
-            }
-
             // Validate ComboBox selections
             String selectedMovieTitle = MovieComboBox.getValue();
             String selectedShowtimeTime = ShowtimeComboBox.getValue();
@@ -150,6 +144,26 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
                 AlertHelper errorAlert = new AlertHelper("Unable to find the selected items in the database.");
                 errorAlert.executeErrorAlert();
                 return;
+            }
+
+            // Check for duplicates
+            boolean duplicateExists = showList.stream().anyMatch(show ->
+                    Objects.equals(show.getMovie().getAMovie_Title(), selectedMovieTitle) &&
+                            Objects.equals(show.getShowtime().getaShowtimeTime(), selectedShowtimeTime) &&
+                            Objects.equals(show.getScreenroom().getScreenroom_Name(), selectedScreenroomName) &&
+                            Objects.equals(show.getShowDate(), selectedDate)
+            );
+
+            if (duplicateExists) {
+                AlertHelper errorAlert = new AlertHelper("A show with the same details already exists.");
+                errorAlert.executeErrorAlert();
+                return;
+            }
+
+            if (isNewShow) {
+                // If it's a new show, create an instance and add it to the list
+                currentShow = new Show();
+                showList.add(currentShow);
             }
 
             // Update the show's details
@@ -184,6 +198,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
             errorAlert.executeErrorAlert();
         }
     }
+
 
 
     private Movie getMovieByTitle(String title) throws IOException, ClassNotFoundException {
