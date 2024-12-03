@@ -10,7 +10,6 @@ import com.example.integrationprojectsdoop2.Models.Showtime;
 import com.example.integrationprojectsdoop2.Models.Screenroom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,7 +21,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,13 +33,19 @@ import java.util.Map;
  */
 public class ManagementViewController {
 
-    /** Observable list containing all managed {@link ShowComponent} instances. */
+    /**
+     * Observable list containing all managed {@link ShowComponent} instances.
+     */
     private ObservableList<ShowComponent> aManagementList;
 
-    /** The name of the view used for adding and modifying components. */
+    /**
+     * The name of the view used for adding and modifying components.
+     */
     private String aAddNModifyViewName;
 
-    /** The filename used for saving and loading the management list. */
+    /**
+     * The filename used for saving and loading the management list.
+     */
     private String aFileName;
 
     @FXML
@@ -67,85 +71,101 @@ public class ManagementViewController {
      */
     @FXML
     public void initialize() {
-        managementListView.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> onListViewItemSelect()
-        );
-        displayManagerLabel.setText("Select an item from the list to see more details.");
+        try {
+            managementListView.getSelectionModel().selectedItemProperty().addListener(
+                    (_, _, _) -> onListViewItemSelect()
+            );
+            displayManagerLabel.setText("Select an item from the list to see more details.");
+        } catch (Exception e) {
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
+        }
     }
 
     /**
      * Sets up the management view with a title, filename for loading data, and a view name for adding/modifying items.
      *
-     * @param pTitle            the title of the management view.
-     * @param pFilename         the filename used for loading and saving data.
+     * @param pTitle              the title of the management view.
+     * @param pFilename           the filename used for loading and saving data.
      * @param pAddNModifyViewName the name of the view used for adding and modifying components.
      */
     public void setManagementView(String pTitle, String pFilename, String pAddNModifyViewName) {
-        this.aFileName = pFilename;
-        this.aAddNModifyViewName = pAddNModifyViewName;
-        this.aManagementList = loadManagementListFrom(pFilename);
-        managementTitleViewLabel.setText(pTitle);
+        try {
+            this.aFileName = pFilename;
+            this.aAddNModifyViewName = pAddNModifyViewName;
+            this.aManagementList = loadManagementListFrom(pFilename);
+            managementTitleViewLabel.setText(pTitle);
 
-        ObservableList<String> displayList = FXCollections.observableArrayList();
-        for (ShowComponent component : aManagementList) {
-            displayList.add(component.getDisplayName());
+            ObservableList<String> displayList = FXCollections.observableArrayList();
+            for (ShowComponent component : aManagementList) {
+                displayList.add(component.getDisplayName());
+            }
+            managementListView.setItems(displayList);
+        } catch (Exception e) {
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
         }
-        managementListView.setItems(displayList);
     }
 
     /**
-     * Handles the action of adding a new item by navigating to the add view.
-     *
-     * @param actionEvent the action event triggered by clicking the add button.
+     * Handles the action of adding a new item by navigating to the added view.
      */
-    public void onAddClickButton(ActionEvent actionEvent) {
-        navigateToAdd(aAddNModifyViewName);
+    public void onAddClickButton() {
+        try {
+            navigateToAdd(aAddNModifyViewName);
+        } catch (Exception e) {
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
+        }
     }
 
     /**
      * Handles the action of deleting the selected item.
      * Shows a confirmation dialog before proceeding with the deletion.
-     *
-     * @param actionEvent the action event triggered by clicking the delete button.
-     * @throws IOException if an error occurs while saving the updated list to the file.
      */
-    public void onDeleteClickButton(ActionEvent actionEvent) throws IOException {
+    public void onDeleteClickButton() {
         int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            if (showConfirmationDialog("Confirm Deletion",
-                    "Are you sure you want to delete this item?",
-                    "This action cannot be undone.")) {
-                deleteItem(selectedIndex);
+        try {
+            if (selectedIndex >= 0) {
+                if (showConfirmationDialog(
+                )) {
+                    deleteItem(selectedIndex);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Deletion canceled by the user.");
+                }
             } else {
-                System.out.println("Deletion canceled by the user.");
+                new AlertHelper("No item selected for deletion.").executeErrorAlert();
             }
-        } else {
-            new AlertHelper("No item selected for deletion.").executeErrorAlert();
+        } catch (Exception e) {
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
         }
     }
 
     /**
      * Handles the action of going back to the previous stage by closing the current window.
-     *
-     * @param actionEvent the action event triggered by clicking the back button.
      */
-    public void onBackButton(ActionEvent actionEvent) {
+    public void onBackButton() {
         Stage stage = (Stage) this.managementTitleViewLabel.getScene().getWindow();
         stage.close();
     }
 
     /**
-     * Handles the action of modifying the selected item by navigating to the modify view.
-     *
-     * @param actionEvent the action event triggered by clicking the modify button.
+     * Handles the action of modifying the selected item by navigating to the modified view.
      */
-    public void onModifyButton(ActionEvent actionEvent) {
-        int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            ShowComponent selectedItem = aManagementList.get(selectedIndex);
-            navigateToModifyView(selectedItem);
-        } else {
-            new AlertHelper("No item selected for modification.").executeErrorAlert();
+    public void onModifyButton() {
+        try {
+            int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                ShowComponent selectedItem = aManagementList.get(selectedIndex);
+                navigateToModifyView(selectedItem);
+            } else {
+                new AlertHelper("No item selected for modification.").executeErrorAlert();
+            }
+        } catch (Exception e) {
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
         }
     }
 
@@ -165,7 +185,7 @@ public class ManagementViewController {
     }
 
     /**
-     * Navigates to the modify view with the selected item.
+     * Navigates to the modified view with the selected item.
      *
      * @param selectedItem the selected item to be modified.
      */
@@ -200,12 +220,17 @@ public class ManagementViewController {
      */
     @FXML
     private void onListViewItemSelect() {
-        int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            ShowComponent selectedItem = aManagementList.get(selectedIndex);
-            displayManagerLabel.setText(selectedItem.toString());
-        } else {
-            displayManagerLabel.setText("Select an item to view details.");
+        try {
+            int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                ShowComponent selectedItem = aManagementList.get(selectedIndex);
+                displayManagerLabel.setText(selectedItem.toString());
+            } else {
+                displayManagerLabel.setText("Select an item to view details.");
+            }
+        } catch (Exception e) {
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
         }
     }
 
@@ -226,7 +251,8 @@ public class ManagementViewController {
                     .map(ShowComponent.class::cast)
                     .toList();
         } catch (Exception e) {
-            e.printStackTrace();
+            AlertHelper errorLoad = new AlertHelper(e.getMessage());
+            errorLoad.executeErrorAlert();
         }
 
         return FXCollections.observableArrayList(components);
@@ -235,60 +261,65 @@ public class ManagementViewController {
     /**
      * Saves the management list to the specified file.
      *
-     * @param pFilename        the filename to which the data should be saved.
+     * @param pFilename       the filename to which the data should be saved.
      * @param pManagementList the management list to save.
-     * @throws IOException if an error occurs while writing to the file.
      */
-    private void saveManagementListToFile(String pFilename, ObservableList<ShowComponent> pManagementList) throws IOException {
-        List<Object> serializableList = new ArrayList<>(pManagementList);
-        WriteObjects writeObjects = new WriteObjects(pFilename);
-        writeObjects.write(serializableList);
+    private void saveManagementListToFile(String pFilename, ObservableList<ShowComponent> pManagementList) {
+
+        try {
+            List<Object> serializableList = new ArrayList<>(pManagementList);
+            WriteObjects writeObjects = new WriteObjects(pFilename);
+            writeObjects.write(serializableList);
+        } catch (Exception e) {
+            AlertHelper errorSave = new AlertHelper(e.getMessage());
+            errorSave.executeErrorAlert();
+        }
     }
 
     /**
      * Displays a confirmation dialog with the specified title, header, and content.
      *
-     * @param title   the title of the dialog.
-     * @param header  the header text of the dialog.
-     * @param content the content text of the dialog.
      * @return {@code true} if the user confirms, {@code false} otherwise.
      */
-    private boolean showConfirmationDialog(String title, String header, String content) {
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle(title);
-        confirmationAlert.setHeaderText(header);
-        confirmationAlert.setContentText(content);
+    private boolean showConfirmationDialog() {
+        ButtonType result = null;
+        try {
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirm Deletion");
+            confirmationAlert.setHeaderText("Are you sure you want to delete this item?");
+            confirmationAlert.setContentText("This action cannot be undone.");
 
-        ButtonType result = confirmationAlert.showAndWait().orElse(ButtonType.CANCEL);
+            result = confirmationAlert.showAndWait().orElse(ButtonType.CANCEL);
+
+        } catch (Exception e) {
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
+        }
         return result == ButtonType.OK;
     }
 
     /**
      * Deletes the selected item from the management list and saves the updated list to the file.
      *
-     * @param selectedIndex the index of the item to delete.
-     * @throws IOException if an error occurs while saving the updated list to the file.
+     * @param pSelectedIndex the index of the item to delete.
      */
-    private void deleteItem(int selectedIndex) throws IOException {
-        if (selectedIndex < 0 || selectedIndex >= aManagementList.size()) {
-            System.out.println("Invalid selection. No item to delete.");
-            AlertHelper nothingChosen = new AlertHelper( "Invalid selection. No item to delete.");
-            nothingChosen.executeErrorAlert();
-
-            return;
+    private void deleteItem(int pSelectedIndex){
+        if (pSelectedIndex < 0 || pSelectedIndex >= aManagementList.size()) {
+            throw new IllegalArgumentException("Invalid selection. No item to delete.");
         }
 
-        Object selectedItem = aManagementList.get(selectedIndex);
+        Object selectedItem = aManagementList.get(pSelectedIndex);
 
         // Check if the selected item is a ShowComponent
         if (selectedItem instanceof ShowComponent) {
             aManagementList.remove(selectedItem);
-            managementListView.getItems().remove(selectedIndex);
+            managementListView.getItems().remove(pSelectedIndex);
 
             saveManagementListToFile(aFileName, aManagementList);
-            System.out.println("Item deleted successfully.");
+            AlertHelper success = new AlertHelper("Item deleted successfully.");
+            success.executeSuccessAlert();
         } else {
-            System.out.println("Selected item is not a ShowComponent. Cannot delete.");
+            throw new IllegalArgumentException("Selected item is not a ShowComponent. Cannot delete.");
         }
     }
 }
