@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ReportViewController{
+public class ReportViewController {
 
     @FXML
     public Label headerName;
@@ -40,7 +40,6 @@ public class ReportViewController{
      * @author Jarvy Lazan
      */
     public void initialize() {
-        reportComboBox.getItems().addAll("Alphabetical (A-Z)", "Alphabetical (Z-A)", "Movie Sold", "Showtimes");
 
         List<Object> objects = readObjectsFromFile("shows.ser");
         showList = objects.stream()
@@ -55,8 +54,8 @@ public class ReportViewController{
                 switch (selectedOption) {
                     case "Alphabetical (A-Z)" -> sortData(true); // Sort A-Z
                     case "Alphabetical (Z-A)" -> sortData(false); // Sort Z-A
-                    case "Movie Sold" -> sortByMovieSold(eTicketsList); // Sort by sales
-                    case "Showtimes" -> sortByShowtimes(); // Sort by sales
+                    case "Movie Sold" -> sortByMovieSold(eTicketsList); // Sort by movie sales
+                    case "Showtimes" -> sortByShowtimes(); // Sort by show sales
                 }
             }
         });
@@ -71,7 +70,7 @@ public class ReportViewController{
         ObservableList<String> sortedShowList = FXCollections.observableArrayList(
                 showList.stream()
                         .map(show -> String.format("%s | Tickets Sold: %d\n",
-                                show.getMovie().getAMovie_Title() + " at " + show.getShowtime().getaShowtimeTime() + " in "+ show.getScreenroom().getScreenroom_Name() ,
+                                show.getMovie().getAMovie_Title() + " at " + show.getShowtime().getaShowtimeTime() + " in " + show.getScreenroom().getScreenroom_Name(),
                                 calculateTicketsSoldForShow(show)))
                         .collect(Collectors.toList())
         );
@@ -86,9 +85,6 @@ public class ReportViewController{
                 .filter(ticket -> ticket.getaShowID().equals(show.getaShowID()))
                 .count();
     }
-
-
-
 
 
     /**
@@ -158,6 +154,14 @@ public class ReportViewController{
 
         // Populate the ListView with both Users and Movies
         populateListView(userList, movieList, eTicketsList);
+
+        if (!userList.isEmpty()) {
+            reportComboBox.getItems().addAll("Alphabetical (A-Z)", "Alphabetical (Z-A)");
+            sortData(true);
+        } else {
+            reportComboBox.getItems().addAll("Movie Sold", "Showtimes");
+            sortByMovieSold(eTicketsList);
+        }
     }
 
     /**
@@ -177,7 +181,8 @@ public class ReportViewController{
 
         // Add Movies to the display list
         for (Movie movie : movies) {
-            displayList.add("Movie: " + movie.toString()); // Customize `toString()` for meaningful display
+            displayList.add("Movie: " + movie.toString());
+
         }
         for (ETicket eTicket : eTickets) {
             displayList.add("Show: " + eTicket.toString());
