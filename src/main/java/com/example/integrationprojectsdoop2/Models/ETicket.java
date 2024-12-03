@@ -1,5 +1,7 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +14,9 @@ import java.time.LocalDateTime;
  * Author: Mohammad Tarin Wahidi
  * Created on: November 24th, 2024
  */
-public class ETicket {
+public class ETicket implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 80085L;
 
     /**
      * The last recorded year for which ticket IDs were generated.
