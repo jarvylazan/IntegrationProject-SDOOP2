@@ -3,7 +3,8 @@ package com.example.integrationprojectsdoop2.Controllers;
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
-import com.example.integrationprojectsdoop2.Models.ModifyController;
+import com.example.integrationprojectsdoop2.Models.Movie;
+import com.example.integrationprojectsdoop2.Models.Show;
 import com.example.integrationprojectsdoop2.Models.ShowComponent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for managing the view and operations related to the management of show components.
@@ -48,6 +50,12 @@ public class ManagementViewController {
 
     @FXML
     private ListView<String> managementListView;
+
+    private static final Map<Class<?>, String> VIEW_MAP = Map.of(
+            Movie.class, "/com/example/integrationprojectsdoop2/manager-edit-movie-view.fxml",
+            Show.class, "/com/example/integrationprojectsdoop2/manager-show-add-modify-view.fxml"
+    );
+
 
     /**
      * Initializes the controller after the FXML file is loaded.
@@ -159,19 +167,29 @@ public class ManagementViewController {
      */
     private void navigateToModifyView(ShowComponent selectedItem) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + aAddNModifyViewName));
-            Parent modifyView = loader.load();
-
-            Object controller = loader.getController();
-            if (controller instanceof ModifyController) {
-                ((ModifyController<ShowComponent>) controller).initializeData(selectedItem);
+            String viewPath = VIEW_MAP.get(selectedItem.getClass());
+            if (viewPath == null) {
+                throw new IllegalStateException("No view mapping found for: " + selectedItem.getClass());
             }
 
-            managementTitleViewLabel.getScene().setRoot(modifyView);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
+            Parent root = loader.load();
+
+            Object controller = loader.getController();
+
+            // Use reflection to call the appropriate initializeData method dynamically
+            controller.getClass()
+                    .getMethod("initializeData", selectedItem.getClass())
+                    .invoke(controller, selectedItem);
+
+            managementTitleViewLabel.getScene().setRoot(root);
         } catch (IOException e) {
-            new AlertHelper(e.getMessage()).executeErrorAlert();
+            new AlertHelper("Error loading view: " + e.getMessage()).executeErrorAlert();
+        } catch (ReflectiveOperationException e) {
+            new AlertHelper("Error initializing controller: " + e.getMessage()).executeErrorAlert();
         }
     }
+
 
     /**
      * Updates the detail display when a new item is selected from the ListView.
