@@ -7,6 +7,7 @@ import com.example.integrationprojectsdoop2.Models.Movie;
 import com.example.integrationprojectsdoop2.Models.Show;
 import com.example.integrationprojectsdoop2.Models.ShowComponent;
 import com.example.integrationprojectsdoop2.Models.Showtime;
+import com.example.integrationprojectsdoop2.Models.Screenroom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,7 +56,8 @@ public class ManagementViewController {
     private static final Map<Class<?>, String> VIEW_MAP = Map.of(
             Movie.class, "/com/example/integrationprojectsdoop2/manager-edit-movie-view.fxml",
             Show.class, "/com/example/integrationprojectsdoop2/manager-show-add-modify-view.fxml",
-            Showtime.class, "/com/example/integrationprojectsdoop2/manager-showtime-add-modify-view.fxml"
+            Showtime.class, "/com/example/integrationprojectsdoop2/manager-showtime-add-modify-view.fxml",
+            Screenroom.class, "/com/example/integrationprojectsdoop2/manager-screen-room-add-modify-view.fxml"
     );
 
 

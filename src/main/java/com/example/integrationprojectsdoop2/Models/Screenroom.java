@@ -2,6 +2,7 @@ package com.example.integrationprojectsdoop2.Models;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a Screenroom with attributes such as ID and name.
@@ -28,8 +29,9 @@ public class Screenroom implements Serializable, ShowComponent {
      * Empty Constructor for the Screenroom class.
      * Automatically generates a unique Screenroom ID.
      * Other attributes can be set using setter methods
+     *
      * @author Jarvy Lazan
-     * */
+     */
     public Screenroom() {
         this.aScreenroom_ID = generateScreenroomID();
     }
@@ -40,7 +42,7 @@ public class Screenroom implements Serializable, ShowComponent {
      * @param pScreenroom_Name the name of the screenroom (cannot be null or empty).
      * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
-     * */
+     */
     public Screenroom(String pScreenroom_Name) {
         this.aScreenroom_ID = generateScreenroomID();
         this.setScreenroom_Name(pScreenroom_Name);
@@ -70,7 +72,6 @@ public class Screenroom implements Serializable, ShowComponent {
      * Gets the name of the Screenroom.
      *
      * @return the Screenroom name.
-     * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
      */
     public String getScreenroom_Name() {
@@ -98,7 +99,40 @@ public class Screenroom implements Serializable, ShowComponent {
 
     @Override
     public String toString() {
-        //TODO: we could add more info. Number of place. etc...
-        return "The Name: "+aScreenroom_Name;
+        return "Screenroom: " + aScreenroom_Name;
+    }
+
+    /**
+     * Resets the Screenroom ID counter based on the highest existing ID.
+     *
+     * @param existingScreenrooms a list of existing Screenroom objects.
+     */
+    public static void resetScreenroomIDCounter(List<Screenroom> existingScreenrooms) {
+        if (existingScreenrooms != null && !existingScreenrooms.isEmpty()) {
+            screenroomIDCounter = existingScreenrooms.stream()
+                    .mapToInt(screenroom -> Integer.parseInt(screenroom.getAScreenroom_ID().substring(1)))
+                    .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
+        }
+    }
+
+    /**
+     * Ensures the ID counter is correct after deserialization.
+     *
+     * @return the deserialized object.
+     */
+    @Serial
+    private Object readResolve() {
+        updateScreenroomIDCounter();
+        return this;
+    }
+
+    /**
+     * Updates the Screenroom ID counter based on the current instance ID.
+     */
+    private void updateScreenroomIDCounter() {
+        int currentID = Integer.parseInt(this.aScreenroom_ID.substring(1));
+        if (currentID >= screenroomIDCounter) { // Only update if the current ID is greater than the counter
+            screenroomIDCounter = currentID + 1;
+        }
     }
 }
