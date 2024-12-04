@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="513.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.ETicketViewController">
+<AnchorPane prefHeight="513.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.ETicketViewController">
    <children>
       <Label fx:id="eTicketLabel" layoutX="21.0" layoutY="75.0" text="Label" />
       <Label layoutX="21.0" layoutY="29.0" text="Booking Confirmation">

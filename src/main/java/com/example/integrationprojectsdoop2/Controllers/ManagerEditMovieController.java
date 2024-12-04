@@ -56,6 +56,20 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
 
             boolean isNewMovie = (currentMovie == null);
 
+            // Get the entered movie title
+            String enteredTitle = TitleTextField.getText().trim();
+
+            // Validate for duplicate movie title
+            boolean isDuplicate = movieList.stream()
+                    .anyMatch(movie -> movie.getAMovie_Title().equalsIgnoreCase(enteredTitle) &&
+                            (isNewMovie || !movie.getAMovie_ID().equals(currentMovie.getAMovie_ID())));
+
+            if (isDuplicate) {
+                AlertHelper errorAlert = new AlertHelper("A movie with the same title already exists. Please use a unique title.");
+                errorAlert.executeErrorAlert();
+                return;
+            }
+
             if (isNewMovie) {
                 // If it's a new movie, create an instance and add it to the list
                 currentMovie = new Movie();
@@ -63,7 +77,7 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
             }
 
             // Update the movie's details from the form
-            currentMovie.setAMovie_Title(TitleTextField.getText().trim());
+            currentMovie.setAMovie_Title(enteredTitle);
             currentMovie.setAMovie_Genre(genreTextField.getText().trim());
             currentMovie.setAMovie_Synopsis(synopsisTextArea.getText().trim());
 
@@ -77,7 +91,14 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
                 }
             }
 
-            // Write the updated list back to the serialized file
+            // Sort the movie list by title (case-insensitive, ignoring leading/trailing spaces)
+            movieList.sort((m1, m2) -> {
+                String title1 = m1.getAMovie_Title() != null ? m1.getAMovie_Title().trim().toLowerCase() : "";
+                String title2 = m2.getAMovie_Title() != null ? m2.getAMovie_Title().trim().toLowerCase() : "";
+                return title1.compareTo(title2);
+            });
+
+            // Write the sorted list back to the serialized file
             WriteObjects writer = new WriteObjects("movies.ser");
             writer.write(movieList.stream().map(m -> (Object) m).collect(Collectors.toList()));
 
@@ -88,12 +109,11 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
             // Close the current window
             onBackButtonClick(actionEvent);
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
             AlertHelper errorAlert = new AlertHelper("Error saving movie: " + e.getMessage());
             errorAlert.executeErrorAlert();
         }
     }
-
 
     public void onBackButtonClick(ActionEvent actionEvent) {
         try {

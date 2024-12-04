@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller for managing the view and operations related to the management of show components.
@@ -241,10 +242,23 @@ public class ManagementViewController {
             ReadObjects readObjects = new ReadObjects(pFilename);
             List<Object> rawObjects = readObjects.read();
 
+            // Convert to mutable list and cast to ShowComponent
             components = rawObjects.stream()
                     .filter(ShowComponent.class::isInstance)
                     .map(ShowComponent.class::cast)
-                    .toList();
+                    .collect(Collectors.toCollection(ArrayList::new)); // Ensure it's a mutable list
+
+            // Sort based on the display name for all components
+            components.sort((o1, o2) -> {
+                String displayName1 = o1.getDisplayName();
+                String displayName2 = o2.getDisplayName();
+
+                // Handle nulls gracefully
+                if (displayName1 == null) return (displayName2 == null) ? 0 : -1;
+                if (displayName2 == null) return 1;
+
+                return displayName1.compareToIgnoreCase(displayName2); // Case-insensitive sorting
+            });
         } catch (Exception e) {
             AlertHelper errorLoad = new AlertHelper(e.getMessage());
             errorLoad.executeErrorAlert();
@@ -252,6 +266,7 @@ public class ManagementViewController {
 
         return FXCollections.observableArrayList(components);
     }
+
 
     /**
      * Saves the management list to the specified file.

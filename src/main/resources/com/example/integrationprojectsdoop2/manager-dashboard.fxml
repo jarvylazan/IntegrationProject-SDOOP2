@@ -84,7 +84,7 @@
             </GridPane>
          </children>
       </VBox>
-      <Button layoutX="319.0" layoutY="436.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="43.0" prefWidth="95.0" text="Back">
+      <Button layoutX="319.0" layoutY="436.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="43.0" prefWidth="95.0" text="Sign Out">
          <font>
             <Font size="16.0" />
          </font>

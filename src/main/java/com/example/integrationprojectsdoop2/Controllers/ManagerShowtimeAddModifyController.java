@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ManagerShowtimeAddModifyController implements ModifyController<Showtime> {
@@ -44,6 +45,27 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
                     .map(Showtime.class::cast)
                     .collect(Collectors.toList());
 
+            // Get the entered showtime time
+            String enteredTime = TimeTextField.getText().trim();
+
+            // Validate the entered time
+            if (enteredTime.isEmpty()) {
+                AlertHelper errorAlert = new AlertHelper("Showtime cannot be empty.");
+                errorAlert.executeErrorAlert();
+                return;
+            }
+
+            // Check for duplicates
+            boolean duplicateExists = showtimeList.stream()
+                    .anyMatch(showtime -> showtime.getaShowtimeTime().equals(enteredTime) &&
+                            (currentShowtime == null || !showtime.getaShowtimeID().equals(currentShowtime.getaShowtimeID())));
+
+            if (duplicateExists) {
+                AlertHelper errorAlert = new AlertHelper("A showtime with the same time already exists.");
+                errorAlert.executeErrorAlert();
+                return;
+            }
+
             boolean isNewShowtime = (currentShowtime == null);
 
             if (isNewShowtime) {
@@ -53,7 +75,7 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             }
 
             // Update the details of the current showtime
-            currentShowtime.setaShowtimeTime(TimeTextField.getText().trim());
+            currentShowtime.setaShowtimeTime(enteredTime);
 
             if (!isNewShowtime) {
                 // Find the existing showtime and replace it
@@ -65,7 +87,17 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
                 }
             }
 
-            // Write the updated list back to the file
+            // Sort the showtime list by time (earliest to latest)
+            showtimeList.sort((s1, s2) -> {
+                try {
+                    return java.time.LocalTime.parse(s1.getaShowtimeTime())
+                            .compareTo(java.time.LocalTime.parse(s2.getaShowtimeTime()));
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("Invalid time format: " + e.getMessage());
+                }
+            });
+
+          // Write the sorted list back to the file
             WriteObjects writer = new WriteObjects("showtimes.ser");
             writer.write(showtimeList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 
@@ -76,7 +108,7 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             // Navigate back to the management view
             onBackButtonClick(actionEvent);
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
             AlertHelper errorAlert = new AlertHelper("Error saving showtime: " + e.getMessage());
             errorAlert.executeErrorAlert();
         }

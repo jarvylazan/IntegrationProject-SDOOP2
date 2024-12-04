@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
+import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.MovieTheatreApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ManagementDashboardController {
 
@@ -97,8 +99,26 @@ public class ManagementDashboardController {
         stage.show();
     }
 
-    public void onBackButtonClick() {
-        Stage stage = (Stage) editMovieView.getScene().getWindow();
-        stage.close();
+    public void onBackButtonClick(ActionEvent pActionEvent) {
+        try {
+            // Load the login view FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/login-view.fxml"));
+            Parent loginView = loader.load();
+
+            // Create a new scene for the login view
+            Scene newScene = new Scene(loginView);
+            newScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
+
+            // Set the new scene to the current stage
+            Stage currentStage = (Stage) ((javafx.scene.Node) pActionEvent.getSource()).getScene().getWindow();
+            currentStage.setTitle("Log in");
+            currentStage.setScene(newScene);
+            currentStage.show();
+
+        } catch (Exception e) {
+            System.err.println("Error loading the Login-View.fxml: " + e.getMessage());
+            AlertHelper errorCatch = new AlertHelper(e.getMessage());
+            errorCatch.executeErrorAlert();
+        }
     }
 }
