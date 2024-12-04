@@ -87,7 +87,17 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
                 }
             }
 
-            // Write the updated list back to the file
+            // Sort the showtime list by time (earliest to latest)
+            showtimeList.sort((s1, s2) -> {
+                try {
+                    return java.time.LocalTime.parse(s1.getaShowtimeTime())
+                            .compareTo(java.time.LocalTime.parse(s2.getaShowtimeTime()));
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("Invalid time format: " + e.getMessage());
+                }
+            });
+
+          // Write the sorted list back to the file
             WriteObjects writer = new WriteObjects("showtimes.ser");
             writer.write(showtimeList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 

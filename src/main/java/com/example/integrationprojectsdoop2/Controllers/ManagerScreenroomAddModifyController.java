@@ -78,7 +78,14 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
                 }
             }
 
-            // Write the updated list back to the file
+            // Sort the screenroom list by name (case-insensitive, ignoring leading/trailing spaces)
+            screenroomList.sort((sr1, sr2) -> {
+                String name1 = sr1.getScreenroom_Name() != null ? sr1.getScreenroom_Name().trim().toLowerCase() : "";
+                String name2 = sr2.getScreenroom_Name() != null ? sr2.getScreenroom_Name().trim().toLowerCase() : "";
+                return name1.compareTo(name2);
+            });
+
+            // Write the sorted list back to the file
             WriteObjects writer = new WriteObjects("screenrooms.ser");
             writer.write(screenroomList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 
@@ -89,7 +96,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             // Navigate back to the management view
             onBackButtonClick(actionEvent);
 
-        } catch (IOException | IllegalArgumentException | ClassNotFoundException e ) {
+        } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
             AlertHelper errorAlert = new AlertHelper("Error saving screenroom: " + e.getMessage());
             errorAlert.executeErrorAlert();
         }

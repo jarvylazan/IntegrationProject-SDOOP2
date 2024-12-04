@@ -91,7 +91,14 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
                 }
             }
 
-            // Write the updated list back to the serialized file
+            // Sort the movie list by title (case-insensitive, ignoring leading/trailing spaces)
+            movieList.sort((m1, m2) -> {
+                String title1 = m1.getAMovie_Title() != null ? m1.getAMovie_Title().trim().toLowerCase() : "";
+                String title2 = m2.getAMovie_Title() != null ? m2.getAMovie_Title().trim().toLowerCase() : "";
+                return title1.compareTo(title2);
+            });
+
+            // Write the sorted list back to the serialized file
             WriteObjects writer = new WriteObjects("movies.ser");
             writer.write(movieList.stream().map(m -> (Object) m).collect(Collectors.toList()));
 
@@ -103,7 +110,7 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
             onBackButtonClick(actionEvent);
 
         } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
-            AlertHelper errorAlert = new AlertHelper(STR."Error saving movie: \{e.getMessage()}");
+            AlertHelper errorAlert = new AlertHelper("Error saving movie: " + e.getMessage());
             errorAlert.executeErrorAlert();
         }
     }
