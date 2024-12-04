@@ -227,8 +227,10 @@ public class Show implements Serializable, ShowComponent {
 
     @Override
     public String getDisplayName() {
-        //TODO: Need to find a better way to display a show: either
-        return aMovie.getAMovie_Title()+aShowtime.getaShowtimeTime()+aScreenroom.getScreenroom_Name();
+        return "Show: " + aMovie.getAMovie_Title() +
+                "\n" + aShowtime.getaShowtimeTime() +
+                " "+ aShowDate + "\nRoom: "
+                + aScreenroom.getScreenroom_Name();
     }
 
     public static void resetMovieIDCounter(List<Movie> existingMovies) {
@@ -263,9 +265,9 @@ public class Show implements Serializable, ShowComponent {
 
     @Override
     public String toString() {
-        return "The Show have:"+
+        return "The Show has:"+
                 "\n\nMovie: \t"+ aMovie.getAMovie_Title()+
-                "\nStart at:\t"+aShowtime.getaShowtimeTime()+
+                "\nStarts at:\t"+aShowtime.getaShowtimeTime()+
                 "\nOn Date:\t" + aShowDate +
                 "\nIn Screenroom:\t"+ aScreenroom.getScreenroom_Name();
     }

@@ -7,13 +7,19 @@ import java.util.List;
 /**
  * Represents a Movie with attributes such as ID, title, genre, and synopsis.
  * Implements {@link Serializable} for object serialization.
- * Each Movie is assigned a unique Movie ID.
- * Provides validation for input values to ensure data integrity.
+ * Each Movie is assigned a unique Movie ID and includes validation for input values
+ * to ensure data integrity.
+ * The class also provides functionality for resetting and updating the Movie ID counter
+ * during deserialization.
+ *
+ * Implements the {@link ShowComponent} interface for display functionality in the system.
  *
  * @author Jarvy Lazan
+ * @version 1.0
  */
 public class Movie implements Serializable, ShowComponent {
 
+    /** Serialized file links to the serialVersionUID */
     @Serial
     private static final long serialVersionUID = 69L;
 
@@ -45,9 +51,10 @@ public class Movie implements Serializable, ShowComponent {
 
     /**
      * Constructs a Movie with the specified title, genre, and synopsis.
+     * Validates each parameter to ensure non-null and non-empty values.
      *
-     * @param pMovie_Title   the title of the movie (cannot be null or empty).
-     * @param pMovie_Genre   the genre of the movie (cannot be null or empty).
+     * @param pMovie_Title    the title of the movie (cannot be null or empty).
+     * @param pMovie_Genre    the genre of the movie (cannot be null or empty).
      * @param pMovie_Synopsis the synopsis of the movie (cannot be null or empty).
      * @throws IllegalArgumentException if any parameter is null or empty.
      * @author Jarvy Lazan
@@ -66,13 +73,13 @@ public class Movie implements Serializable, ShowComponent {
      * @author Jarvy Lazan
      */
     private synchronized static String generateMovieID() {
-        return "MOV" + (movieIDCounter);
+        return "MOV" + movieIDCounter++;
     }
 
     /**
      * Gets the unique Movie ID.
      *
-     * @return the Movie ID.
+     * @return the Movie ID as a string.
      * @author Jarvy Lazan
      */
     public String getAMovie_ID() {
@@ -82,7 +89,7 @@ public class Movie implements Serializable, ShowComponent {
     /**
      * Gets the title of the movie.
      *
-     * @return the movie title.
+     * @return the title of the movie as a string.
      * @author Jarvy Lazan
      */
     public String getAMovie_Title() {
@@ -90,9 +97,9 @@ public class Movie implements Serializable, ShowComponent {
     }
 
     /**
-     * Sets the title of the movie. Cannot be null or empty.
+     * Sets the title of the movie. Ensures the title is non-null and non-empty.
      *
-     * @param pMovie_Title the movie title to set.
+     * @param pMovie_Title the title of the movie.
      * @throws IllegalArgumentException if the title is null or empty.
      * @author Jarvy Lazan
      */
@@ -106,8 +113,7 @@ public class Movie implements Serializable, ShowComponent {
     /**
      * Gets the genre of the movie.
      *
-     * @return the movie genre.
-     * @throws IllegalArgumentException if the genre is null or empty.
+     * @return the genre of the movie as a string.
      * @author Jarvy Lazan
      */
     public String getAMovie_Genre() {
@@ -115,9 +121,9 @@ public class Movie implements Serializable, ShowComponent {
     }
 
     /**
-     * Sets the genre of the movie. Cannot be null or empty.
+     * Sets the genre of the movie. Ensures the genre is non-null and non-empty.
      *
-     * @param pMovie_Genre the movie genre to set.
+     * @param pMovie_Genre the genre of the movie.
      * @throws IllegalArgumentException if the genre is null or empty.
      * @author Jarvy Lazan
      */
@@ -131,8 +137,7 @@ public class Movie implements Serializable, ShowComponent {
     /**
      * Gets the synopsis of the movie.
      *
-     * @return the movie synopsis.
-     * @throws IllegalArgumentException if the synopsis is null or empty.
+     * @return the synopsis of the movie as a string.
      * @author Jarvy Lazan
      */
     public String getAMovie_Synopsis() {
@@ -140,9 +145,9 @@ public class Movie implements Serializable, ShowComponent {
     }
 
     /**
-     * Sets the synopsis of the movie. Cannot be null or empty.
+     * Sets the synopsis of the movie. Ensures the synopsis is non-null and non-empty.
      *
-     * @param pMovie_Synopsis the movie synopsis to set.
+     * @param pMovie_Synopsis the synopsis of the movie.
      * @throws IllegalArgumentException if the synopsis is null or empty.
      * @author Jarvy Lazan
      */
@@ -153,35 +158,68 @@ public class Movie implements Serializable, ShowComponent {
         this.aMovie_Synopsis = pMovie_Synopsis;
     }
 
+    /**
+     * Gets the display name of the movie.
+     * Implements the {@link ShowComponent#getDisplayName()} method.
+     *
+     * @return the title of the movie.
+     * @author Jarvy Lazan
+     */
     @Override
     public String getDisplayName() {
         return aMovie_Title;
     }
+
+    /**
+     * Converts the movie details to a readable string representation.
+     *
+     * @return the string representation of the movie's details.
+     * @author Jarvy Lazan
+     */
     @Override
-    public String toString(){
-        return "Title: \t" + aMovie_Title+
-                "\nGenre:\t"+aMovie_Genre+
-                " \nSynopsis:\t "+ aMovie_Synopsis;
+    public String toString() {
+        return "Title: \t" + aMovie_Title +
+                "\nGenre:\t" + aMovie_Genre +
+                "\nSynopsis:\t" + aMovie_Synopsis;
     }
 
+    /**
+     * Resets the Movie ID counter based on existing movies.
+     * Sets the counter to the highest existing ID + 1.
+     *
+     * @param existingMovies the list of existing movies.
+     * @author Jarvy Lazan
+     */
     public static void resetMovieIDCounter(List<Movie> existingMovies) {
         if (existingMovies != null && !existingMovies.isEmpty()) {
             movieIDCounter = existingMovies.stream()
                     .mapToInt(movie -> Integer.parseInt(movie.getAMovie_ID().substring(3)))
-                    .max().orElse(0) + 1;  // Find the max ID and set counter to max + 1
+                    .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
         }
     }
 
-    // Make sure to add these methods during the deserialization process
+    /**
+     * Ensures the Movie ID counter is updated after deserialization.
+     *
+     * @return the current instance of {@code Movie}.
+     * @author Jarvy Lazan
+     */
     @Serial
     private Object readResolve() {
-        updateMovieIDCounter();  // Ensure the ID counter is correct after deserialization
+        updateMovieIDCounter(); // Ensure the ID counter is correct after deserialization
         return this;
     }
 
+    /**
+     * Updates the Movie ID counter based on the current movie's ID.
+     * Ensures the counter is at least one higher than the current movie's ID.
+     *
+     * @throws NumberFormatException if the Movie ID is improperly formatted.
+     * @author Jarvy Lazan
+     */
     private void updateMovieIDCounter() {
         int currentID = Integer.parseInt(this.aMovie_ID.substring(3));
-        if (currentID >= movieIDCounter) {  // Only update if the current ID is greater than the counter
+        if (currentID >= movieIDCounter) { // Only update if the current ID is greater than the counter
             movieIDCounter = currentID + 1;
         }
     }

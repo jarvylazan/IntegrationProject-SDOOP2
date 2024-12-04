@@ -98,10 +98,9 @@ public class ManagementViewController {
     /**
      * Handles the action of adding a new item by navigating to the add view.
      *
-     * @param actionEvent the action event triggered by clicking the add button.
      * @author Samuel Mireault
      */
-    public void onAddClickButton(ActionEvent actionEvent) {
+    public void onAddClickButton() {
         navigateToAdd(aAddNModifyViewName);
     }
 
@@ -109,11 +108,10 @@ public class ManagementViewController {
      * Handles the action of deleting the selected item.
      * Shows a confirmation dialog before proceeding with the deletion.
      *
-     * @param actionEvent the action event triggered by clicking the delete button.
      * @throws IOException if an error occurs while saving the updated list to the file.
      * @author Samuel Mireault
      */
-    public void onDeleteClickButton(ActionEvent actionEvent) throws IOException {
+    public void onDeleteClickButton() throws IOException {
         int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             if (showConfirmationDialog("Confirm Deletion",
@@ -131,10 +129,9 @@ public class ManagementViewController {
     /**
      * Handles the action of going back to the previous stage by closing the current window.
      *
-     * @param actionEvent the action event triggered by clicking the back button.
      * @author Samuel Mireault
      */
-    public void onBackButton(ActionEvent actionEvent) {
+    public void onBackButton() {
         Stage stage = (Stage) this.managementTitleViewLabel.getScene().getWindow();
         stage.close();
     }

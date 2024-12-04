@@ -10,9 +10,14 @@ import java.util.List;
  * Each Screenroom is assigned a unique Screenroom ID.
  * Provides validation for input values to ensure data integrity.
  *
+ * Implements the {@link ShowComponent} interface for display functionality in the system.
+ * This class also ensures proper handling of ID counters during serialization and deserialization.
+ *
  * @author Jarvy Lazan
+ * @version 1.0
  */
 public class Screenroom implements Serializable, ShowComponent {
+
     @Serial
     private static final long serialVersionUID = 34L;
 
@@ -26,9 +31,9 @@ public class Screenroom implements Serializable, ShowComponent {
     private String aScreenroom_Name;
 
     /**
-     * Empty Constructor for the Screenroom class.
+     * Default constructor for the Screenroom class.
      * Automatically generates a unique Screenroom ID.
-     * Other attributes can be set using setter methods
+     * The name can be set using the {@link #setScreenroom_Name(String)} method.
      *
      * @author Jarvy Lazan
      */
@@ -38,6 +43,7 @@ public class Screenroom implements Serializable, ShowComponent {
 
     /**
      * Constructs a Screenroom with the specified name.
+     * Validates the name to ensure it is non-null and non-empty.
      *
      * @param pScreenroom_Name the name of the screenroom (cannot be null or empty).
      * @throws IllegalArgumentException if the name is null or empty.
@@ -61,7 +67,7 @@ public class Screenroom implements Serializable, ShowComponent {
     /**
      * Gets the unique Screenroom ID.
      *
-     * @return the Screenroom ID.
+     * @return the Screenroom ID as a string.
      * @author Jarvy Lazan
      */
     public String getAScreenroom_ID() {
@@ -71,7 +77,7 @@ public class Screenroom implements Serializable, ShowComponent {
     /**
      * Gets the name of the Screenroom.
      *
-     * @return the Screenroom name.
+     * @return the Screenroom name as a string.
      * @author Jarvy Lazan
      */
     public String getScreenroom_Name() {
@@ -79,9 +85,10 @@ public class Screenroom implements Serializable, ShowComponent {
     }
 
     /**
-     * Sets the name of the Screenroom. Cannot be null or empty.
+     * Sets the name of the Screenroom.
+     * Validates the name to ensure it is non-null and non-empty.
      *
-     * @param pScreenroom_Name the screenroom name to set.
+     * @param pScreenroom_Name the name of the screenroom to set.
      * @throws IllegalArgumentException if the name is null or empty.
      * @author Jarvy Lazan
      */
@@ -92,11 +99,24 @@ public class Screenroom implements Serializable, ShowComponent {
         this.aScreenroom_Name = pScreenroom_Name;
     }
 
+    /**
+     * Provides the display name of the Screenroom.
+     * Implements the {@link ShowComponent#getDisplayName()} method.
+     *
+     * @return the name of the Screenroom as the display name.
+     * @author Jarvy Lazan
+     */
     @Override
     public String getDisplayName() {
         return aScreenroom_Name;
     }
 
+    /**
+     * Returns a string representation of the Screenroom object.
+     *
+     * @return a string containing the Screenroom name.
+     * @author Jarvy Lazan
+     */
     @Override
     public String toString() {
         return "Screenroom: " + aScreenroom_Name;
@@ -104,8 +124,10 @@ public class Screenroom implements Serializable, ShowComponent {
 
     /**
      * Resets the Screenroom ID counter based on the highest existing ID.
+     * Ensures the counter starts from the next ID after the highest existing ID.
      *
      * @param existingScreenrooms a list of existing Screenroom objects.
+     * @author Jarvy Lazan
      */
     public static void resetScreenroomIDCounter(List<Screenroom> existingScreenrooms) {
         if (existingScreenrooms != null && !existingScreenrooms.isEmpty()) {
@@ -116,9 +138,11 @@ public class Screenroom implements Serializable, ShowComponent {
     }
 
     /**
-     * Ensures the ID counter is correct after deserialization.
+     * Ensures the Screenroom ID counter is correct after deserialization.
+     * Updates the ID counter to reflect the highest existing ID.
      *
      * @return the deserialized object.
+     * @author Jarvy Lazan
      */
     @Serial
     private Object readResolve() {
@@ -128,6 +152,10 @@ public class Screenroom implements Serializable, ShowComponent {
 
     /**
      * Updates the Screenroom ID counter based on the current instance ID.
+     * Ensures the counter is at least one higher than the current Screenroom's ID.
+     *
+     * @throws NumberFormatException if the Screenroom ID is improperly formatted.
+     * @author Jarvy Lazan
      */
     private void updateScreenroomIDCounter() {
         int currentID = Integer.parseInt(this.aScreenroom_ID.substring(1));
