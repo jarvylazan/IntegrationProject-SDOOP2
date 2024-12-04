@@ -106,20 +106,26 @@ public class ManagementViewController {
 
     /**
      * Handles the action of deleting the selected item.
-     * Shows a confirmation dialog before proceeding with the deletion.
+     * Ensures the selected item is not referenced in any existing show before deletion.
      *
-     * @throws IOException if an error occurs while saving the updated list to the file.
-     * @author Samuel Mireault
+     * @throws IOException if an error occurs during the deletion process.
+     * @author Jarvy Lazan
      */
     public void onDeleteClickButton() throws IOException {
         int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            if (showConfirmationDialog("Confirm Deletion",
-                    "Are you sure you want to delete this item?",
-                    "This action cannot be undone.")) {
+            ShowComponent selectedItem = aManagementList.get(selectedIndex);
+
+            // Check if the selected item is used in any show
+            if (isAssociatedWithExistingShow(selectedItem)) {
+                new AlertHelper("Cannot delete: The selected item is referenced in existing shows.").executeErrorAlert();
+                return;
+            }
+
+            // Confirm deletion
+            if (showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete this item?", "This action cannot be undone.")) {
+                // Perform deletion
                 deleteItem(selectedIndex);
-            } else {
-                System.out.println("Deletion canceled by the user.");
             }
         } else {
             new AlertHelper("No item selected for deletion.").executeErrorAlert();
@@ -238,31 +244,67 @@ public class ManagementViewController {
 
     /**
      * Deletes the selected item from the management list and saves the updated list to the file.
+     * Ensures that the selected item is not associated with any existing `Show` objects.
      *
      * @param selectedIndex the index of the item to delete.
      * @throws IOException if an error occurs while saving the updated list to the file.
-     * @author Samuel Mireault
+     * @author Jarvy Lazan
      */
     private void deleteItem(int selectedIndex) throws IOException {
         if (selectedIndex < 0 || selectedIndex >= aManagementList.size()) {
             System.out.println("Invalid selection. No item to delete.");
             AlertHelper nothingChosen = new AlertHelper("Invalid selection. No item to delete.");
             nothingChosen.executeErrorAlert();
-
             return;
         }
 
-        Object selectedItem = aManagementList.get(selectedIndex);
+        ShowComponent selectedItem = aManagementList.get(selectedIndex);
 
-        if (selectedItem instanceof ShowComponent) {
-            aManagementList.remove(selectedItem);
-            managementListView.getItems().remove(selectedIndex);
-
-            saveManagementListToFile(aFileName, aManagementList);
-            System.out.println("Item deleted successfully.");
-        } else {
-            System.out.println("Selected item is not a ShowComponent. Cannot delete.");
+        // Check for dependencies in existing Shows
+        if (isAssociatedWithExistingShow(selectedItem)) {
+            AlertHelper errorAlert = new AlertHelper("Cannot delete this item as it is associated with an existing Show.");
+            errorAlert.executeErrorAlert();
+            return;
         }
+
+        // Proceed with deletion
+        aManagementList.remove(selectedItem);
+        managementListView.getItems().remove(selectedIndex);
+        saveManagementListToFile(aFileName, aManagementList);
+        System.out.println("Item deleted successfully.");
+    }
+    /**
+     * Checks if the given `ShowComponent` is associated with any existing `Show` objects.
+     *
+     * @param component the `ShowComponent` to check for dependencies.
+     * @return {@code true} if the component is associated with an existing `Show`, {@code false} otherwise.
+     * @author Jarvy Lazan
+     */
+    private boolean isAssociatedWithExistingShow(ShowComponent component) {
+        try {
+            // Read the list of existing Shows
+            ReadObjects readObjects = new ReadObjects("shows.ser");
+            List<Object> rawObjects = readObjects.read();
+            List<Show> existingShows = rawObjects.stream()
+                    .filter(Show.class::isInstance)
+                    .map(Show.class::cast)
+                    .collect(Collectors.toList());
+
+            // Check for associations based on the type of ShowComponent
+            if (component instanceof Movie) {
+                String movieID = ((Movie) component).getAMovie_ID();
+                return existingShows.stream().anyMatch(show -> show.getMovie().getAMovie_ID().equals(movieID));
+            } else if (component instanceof Showtime) {
+                String showtimeID = ((Showtime) component).getaShowtimeID();
+                return existingShows.stream().anyMatch(show -> show.getShowtime().getaShowtimeID().equals(showtimeID));
+            } else if (component instanceof Screenroom) {
+                String screenroomID = ((Screenroom) component).getAScreenroom_ID();
+                return existingShows.stream().anyMatch(show -> show.getScreenroom().getAScreenroom_ID().equals(screenroomID));
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error reading Shows file: " + e.getMessage());
+        }
+        return false;
     }
 
     /**

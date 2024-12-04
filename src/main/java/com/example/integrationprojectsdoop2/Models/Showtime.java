@@ -89,18 +89,38 @@ public class Showtime implements Serializable, ShowComponent {
      *
      * @param pShowtime_Time the showtime time to set.
      * @throws IllegalArgumentException if the showtime time does not match the format HH:mm.
-     * @author Mohammad Tarin Wahidi
+     * @author Mohammad Tarin Wahidi & Jarvy Lazan
      */
     public void setaShowtimeTime(String pShowtime_Time) {
-        // Regular expression to validate the format HH:mm
-        String timePattern = "^\\d{2}:\\d{2}$";
+        String normalizedTime = normalizeTime(pShowtime_Time); // Normalize to HH:mm
+        String timePattern = "^(?:[01]?\\d|2[0-3]):[0-5]\\d$";
 
-        if (pShowtime_Time == null || !pShowtime_Time.matches(timePattern)) {
-            throw new IllegalArgumentException("A showtime must follow the format HH:mm (e.g., 12:34).");
+        if (normalizedTime == null || !normalizedTime.matches(timePattern)) {
+            throw new IllegalArgumentException("A showtime must follow the format H:mm or HH:mm (e.g., 9:30, 12:45) and be within valid time bounds.");
         }
 
-        this.aShowtime_Time = pShowtime_Time;
+        this.aShowtime_Time = normalizedTime;
     }
+
+    /**
+     * Normalizes a given time string into a standard HH:mm format.
+     *
+     * This method takes a time string in the format "H:mm" or "HH:mm",
+     * splits it into hours and minutes, and ensures that the output is
+     * consistently formatted as "HH:mm" with leading zeros if necessary.
+     *
+     * @param time the input time string to normalize, in the format "H:mm" or "HH:mm".
+     * @return the normalized time string in "HH:mm" format.
+     * @throws NumberFormatException if the time string contains invalid numeric values.
+     * @throws ArrayIndexOutOfBoundsException if the time string is improperly formatted.
+     */
+    private static String normalizeTime(String time) {
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+        return String.format("%02d:%02d", hour, minute);
+    }
+
 
     /**
      * Provides the display name of the Showtime.

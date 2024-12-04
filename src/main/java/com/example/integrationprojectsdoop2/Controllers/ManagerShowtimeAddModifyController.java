@@ -78,7 +78,7 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
 
             // Check for duplicates
             boolean duplicateExists = showtimeList.stream()
-                    .anyMatch(showtime -> showtime.getaShowtimeTime().equals(enteredTime) &&
+                    .anyMatch(showtime -> normalizeTime(showtime.getaShowtimeTime()).equals(normalizeTime(enteredTime)) &&
                             (currentShowtime == null || !showtime.getaShowtimeID().equals(currentShowtime.getaShowtimeID())));
 
             if (duplicateExists) {
@@ -96,7 +96,9 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             }
 
             // Update the details of the current showtime
-            currentShowtime.setaShowtimeTime(enteredTime);
+            String normalizedTime = normalizeTime(enteredTime);
+            currentShowtime.setaShowtimeTime(normalizedTime);
+
 
             if (!isNewShowtime) {
                 // Find the existing showtime and replace it
@@ -111,12 +113,17 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             // Sort the showtime list by time (earliest to latest)
             showtimeList.sort((s1, s2) -> {
                 try {
-                    return java.time.LocalTime.parse(s1.getaShowtimeTime())
-                            .compareTo(java.time.LocalTime.parse(s2.getaShowtimeTime()));
+                    String normalizedTime1 = normalizeTime(s1.getaShowtimeTime());
+                    String normalizedTime2 = normalizeTime(s2.getaShowtimeTime());
+                    return java.time.LocalTime.parse(normalizedTime1)
+                            .compareTo(java.time.LocalTime.parse(normalizedTime2));
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Invalid time format: " + e.getMessage());
                 }
             });
+
+
+
 
             // Write the sorted list back to the file
             WriteObjects writer = new WriteObjects("showtimes.ser");
@@ -133,6 +140,20 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             AlertHelper errorAlert = new AlertHelper("Error saving showtime: " + e.getMessage());
             errorAlert.executeErrorAlert();
         }
+    }
+
+    /**
+     * Normalizes a time string to HH:mm format.
+     *
+     * @param time the input time string in H:mm or HH:mm format.
+     * @return the normalized time string in HH:mm format.
+     * @author Jarvy Lazan
+     */
+    private static String normalizeTime(String time) {
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+        return String.format("%02d:%02d", hour, minute);
     }
 
     /**
