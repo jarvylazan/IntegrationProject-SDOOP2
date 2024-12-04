@@ -74,19 +74,19 @@ public class ReportViewController {
                     case "Alphabetical (A-Z)" -> sortData(true);
                     case "Alphabetical (Z-A)" -> sortData(false);
                     case "Movie Sold" -> sortByMovieSold(eTicketsList);
-                    case "Showtimes" -> sortByShowtimes();
+                    case "Show" -> sortByShow();
                 }
             }
         });
     }
 
     /**
-     * Sorts shows by their showtimes in chronological order and updates the ListView.
+     * Sorts shows by their shows in chronological order and updates the ListView.
      * This method uses the show's date and time to determine the order.
      *
      * @author Jarvy Lazan & Samuel Mireault
      */
-    private void sortByShowtimes() {
+    private void sortByShow() {
         showList.sort(Comparator.comparing(
                 Show::getShowDate,
                 Comparator.nullsLast(Comparator.naturalOrder())
