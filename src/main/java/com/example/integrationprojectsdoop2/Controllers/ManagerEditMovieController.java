@@ -18,6 +18,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for editing and managing movies in the application.
+ * Handles adding, updating, and saving movie information.
+ *
+ * @author Jarvy Lazan
+ */
 public class ManagerEditMovieController implements ModifyController<Movie> {
 
     @FXML
@@ -31,6 +37,13 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
 
     private Movie currentMovie; // The movie being edited
 
+    /**
+     * Initializes the data for the controller. If a movie is provided, its details are populated in the form.
+     * If no movie is provided, the form is cleared.
+     *
+     * @param movie the movie to initialize the form with, or null for a blank form.
+     * @author Jarvy Lazan
+     */
     public void initializeData(Movie movie) {
         if (movie != null) {
             this.currentMovie = movie;
@@ -45,6 +58,16 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
         }
     }
 
+    /**
+     * Handles the save button click event. Validates inputs, checks for duplicates,
+     * updates the movie list, sorts it by title, and saves it back to the file.
+     *
+     * @param actionEvent the event triggered by clicking the save button.
+     * @throws IOException if an error occurs during file operations.
+     * @throws ClassNotFoundException if the deserialization fails.
+     * @throws IllegalArgumentException if input validation fails.
+     * @author Jarvy Lazan
+     */
     public void onSaveButtonClick(ActionEvent actionEvent) {
         try {
             ReadObjects reader = new ReadObjects("movies.ser");
@@ -115,6 +138,13 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
         }
     }
 
+    /**
+     * Handles the back button click event. Navigates back to the management view.
+     *
+     * @param actionEvent the event triggered by clicking the back button.
+     * @throws IOException if an error occurs during navigation to the management view.
+     * @author Jarvy Lazan
+     */
     public void onBackButtonClick(ActionEvent actionEvent) {
         try {
             // Load the management view FXML
