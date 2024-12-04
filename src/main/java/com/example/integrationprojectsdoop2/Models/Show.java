@@ -182,7 +182,7 @@ public class Show implements Serializable, ShowComponent {
      * @return The e-ticket for this Show.
      * @author Jarvy Lazan
      */
-    private ETicket getTicket() {
+    public ETicket getTicket() {
         return aTicket;
     }
 

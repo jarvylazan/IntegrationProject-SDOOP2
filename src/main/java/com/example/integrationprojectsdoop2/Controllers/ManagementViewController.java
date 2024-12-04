@@ -6,6 +6,8 @@ import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
 import com.example.integrationprojectsdoop2.Models.Movie;
 import com.example.integrationprojectsdoop2.Models.Show;
 import com.example.integrationprojectsdoop2.Models.ShowComponent;
+import com.example.integrationprojectsdoop2.Models.Showtime;
+import com.example.integrationprojectsdoop2.Models.Screenroom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller for managing the view and operations related to the management of show components.
@@ -53,7 +56,9 @@ public class ManagementViewController {
 
     private static final Map<Class<?>, String> VIEW_MAP = Map.of(
             Movie.class, "/com/example/integrationprojectsdoop2/manager-edit-movie-view.fxml",
-            Show.class, "/com/example/integrationprojectsdoop2/manager-show-add-modify-view.fxml"
+            Show.class, "/com/example/integrationprojectsdoop2/manager-show-add-modify-view.fxml",
+            Showtime.class, "/com/example/integrationprojectsdoop2/manager-showtime-add-modify-view.fxml",
+            Screenroom.class, "/com/example/integrationprojectsdoop2/manager-screen-room-add-modify-view.fxml"
     );
 
 
@@ -217,16 +222,30 @@ public class ManagementViewController {
             ReadObjects readObjects = new ReadObjects(pFilename);
             List<Object> rawObjects = readObjects.read();
 
+            // Convert to mutable list and cast to ShowComponent
             components = rawObjects.stream()
                     .filter(ShowComponent.class::isInstance)
                     .map(ShowComponent.class::cast)
-                    .toList();
+                    .collect(Collectors.toCollection(ArrayList::new)); // Ensure it's a mutable list
+
+            // Sort based on the display name for all components
+            components.sort((o1, o2) -> {
+                String displayName1 = o1.getDisplayName();
+                String displayName2 = o2.getDisplayName();
+
+                // Handle nulls gracefully
+                if (displayName1 == null) return (displayName2 == null) ? 0 : -1;
+                if (displayName2 == null) return 1;
+
+                return displayName1.compareToIgnoreCase(displayName2); // Case-insensitive sorting
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return FXCollections.observableArrayList(components);
     }
+
 
     /**
      * Saves the management list to the specified file.
@@ -236,10 +255,9 @@ public class ManagementViewController {
      * @throws IOException if an error occurs while writing to the file.
      */
     private void saveManagementListToFile(String pFilename, ObservableList<ShowComponent> pManagementList) throws IOException {
+        List<Object> serializableList = new ArrayList<>(pManagementList);
         WriteObjects writeObjects = new WriteObjects(pFilename);
-        List<Object> components = Collections.singletonList(pManagementList);
-
-        writeObjects.write(components);
+        writeObjects.write(serializableList);
     }
 
     /**
@@ -267,11 +285,25 @@ public class ManagementViewController {
      * @throws IOException if an error occurs while saving the updated list to the file.
      */
     private void deleteItem(int selectedIndex) throws IOException {
-        ShowComponent selectedItem = aManagementList.get(selectedIndex);
-        aManagementList.remove(selectedIndex);
-        managementListView.getItems().remove(selectedIndex);
+        if (selectedIndex < 0 || selectedIndex >= aManagementList.size()) {
+            System.out.println("Invalid selection. No item to delete.");
+            AlertHelper nothingChosen = new AlertHelper( "Invalid selection. No item to delete.");
+            nothingChosen.executeErrorAlert();
 
-        saveManagementListToFile(aFileName, aManagementList);
-        System.out.println("Item deleted successfully.");
+            return;
+        }
+
+        Object selectedItem = aManagementList.get(selectedIndex);
+
+        // Check if the selected item is a ShowComponent
+        if (selectedItem instanceof ShowComponent) {
+            aManagementList.remove(selectedItem);
+            managementListView.getItems().remove(selectedIndex);
+
+            saveManagementListToFile(aFileName, aManagementList);
+            System.out.println("Item deleted successfully.");
+        } else {
+            System.out.println("Selected item is not a ShowComponent. Cannot delete.");
+        }
     }
 }

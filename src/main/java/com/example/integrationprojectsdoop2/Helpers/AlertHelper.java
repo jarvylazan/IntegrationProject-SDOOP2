@@ -26,6 +26,24 @@ public class AlertHelper {
     }
 
     /**
+     * Empty constructor for AlertHelper, allowing the message to be set later.
+     */
+    public AlertHelper() {}
+
+    /**
+     * Sets the alert message.
+     *
+     * @param pAlertMessage the message to set.
+     * @throws IllegalArgumentException if the alert message is null or empty.
+     */
+    public void setMessage(String pAlertMessage) {
+        if (pAlertMessage == null || pAlertMessage.trim().isEmpty()) {
+            throw new IllegalArgumentException("Alert message cannot be null or empty.");
+        }
+        this.aAlertMessage = pAlertMessage;
+    }
+
+    /**
      * Displays a success alert (INFORMATION type) with the provided message.
      * Uses JavaFX's Alert class to show the alert.
      *

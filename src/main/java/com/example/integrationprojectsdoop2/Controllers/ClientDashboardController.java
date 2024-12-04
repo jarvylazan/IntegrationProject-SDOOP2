@@ -4,6 +4,7 @@ import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.Show;
+import com.example.integrationprojectsdoop2.MovieTheatreApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,9 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ClientDashboardController {
 
@@ -107,34 +106,35 @@ public class ClientDashboardController {
     private void updateMovieListView(LocalDate selectedDate) {
         ObservableList<String> movieTitles = FXCollections.observableArrayList();
 
+        Set<String> uniqueMovieTitles = new HashSet<>(); // For unique movie titles
+        boolean hasMoviesForDate = false;
+
         for (Show show : this.aShowsList) {
-            if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) { // Filter by date
-                movieTitles.add(show.getMovie().getAMovie_Title());
-            }
-            else if (show.getShowDate() == null || !show.getShowDate().equals(selectedDate)) {
-                movieTitles.add("There are no movies available for this date.");
-                break;
+            if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) {
+                // Filter by date and add unique movie titles
+                if (uniqueMovieTitles.add(show.getMovie().getAMovie_Title())) {
+                    movieTitles.add(show.getMovie().getAMovie_Title());
+                }
+                hasMoviesForDate = true; // At least one movie is available
             }
         }
 
-        // Show a message if no movies are available for the selected date
-        if (movieTitles.isEmpty()) {
-            AlertHelper alert = new AlertHelper("No movies available for that date.");
-            alert.executeWarningAlert();
+        if (!hasMoviesForDate) {
+            movieTitles.add("There are no movies available for this date.");
         }
 
         this.movieListView.setItems(movieTitles);
     }
 
     @FXML
-    protected void onSeeShowOptionsButtonClick(ActionEvent event) {
+    protected void onSeeShowOptionsButtonClick(ActionEvent pEvent) {
         // Get the selected movie title from the ListView
         String selectedMovieTitle = (String) this.movieListView.getSelectionModel().getSelectedItem();
         LocalDate selectedDate = this.movieDatePicker.getValue();
 
         // Check if a movie title and a valid date are selected
         if (selectedMovieTitle == null) {
-            AlertHelper alert = new AlertHelper("Please select a movie title from the list. ");
+            AlertHelper alert = new AlertHelper("Please select a movie title from the list.");
             alert.executeWarningAlert();
             return;
         }
@@ -147,24 +147,22 @@ public class ClientDashboardController {
 
         // If no shows match, inform the user
         if (filteredShows.isEmpty()) {
-            System.out.println("No shows available for the selected movie and date.");
+            AlertHelper alert = new AlertHelper("No shows available for the selected movie and date.");
+            alert.executeWarningAlert();
             return;
         }
 
         try {
-            // Load the new view
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("movie-shows-view.fxml"));
-            Parent showsRoot = loader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/movie-shows-view.fxml")));
+            Parent root = fxmlLoader.load();
+            MovieShowsController controller = fxmlLoader.getController();
+            controller.setMovieShowsView(filteredShows.getFirst(), aLoggedClient, filteredShows);
 
-            // Pass data to the new controller
-            //MovieShowsViewController controller = loader.getController();
-            //controller.setMovieShowsView(filteredShows);
-
-            // Set the new scene
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(showsRoot));
-            stage.setTitle("Movie Shows");
-            stage.show();
+            Scene scene = new Scene(root);
+            Stage currentStage = (Stage) ((javafx.scene.Node) pEvent.getSource()).getScene().getWindow();
+            currentStage.setTitle("Movie Shows");
+            currentStage.setScene(scene);
+            currentStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
