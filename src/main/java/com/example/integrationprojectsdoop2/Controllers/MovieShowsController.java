@@ -1,6 +1,8 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
+import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
+import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
 import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.ETicket;
 import com.example.integrationprojectsdoop2.Models.Show;
@@ -19,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class MovieShowsController {
@@ -88,6 +91,25 @@ public class MovieShowsController {
             ETicket eTicket = new ETicket(selectedShow, aLoggedClient);
 
             try {
+                ReadObjects reader = new ReadObjects("etickets.ser");
+                List<Object> rawObjects = reader.read();
+                List<ETicket> eTicketList = rawObjects.stream()
+                        .filter(ETicket.class::isInstance)
+                        .map(ETicket.class::cast)
+                        .collect(Collectors.toList());
+
+                eTicketList.add(eTicket);
+
+                // Write the updated list back to the file
+                WriteObjects writer = new WriteObjects("etickets.ser");
+                writer.write(eTicketList.stream().map(s -> (Object) s).collect(Collectors.toList()));
+
+            } catch (IOException | ClassNotFoundException e) {
+                AlertHelper errorAlert = new AlertHelper("Error saving ETicket: " + e.getMessage());
+                errorAlert.executeErrorAlert();
+            }
+
+            try {
                 FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/e-ticket-view.fxml")));
                 Parent root = fxmlLoader.load();
                 ETicketViewController controller = fxmlLoader.getController();
@@ -106,6 +128,7 @@ public class MovieShowsController {
             alert.executeWarningAlert();
         }
     }
+
 
     public void onBackButtonClick(ActionEvent pActionEvent) {
         try {

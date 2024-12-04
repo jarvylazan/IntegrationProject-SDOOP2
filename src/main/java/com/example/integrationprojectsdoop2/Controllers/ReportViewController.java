@@ -82,7 +82,7 @@ public class ReportViewController {
     private int calculateTicketsSoldForShow(Show show) {
         // Example logic: Iterate over a global list of tickets and count matches
         return (int) eTicketsList.stream()
-                .filter(ticket -> ticket.getaShowID().equals(show.getaShowID()))
+                .filter(ticket -> ticket.getaShow().getaShowID().equals(show.getaShowID()))
                 .count();
     }
 
@@ -100,7 +100,7 @@ public class ReportViewController {
 
         // Count tickets for each movie
         for (ETicket eticket : pEticketList) {
-            String showID = eticket.getaShowID();
+            String showID = eticket.getaShow().getaShowID();
             Optional<Show> matchingShow = showList.stream()
                     .filter(show -> show.getaShowID().equals(showID))
                     .findFirst();

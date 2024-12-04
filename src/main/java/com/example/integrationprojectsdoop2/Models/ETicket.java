@@ -30,12 +30,12 @@ public class ETicket implements Serializable {
     /**
      * The unique ID of the ticket.
      */
-    private final String aTicketID;
+    private String aTicketID;
 
     /**
      * The show associated with the ticket.
      */
-    private final Show aShow;
+    private Show aShow;
 
     /**
      * The date and time of the ticket purchase.
@@ -43,9 +43,9 @@ public class ETicket implements Serializable {
     private LocalDateTime aPurchaseDateTime;
 
     /**
-     * The ID of the client who purchased the ticket.
+     * The client who purchased the ticket.
      */
-    private final Client aClient;
+    private Client aClient;
 
     /**
      * Constructs a new ETicket with the given show ID and client ID.
