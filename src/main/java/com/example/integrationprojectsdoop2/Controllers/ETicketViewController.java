@@ -33,8 +33,6 @@ public class ETicketViewController {
         this.aETicket = pTicket;
 
         updateETicketLabel();
-
-        logETicketsFromFile();
     }
 
     private void updateETicketLabel() {
@@ -80,34 +78,6 @@ public class ETicketViewController {
             System.err.println("Error loading the Client Dashboard : " + e.getMessage());
             AlertHelper errorCatch = new AlertHelper(e.getMessage());
             errorCatch.executeErrorAlert();
-        }
-    }
-
-    private void logETicketsFromFile() {
-        try {
-            // Read the contents of the file
-            ReadObjects reader = new ReadObjects("etickets.ser");
-            List<Object> rawObjects = reader.read();
-
-            // Filter and cast the objects to ETicket
-            List<ETicket> eTicketList = rawObjects.stream()
-                    .filter(ETicket.class::isInstance)
-                    .map(ETicket.class::cast)
-                    .collect(Collectors.toList());
-
-            // Log each ticket's details to the console
-            System.out.println("------ E-Tickets Stored in File ------");
-            if (eTicketList.isEmpty()) {
-                System.out.println("No tickets found in the file.");
-            } else {
-                for (ETicket ticket : eTicketList) {
-                    System.out.println(ticket); // Assuming ETicket has a meaningful toString() implementation
-                }
-            }
-            System.out.println("--------------------------------------");
-        } catch (IOException | ClassNotFoundException e) {
-            AlertHelper errorAlert = new AlertHelper("Error reading E-Tickets file: " + e.getMessage());
-            errorAlert.executeErrorAlert();
         }
     }
 }
