@@ -111,12 +111,7 @@ public class ManagementViewController {
      * Handles the action of adding a new item by navigating to the added view.
      */
     public void onAddClickButton() {
-        try {
             navigateToAdd(aAddNModifyViewName);
-        } catch (Exception e) {
-            AlertHelper error = new AlertHelper(e.getMessage());
-            error.executeErrorAlert();
-        }
     }
 
     /**
