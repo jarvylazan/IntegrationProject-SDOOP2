@@ -58,7 +58,7 @@ public class MovieShowsController {
     }
 
     private void updateMovieTitleAndDateLabel() {
-        this.movieTitleAndDateLabel.setText(this.aShow.getMovie().getAMovie_Title() + ", " + this.aShow.getShowDate());
+        this.movieTitleAndDateLabel.setText(this.aShow.getMovie().getMovie_Title() + ", " + this.aShow.getShowDate());
     }
 
     private void updateShowListView() {

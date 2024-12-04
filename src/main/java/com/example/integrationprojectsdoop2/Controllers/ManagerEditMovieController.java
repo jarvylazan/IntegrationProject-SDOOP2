@@ -47,9 +47,9 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
     public void initializeData(Movie movie) {
         if (movie != null) {
             this.currentMovie = movie;
-            TitleTextField.setText(movie.getAMovie_Title());
-            genreTextField.setText(movie.getAMovie_Genre());
-            synopsisTextArea.setText(movie.getAMovie_Synopsis());
+            TitleTextField.setText(movie.getMovie_Title());
+            genreTextField.setText(movie.getMovie_Genre());
+            synopsisTextArea.setText(movie.getMovie_Synopsis());
         } else {
             this.currentMovie = null;
             TitleTextField.clear();
@@ -84,8 +84,8 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
 
             // Validate for duplicate movie title
             boolean isDuplicate = movieList.stream()
-                    .anyMatch(movie -> movie.getAMovie_Title().equalsIgnoreCase(enteredTitle) &&
-                            (isNewMovie || !movie.getAMovie_ID().equals(currentMovie.getAMovie_ID())));
+                    .anyMatch(movie -> movie.getMovie_Title().equalsIgnoreCase(enteredTitle) &&
+                            (isNewMovie || !movie.getMovie_ID().equals(currentMovie.getMovie_ID())));
 
             if (isDuplicate) {
                 AlertHelper errorAlert = new AlertHelper("A movie with the same title already exists. Please use a unique title.");
@@ -100,14 +100,14 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
             }
 
             // Update the movie's details from the form
-            currentMovie.setAMovie_Title(enteredTitle);
-            currentMovie.setAMovie_Genre(genreTextField.getText().trim());
-            currentMovie.setAMovie_Synopsis(synopsisTextArea.getText().trim());
+            currentMovie.setMovie_Title(enteredTitle);
+            currentMovie.setMovie_Genre(genreTextField.getText().trim());
+            currentMovie.setMovie_Synopsis(synopsisTextArea.getText().trim());
 
             if (!isNewMovie) {
                 // Find the movie with the same ID and replace it
                 for (int i = 0; i < movieList.size(); i++) {
-                    if (movieList.get(i).getAMovie_ID().equals(currentMovie.getAMovie_ID())) {
+                    if (movieList.get(i).getMovie_ID().equals(currentMovie.getMovie_ID())) {
                         movieList.set(i, currentMovie);  // Replace the movie with updated details
                         break;
                     }
@@ -116,8 +116,8 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
 
             // Sort the movie list by title (case-insensitive, ignoring leading/trailing spaces)
             movieList.sort((m1, m2) -> {
-                String title1 = m1.getAMovie_Title() != null ? m1.getAMovie_Title().trim().toLowerCase() : "";
-                String title2 = m2.getAMovie_Title() != null ? m2.getAMovie_Title().trim().toLowerCase() : "";
+                String title1 = m1.getMovie_Title() != null ? m1.getMovie_Title().trim().toLowerCase() : "";
+                String title2 = m2.getMovie_Title() != null ? m2.getMovie_Title().trim().toLowerCase() : "";
                 return title1.compareTo(title2);
             });
 

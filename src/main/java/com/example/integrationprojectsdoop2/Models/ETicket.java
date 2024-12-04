@@ -57,7 +57,7 @@ public class ETicket implements Serializable {
         this.aShow = pShow;
         this.aPurchaseDateTime = LocalDateTime.now();
         this.aClient = pClient;
-        this.aTicketID = setaTicketID();
+        this.aTicketID = setTicketID();
     }
 
     /**
@@ -66,7 +66,7 @@ public class ETicket implements Serializable {
      *
      * @return a unique ticket ID in the format "YYYYNNNNNNNNNN".
      */
-    private static synchronized String setaTicketID() {
+    private static synchronized String setTicketID() {
         String currentYear = String.valueOf(LocalDateTime.now().getYear());
 
         // Reset counter if the year changes
@@ -87,7 +87,7 @@ public class ETicket implements Serializable {
      *
      * @return the ticket ID.
      */
-    public String getaTicketID() {
+    public String getTicketID() {
         return this.aTicketID;
     }
 
@@ -96,7 +96,7 @@ public class ETicket implements Serializable {
      *
      * @return the show.
      */
-    public Show getaShow() {
+    public Show getShow() {
         return this.aShow;
     }
 
@@ -105,7 +105,7 @@ public class ETicket implements Serializable {
      *
      * @return the purchase date and time.
      */
-    public LocalDateTime getaPurchaseDateTime() {
+    public LocalDateTime getPurchaseDateTime() {
         return this.aPurchaseDateTime;
     }
 
@@ -114,7 +114,7 @@ public class ETicket implements Serializable {
      *
      * @return the client.
      */
-    public Client getaClient() {
+    public Client getClient() {
         return this.aClient;
     }
 }

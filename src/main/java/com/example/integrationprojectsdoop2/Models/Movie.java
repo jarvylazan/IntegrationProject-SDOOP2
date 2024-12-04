@@ -61,9 +61,9 @@ public class Movie implements Serializable, ShowComponent {
      */
     public Movie(String pMovie_Title, String pMovie_Genre, String pMovie_Synopsis) {
         this.aMovie_ID = generateMovieID();
-        this.setAMovie_Title(pMovie_Title);
-        this.setAMovie_Genre(pMovie_Genre);
-        this.setAMovie_Synopsis(pMovie_Synopsis);
+        this.setMovie_Title(pMovie_Title);
+        this.setMovie_Genre(pMovie_Genre);
+        this.setMovie_Synopsis(pMovie_Synopsis);
     }
 
     /**
@@ -82,7 +82,7 @@ public class Movie implements Serializable, ShowComponent {
      * @return the Movie ID as a string.
      * @author Jarvy Lazan
      */
-    public String getAMovie_ID() {
+    public String getMovie_ID() {
         return this.aMovie_ID;
     }
 
@@ -92,7 +92,7 @@ public class Movie implements Serializable, ShowComponent {
      * @return the title of the movie as a string.
      * @author Jarvy Lazan
      */
-    public String getAMovie_Title() {
+    public String getMovie_Title() {
         return this.aMovie_Title;
     }
 
@@ -103,7 +103,7 @@ public class Movie implements Serializable, ShowComponent {
      * @throws IllegalArgumentException if the title is null or empty.
      * @author Jarvy Lazan
      */
-    public void setAMovie_Title(String pMovie_Title) {
+    public void setMovie_Title(String pMovie_Title) {
         if (pMovie_Title == null || pMovie_Title.trim().isEmpty()) {
             throw new IllegalArgumentException("Movie Title cannot be null or empty.");
         }
@@ -116,7 +116,7 @@ public class Movie implements Serializable, ShowComponent {
      * @return the genre of the movie as a string.
      * @author Jarvy Lazan
      */
-    public String getAMovie_Genre() {
+    public String getMovie_Genre() {
         return this.aMovie_Genre;
     }
 
@@ -127,7 +127,7 @@ public class Movie implements Serializable, ShowComponent {
      * @throws IllegalArgumentException if the genre is null or empty.
      * @author Jarvy Lazan
      */
-    public void setAMovie_Genre(String pMovie_Genre) {
+    public void setMovie_Genre(String pMovie_Genre) {
         if (pMovie_Genre == null || pMovie_Genre.trim().isEmpty()) {
             throw new IllegalArgumentException("Movie Genre cannot be null or empty.");
         }
@@ -140,7 +140,7 @@ public class Movie implements Serializable, ShowComponent {
      * @return the synopsis of the movie as a string.
      * @author Jarvy Lazan
      */
-    public String getAMovie_Synopsis() {
+    public String getMovie_Synopsis() {
         return this.aMovie_Synopsis;
     }
 
@@ -151,7 +151,7 @@ public class Movie implements Serializable, ShowComponent {
      * @throws IllegalArgumentException if the synopsis is null or empty.
      * @author Jarvy Lazan
      */
-    public void setAMovie_Synopsis(String pMovie_Synopsis) {
+    public void setMovie_Synopsis(String pMovie_Synopsis) {
         if (pMovie_Synopsis == null || pMovie_Synopsis.trim().isEmpty()) {
             throw new IllegalArgumentException("Movie Synopsis cannot be null or empty.");
         }
@@ -193,7 +193,7 @@ public class Movie implements Serializable, ShowComponent {
     public static void resetMovieIDCounter(List<Movie> existingMovies) {
         if (existingMovies != null && !existingMovies.isEmpty()) {
             movieIDCounter = existingMovies.stream()
-                    .mapToInt(movie -> Integer.parseInt(movie.getAMovie_ID().substring(3)))
+                    .mapToInt(movie -> Integer.parseInt(movie.getMovie_ID().substring(3)))
                     .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
         }
     }

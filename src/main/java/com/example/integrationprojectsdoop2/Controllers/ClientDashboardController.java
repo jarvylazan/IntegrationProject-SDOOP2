@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
@@ -97,10 +96,10 @@ public class ClientDashboardController {
         for (Show show : this.aShowsList) {
             if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) {
                 // Filter by date and add unique movie titles
-                if (uniqueMovieTitles.add(show.getMovie().getAMovie_Title())) {
-                    movieTitles.add("Title : " + show.getMovie().getAMovie_Title() +
-                                    "\nGenre : " + show.getMovie().getAMovie_Genre() +
-                                    "\nSynopsis : " + show.getMovie().getAMovie_Synopsis());
+                if (uniqueMovieTitles.add(show.getMovie().getMovie_Title())) {
+                    movieTitles.add("Title : " + show.getMovie().getMovie_Title() +
+                                    "\nGenre : " + show.getMovie().getMovie_Genre() +
+                                    "\nSynopsis : " + show.getMovie().getMovie_Synopsis());
                 }
                 hasMoviesForDate = true; // At least one movie is available
             }
@@ -128,7 +127,7 @@ public class ClientDashboardController {
 
         // Filter shows based on the selected movie title and date
         List<Show> filteredShows = this.aShowsList.stream()
-                .filter(show -> show.getMovie().getAMovie_Title().equals(selectedMovieTitle)
+                .filter(show -> show.getMovie().getMovie_Title().equals(selectedMovieTitle)
                         && show.getShowDate().equals(selectedDate))
                 .toList();
 
@@ -187,6 +186,6 @@ public class ClientDashboardController {
     }
 
     public void updateWelcomeLabel() {
-        this.welcomeLabel.setText("Welcome, " + this.aLoggedClient.getaUser_Name() + "!");
+        this.welcomeLabel.setText("Welcome, " + this.aLoggedClient.getUser_Name() + "!");
     }
 }

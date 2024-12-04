@@ -74,7 +74,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             // Check if a screenroom with the same name already exists
             boolean isDuplicate = screenroomList.stream()
                     .anyMatch(screenroom -> screenroom.getScreenroom_Name().equalsIgnoreCase(enteredName) &&
-                            (isNewScreenroom || !screenroom.getAScreenroom_ID().equals(currentScreenroom.getAScreenroom_ID())));
+                            (isNewScreenroom || !screenroom.getScreenroom_ID().equals(currentScreenroom.getScreenroom_ID())));
 
             if (isDuplicate) {
                 AlertHelper errorAlert = new AlertHelper("A screenroom with the same name already exists. Please use a unique name.");
@@ -94,7 +94,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             if (!isNewScreenroom) {
                 // Find the existing screenroom and replace it
                 for (int i = 0; i < screenroomList.size(); i++) {
-                    if (screenroomList.get(i).getAScreenroom_ID().equals(currentScreenroom.getAScreenroom_ID())) {
+                    if (screenroomList.get(i).getScreenroom_ID().equals(currentScreenroom.getScreenroom_ID())) {
                         screenroomList.set(i, currentScreenroom);
                         break;
                     }
