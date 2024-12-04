@@ -1,6 +1,8 @@
 package com.example.integrationprojectsdoop2.Controllers;
 
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
+import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
+import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
 import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.ETicket;
 import com.example.integrationprojectsdoop2.Models.Show;
@@ -19,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class MovieShowsController {
@@ -85,20 +88,36 @@ public class MovieShowsController {
 
         if (selectedShow != null) {
             // Pass the show ID to the Ticket constructor
-            ETicket ticket = new ETicket(selectedShow.getaShowID(), aLoggedClient.getClientID());
+            ETicket eTicket = new ETicket(selectedShow, aLoggedClient);
 
-            // Add additional ticket handling logic here
-            System.out.println("Ticket created: " + ticket);
+            try {
+                ReadObjects reader = new ReadObjects("etickets.ser");
+                List<Object> rawObjects = reader.read();
+                List<ETicket> eTicketList = rawObjects.stream()
+                        .filter(ETicket.class::isInstance)
+                        .map(ETicket.class::cast)
+                        .collect(Collectors.toList());
+
+                eTicketList.add(eTicket);
+
+                // Write the updated list back to the file
+                WriteObjects writer = new WriteObjects("etickets.ser");
+                writer.write(eTicketList.stream().map(s -> (Object) s).collect(Collectors.toList()));
+
+            } catch (IOException | ClassNotFoundException e) {
+                AlertHelper errorAlert = new AlertHelper("Error saving ETicket: " + e.getMessage());
+                errorAlert.executeErrorAlert();
+            }
 
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("/com/example/integrationprojectsdoop2/e-ticket-view.fxml")));
                 Parent root = fxmlLoader.load();
-                //ETicketViewController controller = fxmlLoader.getController();
-                // controller.setETicketView(ticket);
+                ETicketViewController controller = fxmlLoader.getController();
+                controller.setETicketView(eTicket);
 
                 Scene scene = new Scene(root);
                 Stage currentStage = (Stage) ((javafx.scene.Node) pEvent.getSource()).getScene().getWindow();
-                currentStage.setTitle("Movie Shows");
+                currentStage.setTitle("ETicket Booking Confirmation");
                 currentStage.setScene(scene);
                 currentStage.show();
             } catch (IOException e) {
@@ -109,6 +128,7 @@ public class MovieShowsController {
             alert.executeWarningAlert();
         }
     }
+
 
     public void onBackButtonClick(ActionEvent pActionEvent) {
         try {
