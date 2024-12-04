@@ -126,6 +126,7 @@ public class SignUpController {
             // TODO: might want to change the title and message inside the alert. ( need to change the AlertHelper)
             // Show success alert
             AlertHelper clientAdd = new AlertHelper("Client Added: " + newClient.getaUser_Email());
+            clientAdd.setMessage("You have successfully signed up. \n\nWelcome to TJS Theater!");
             clientAdd.executeSuccessAlert();
 
             // Navigate to the client dashboard
