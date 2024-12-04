@@ -75,7 +75,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
                 movies.stream()
                         .filter(Movie.class::isInstance)
                         .map(Movie.class::cast)
-                        .map(Movie::getAMovie_Title)
+                        .map(Movie::getMovie_Title)
                         .collect(Collectors.toList())
         );
     }
@@ -94,7 +94,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
                 showtimes.stream()
                         .filter(Showtime.class::isInstance)
                         .map(Showtime.class::cast)
-                        .map(Showtime::getaShowtimeTime)
+                        .map(Showtime::getShowtimeTime)
                         .collect(Collectors.toList())
         );
     }
@@ -128,8 +128,8 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
     public void initializeData(Show show) {
         if (show != null) {
             this.currentShow = show;
-            MovieComboBox.setValue(show.getMovie().getAMovie_Title());
-            ShowtimeComboBox.setValue(show.getShowtime().getaShowtimeTime());
+            MovieComboBox.setValue(show.getMovie().getMovie_Title());
+            ShowtimeComboBox.setValue(show.getShowtime().getShowtimeTime());
             ScreenroomComboBox.setValue(show.getScreenroom().getScreenroom_Name());
             ShowDatePicker.setValue(show.getShowDate());
         }
@@ -185,8 +185,8 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
             }
 
             boolean duplicateExists = showList.stream().anyMatch(show ->
-                    Objects.equals(show.getMovie().getAMovie_Title(), selectedMovieTitle) &&
-                            Objects.equals(show.getShowtime().getaShowtimeTime(), selectedShowtimeTime) &&
+                    Objects.equals(show.getMovie().getMovie_Title(), selectedMovieTitle) &&
+                            Objects.equals(show.getShowtime().getShowtimeTime(), selectedShowtimeTime) &&
                             Objects.equals(show.getScreenroom().getScreenroom_Name(), selectedScreenroomName) &&
                             Objects.equals(show.getShowDate(), selectedDate)
             );
@@ -231,7 +231,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
         return reader.read().stream()
                 .filter(Movie.class::isInstance)
                 .map(Movie.class::cast)
-                .filter(movie -> movie.getAMovie_Title().equals(title))
+                .filter(movie -> movie.getMovie_Title().equals(title))
                 .findFirst()
                 .orElse(null);
     }
@@ -250,7 +250,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
         return reader.read().stream()
                 .filter(Showtime.class::isInstance)
                 .map(Showtime.class::cast)
-                .filter(showtime -> showtime.getaShowtimeTime().equals(time))
+                .filter(showtime -> showtime.getShowtimeTime().equals(time))
                 .findFirst()
                 .orElse(null);
     }

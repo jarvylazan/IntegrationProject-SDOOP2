@@ -39,7 +39,7 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
     public void initializeData(Showtime showtime) {
         if (showtime != null) {
             this.currentShowtime = showtime;
-            TimeTextField.setText(showtime.getaShowtimeTime());
+            TimeTextField.setText(showtime.getShowtimeTime());
         } else {
             this.currentShowtime = null;
             TimeTextField.clear();
@@ -78,8 +78,8 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
 
             // Check for duplicates
             boolean duplicateExists = showtimeList.stream()
-                    .anyMatch(showtime -> showtime.getaShowtimeTime().equals(enteredTime) &&
-                            (currentShowtime == null || !showtime.getaShowtimeID().equals(currentShowtime.getaShowtimeID())));
+                    .anyMatch(showtime -> showtime.getShowtimeTime().equals(enteredTime) &&
+                            (currentShowtime == null || !showtime.getShowtimeID().equals(currentShowtime.getShowtimeID())));
 
             if (duplicateExists) {
                 AlertHelper errorAlert = new AlertHelper("A showtime with the same time already exists.");
@@ -96,12 +96,12 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             }
 
             // Update the details of the current showtime
-            currentShowtime.setaShowtimeTime(enteredTime);
+            currentShowtime.setShowtimeTime(enteredTime);
 
             if (!isNewShowtime) {
                 // Find the existing showtime and replace it
                 for (int i = 0; i < showtimeList.size(); i++) {
-                    if (showtimeList.get(i).getaShowtimeID().equals(currentShowtime.getaShowtimeID())) {
+                    if (showtimeList.get(i).getShowtimeID().equals(currentShowtime.getShowtimeID())) {
                         showtimeList.set(i, currentShowtime);
                         break;
                     }
@@ -111,8 +111,8 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             // Sort the showtime list by time (earliest to latest)
             showtimeList.sort((s1, s2) -> {
                 try {
-                    return java.time.LocalTime.parse(s1.getaShowtimeTime())
-                            .compareTo(java.time.LocalTime.parse(s2.getaShowtimeTime()));
+                    return java.time.LocalTime.parse(s1.getShowtimeTime())
+                            .compareTo(java.time.LocalTime.parse(s2.getShowtimeTime()));
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Invalid time format: " + e.getMessage());
                 }

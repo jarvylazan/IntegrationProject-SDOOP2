@@ -94,7 +94,7 @@ public class Client extends User {
      * @return the subscription date of the client as a {@link LocalDate}.
      * @author Samuel
      */
-    public LocalDate getaClientSubscriptionDate() {
+    public LocalDate getClientSubscriptionDate() {
         return aClientSubscriptionDate;
     }
 

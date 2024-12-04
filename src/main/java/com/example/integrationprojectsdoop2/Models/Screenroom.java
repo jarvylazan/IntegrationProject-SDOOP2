@@ -70,7 +70,7 @@ public class Screenroom implements Serializable, ShowComponent {
      * @return the Screenroom ID as a string.
      * @author Jarvy Lazan
      */
-    public String getAScreenroom_ID() {
+    public String getScreenroom_ID() {
         return this.aScreenroom_ID;
     }
 
@@ -132,7 +132,7 @@ public class Screenroom implements Serializable, ShowComponent {
     public static void resetScreenroomIDCounter(List<Screenroom> existingScreenrooms) {
         if (existingScreenrooms != null && !existingScreenrooms.isEmpty()) {
             screenroomIDCounter = existingScreenrooms.stream()
-                    .mapToInt(screenroom -> Integer.parseInt(screenroom.getAScreenroom_ID().substring(1)))
+                    .mapToInt(screenroom -> Integer.parseInt(screenroom.getScreenroom_ID().substring(1)))
                     .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
         }
     }

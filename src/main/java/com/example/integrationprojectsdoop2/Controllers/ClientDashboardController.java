@@ -125,10 +125,11 @@ public class ClientDashboardController {
 
         for (Show show : this.aShowsList) {
             if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) {
-                if (uniqueMovieTitles.add(show.getMovie().getAMovie_Title())) {
-                    movieTitles.add("Title : " + show.getMovie().getAMovie_Title() +
-                            "\nGenre : " + show.getMovie().getAMovie_Genre() +
-                            "\nSynopsis : " + show.getMovie().getAMovie_Synopsis());
+                // Filter by date and add unique movie titles
+                if (uniqueMovieTitles.add(show.getMovie().getMovie_Title())) {
+                    movieTitles.add("Title : " + show.getMovie().getMovie_Title() +
+                                    "\nGenre : " + show.getMovie().getMovie_Genre() +
+                                    "\nSynopsis : " + show.getMovie().getMovie_Synopsis());
                 }
                 hasMoviesForDate = true;
             }
@@ -162,7 +163,7 @@ public class ClientDashboardController {
 
         // Filter shows based on the extracted title and selected date
         List<Show> filteredShows = this.aShowsList.stream()
-                .filter(show -> show.getMovie().getAMovie_Title().equals(selectedMovieTitle)
+                .filter(show -> show.getMovie().getMovie_Title().equals(selectedMovieTitle)
                         && show.getShowDate().equals(selectedDate))
                 .toList();
 
@@ -222,6 +223,6 @@ public class ClientDashboardController {
      * Updates the welcome label with the logged-in client's name.
      */
     public void updateWelcomeLabel() {
-        this.welcomeLabel.setText("Welcome, " + this.aLoggedClient.getaUser_Name() + "!");
+        this.welcomeLabel.setText("Welcome, " + this.aLoggedClient.getUser_Name() + "!");
     }
 }

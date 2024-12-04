@@ -95,7 +95,7 @@ public class ReportViewController {
         ObservableList<String> sortedShowList = FXCollections.observableArrayList(
                 showList.stream()
                         .map(show -> String.format("%s | Tickets Sold: %d\n",
-                                show.getMovie().getAMovie_Title() + " at " + show.getShowtime().getaShowtimeTime() + " in " + show.getScreenroom().getScreenroom_Name(),
+                                show.getMovie().getMovie_Title() + " at " + show.getShowtime().getShowtimeTime() + " in " + show.getScreenroom().getScreenroom_Name(),
                                 calculateTicketsSoldForShow(show)))
                         .collect(Collectors.toList())
         );
@@ -112,7 +112,7 @@ public class ReportViewController {
      */
     private int calculateTicketsSoldForShow(Show show) {
         return (int) eTicketsList.stream()
-                .filter(ticket -> ticket.getaShow().getaShowID().equals(show.getaShowID()))
+                .filter(ticket -> ticket.getShow().getShowID().equals(show.getShowID()))
                 .count();
     }
 
@@ -126,13 +126,13 @@ public class ReportViewController {
         Map<String, Integer> movieSales = new HashMap<>();
 
         for (ETicket eticket : pEticketList) {
-            String showID = eticket.getaShow().getaShowID();
+            String showID = eticket.getShow().getShowID();
             Optional<Show> matchingShow = showList.stream()
-                    .filter(show -> show.getaShowID().equals(showID))
+                    .filter(show -> show.getShowID().equals(showID))
                     .findFirst();
 
             matchingShow.ifPresent(show -> {
-                String movieName = show.getMovie().getAMovie_Title();
+                String movieName = show.getMovie().getMovie_Title();
                 movieSales.put(movieName, movieSales.getOrDefault(movieName, 0) + 1);
             });
         }
@@ -217,8 +217,8 @@ public class ReportViewController {
      * @author Jarvy Lazan & Samuel Mireault
      */
     private void sortData(boolean ascending) {
-        Comparator<User> userComparator = Comparator.comparing(User::getaUser_Name, String.CASE_INSENSITIVE_ORDER);
-        Comparator<Movie> movieComparator = Comparator.comparing(Movie::getAMovie_Title, String.CASE_INSENSITIVE_ORDER);
+        Comparator<User> userComparator = Comparator.comparing(User::getUser_Name, String.CASE_INSENSITIVE_ORDER);
+        Comparator<Movie> movieComparator = Comparator.comparing(Movie::getMovie_Title, String.CASE_INSENSITIVE_ORDER);
 
         if (!ascending) {
             userComparator = userComparator.reversed();

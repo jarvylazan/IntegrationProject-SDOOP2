@@ -9,7 +9,7 @@ import java.util.List;
  * Implements {@link Serializable} for object serialization.
  * Each Showtime has a unique ID automatically generated.
  * The time is validated to ensure it follows the format HH:mm (e.g., 12:34).
- *
+ * <p>
  * Implements the {@link ShowComponent} interface for display functionality in the system.
  * This class also ensures proper handling of ID counters during serialization and deserialization.
  *
@@ -51,7 +51,7 @@ public class Showtime implements Serializable, ShowComponent {
      */
     public Showtime(String pShowtime_Time) {
         this.aShowtime_ID = generateShowtimeID();
-        setaShowtimeTime(pShowtime_Time); // Calls setter for validation.
+        setShowtimeTime(pShowtime_Time); // Calls setter for validation.
     }
 
     /**
@@ -70,7 +70,7 @@ public class Showtime implements Serializable, ShowComponent {
      * @return the Showtime ID.
      * @author Mohammad Tarin Wahidi
      */
-    public String getaShowtimeID() {
+    public String getShowtimeID() {
         return this.aShowtime_ID;
     }
 
@@ -80,7 +80,7 @@ public class Showtime implements Serializable, ShowComponent {
      * @return the showtime time in the format HH:mm.
      * @author Mohammad Tarin Wahidi
      */
-    public String getaShowtimeTime() {
+    public String getShowtimeTime() {
         return this.aShowtime_Time;
     }
 
@@ -91,7 +91,7 @@ public class Showtime implements Serializable, ShowComponent {
      * @throws IllegalArgumentException if the showtime time does not match the format HH:mm.
      * @author Mohammad Tarin Wahidi
      */
-    public void setaShowtimeTime(String pShowtime_Time) {
+    public void setShowtimeTime(String pShowtime_Time) {
         // Regular expression to validate the format HH:mm
         String timePattern = "^\\d{2}:\\d{2}$";
 
@@ -135,7 +135,7 @@ public class Showtime implements Serializable, ShowComponent {
     public static void resetShowtimeIDCounter(List<Showtime> existingShowtimes) {
         if (existingShowtimes != null && !existingShowtimes.isEmpty()) {
             showtimeIDCounter = existingShowtimes.stream()
-                    .mapToInt(showtime -> Integer.parseInt(showtime.getaShowtimeID().substring(1)))
+                    .mapToInt(showtime -> Integer.parseInt(showtime.getShowtimeID().substring(1)))
                     .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
         }
     }

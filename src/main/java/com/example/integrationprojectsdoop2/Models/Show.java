@@ -100,7 +100,7 @@ public class Show implements Serializable, ShowComponent {
         return "S" + aShowIDCounter++;
     }
 
-    public String getaShowID() {
+    public String getShowID() {
         return aShowID;
     }
 
@@ -227,8 +227,8 @@ public class Show implements Serializable, ShowComponent {
 
     @Override
     public String getDisplayName() {
-        return "Show: " + aMovie.getAMovie_Title() +
-                "\n" + aShowtime.getaShowtimeTime() +
+        return "Show: " + aMovie.getMovie_Title() +
+                "\n" + aShowtime.getShowtimeTime() +
                 " "+ aShowDate + "\nRoom: "
                 + aScreenroom.getScreenroom_Name();
     }
@@ -236,7 +236,7 @@ public class Show implements Serializable, ShowComponent {
     public static void resetMovieIDCounter(List<Movie> existingMovies) {
         if (existingMovies != null && !existingMovies.isEmpty()) {
             aShowIDCounter = existingMovies.stream()
-                    .mapToInt(movie -> Integer.parseInt(movie.getAMovie_ID().substring(3)))
+                    .mapToInt(movie -> Integer.parseInt(movie.getMovie_ID().substring(3)))
                     .max().orElse(0) + 1;  // Find the max ID and set counter to max + 1
         }
     }
@@ -266,8 +266,8 @@ public class Show implements Serializable, ShowComponent {
     @Override
     public String toString() {
         return "The Show has:"+
-                "\n\nMovie: \t"+ aMovie.getAMovie_Title()+
-                "\nStarts at:\t"+aShowtime.getaShowtimeTime()+
+                "\n\nMovie: \t"+ aMovie.getMovie_Title()+
+                "\nStarts at:\t"+aShowtime.getShowtimeTime()+
                 "\nOn Date:\t" + aShowDate +
                 "\nIn Screenroom:\t"+ aScreenroom.getScreenroom_Name();
     }

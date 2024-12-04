@@ -55,18 +55,22 @@ public class ETicketViewController {
      */
     private void updateETicketLabel() {
         // Extract details from the ticket
-        String ticketId = this.aETicket.getaTicketID(); // Unique ticket identifier
-        String movieTitle = this.aETicket.getaShow().getMovie().getAMovie_Title();
-        String showtime = this.aETicket.getaShow().getShowtime().toString();
-        String screeningRoom = this.aETicket.getaShow().getScreenroom().getScreenroom_Name();
-        String clientName = this.aETicket.getaClient().getaUser_Name();
-        String purchaseDateTime = this.aETicket.getaPurchaseDateTime().toString();
+        String ticketId = this.aETicket.getETicketID(); // Assuming getId() returns a String or unique identifier
+        String movieTitle = this.aETicket.getShow().getMovie().getMovie_Title();
+        String showtime = this.aETicket.getShow().getShowtime().toString(); // Assuming Showtime has a meaningful toString()
+        String screeningRoom = this.aETicket.getShow().getScreenroom().getScreenroom_Name(); // Adjust based on your model
+        String clientName = this.aETicket.getClient().getUser_Name(); // Assuming getClient() returns a Client object with a getName() method
+        String purchaseDateTime = this.aETicket.getPurchaseDateTime().toString(); // Assuming this returns a formatted date-time string
 
-        String labelText = String.format(
-                "Ticket ID: %s\nMovie Title: %s\nShowtime: %s\nScreening Room: %s\nClient Name: %s\nPurchase Date & Time: %s",
-                ticketId, movieTitle, showtime, screeningRoom, clientName, purchaseDateTime
-        );
-
+        // Build the label text
+        StringBuilder labelText = new StringBuilder();
+        labelText.append("🎟️ E-Ticket Details 🎟️\n\n")
+                .append("Ticket ID: ").append(ticketId).append("\n")
+                .append("Movie Title: ").append(movieTitle).append("\n")
+                .append("Showtime: ").append(showtime).append("\n")
+                .append("Screening Room: ").append(screeningRoom).append("\n")
+                .append("Client Name: ").append(clientName).append("\n")
+                .append("Purchase Date & Time: ").append(purchaseDateTime).append("\n");
 
         // Set the text to the label
         eTicketLabel.setText(labelText.toString());
@@ -86,7 +90,7 @@ public class ETicketViewController {
 
             // Pass client data to the Client Dashboard Controller
             ClientDashboardController controller = loader.getController();
-            controller.setClientDashboardView("shows.ser", aETicket.getaClient());
+            controller.setClientDashboardView("shows.ser", aETicket.getClient());
 
             // Set the new scene
             Scene newScene = new Scene(root);
