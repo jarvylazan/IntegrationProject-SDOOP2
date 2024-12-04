@@ -18,9 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -46,19 +44,6 @@ public class ClientDashboardController {
 
         // Update the top label with the user's name
         updateWelcomeLabel();
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pSerializedFileName))) {
-            Object deserializedObject = ois.readObject();
-
-            // If the file contains a list
-            if (deserializedObject instanceof List<?> list) {
-                list.forEach(System.out::println);
-            } else {
-                System.out.println("Deserialized Object: " + deserializedObject);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
 
         // Populate ListView with today's shows
         updateMovieListView(LocalDate.now());
@@ -113,7 +98,9 @@ public class ClientDashboardController {
             if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) {
                 // Filter by date and add unique movie titles
                 if (uniqueMovieTitles.add(show.getMovie().getAMovie_Title())) {
-                    movieTitles.add(show.getMovie().getAMovie_Title());
+                    movieTitles.add("Title : " + show.getMovie().getAMovie_Title() +
+                                    "\nGenre : " + show.getMovie().getAMovie_Genre() +
+                                    "\nSynopsis : " + show.getMovie().getAMovie_Synopsis());
                 }
                 hasMoviesForDate = true; // At least one movie is available
             }
