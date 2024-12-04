@@ -1,8 +1,14 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
+
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * ETicket Class
@@ -25,7 +31,7 @@ public class ETicket implements Serializable {
     /**
      * Counter for ticket IDs within the current year.
      */
-    private static int aCounter = 0;
+    private static int aCounter = lastIncrement();
 
     /**
      * The unique ID of the ticket.
@@ -57,29 +63,60 @@ public class ETicket implements Serializable {
         this.aShow = pShow;
         this.aPurchaseDateTime = LocalDateTime.now();
         this.aClient = pClient;
-        this.aTicketID = setaTicketID();
+        this.aTicketID = setETicketID();
     }
 
     /**
-     * Generates a unique ticket ID based on the current year and a counter.
-     * Resets the counter if the year changes.
-     *
-     * @return a unique ticket ID in the format "YYYYNNNNNNNNNN".
+     * Reads the last incremented counter from the stored tickets in etickets.ser.
+     * Resets to 1 if no tickets exist or the file is empty.
      */
-    private static synchronized String setaTicketID() {
+    private static int lastIncrement() {
+        List<ETicket> eTicketList;
+        try {
+            ReadObjects reader = new ReadObjects("etickets.ser");
+            eTicketList = reader.read().stream()
+                    .filter(ETicket.class::isInstance)
+                    .map(ETicket.class::cast)
+                    .collect(Collectors.toList());
+        } catch (IOException | ClassNotFoundException e) {
+            eTicketList = Collections.emptyList(); // Fallback in case of errors
+        }
+
+        if (eTicketList.isEmpty()) {
+            return 1; // Start from 1 if no tickets exist
+        }
+
+        // Get the last ticket and extract its counter
+        ETicket lastTicket = eTicketList.getLast();
+        String lastTicketID = lastTicket.getaTicketID(); // Assuming getTicketID() exists
+        String lastYear = lastTicketID.substring(0, 4); // Extract the year from the ID
+
+        // If the year has changed, reset the counter
+        if (!lastYear.equals(aLastYear)) {
+            return 1;
+        }
+
+        // Extract and increment the 10-digit counter
+        String counterPart = lastTicketID.substring(4);
+        return Integer.parseInt(counterPart) + 1;
+    }
+
+    /**
+     * Generates the next ETicket ID in the format Year + 10-digit counter.
+     *
+     * @return a formatted ETicket ID.
+     */
+    private synchronized String setETicketID() {
         String currentYear = String.valueOf(LocalDateTime.now().getYear());
 
         // Reset counter if the year changes
         if (!currentYear.equals(aLastYear)) {
             aLastYear = currentYear;
-            aCounter = 0;
+            aCounter = 1;
         }
 
-        // Increment the counter
-        aCounter++;
-
         // Format the ticket ID as Year + 10-digit counter (padded with leading zeros)
-        return currentYear + String.format("%010d", aCounter);
+        return currentYear + String.format("%010d", aCounter++);
     }
 
     /**

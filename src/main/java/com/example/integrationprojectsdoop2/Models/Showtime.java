@@ -98,7 +98,7 @@ public class Showtime implements Serializable, ShowComponent {
 
     @Override
     public String toString() {
-        return "Showtime: " + aShowtime_Time;
+        return aShowtime_Time;
     }
 
     /**

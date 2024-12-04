@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -168,6 +169,12 @@ public class ClientDashboardController {
 
         if (filteredShows.isEmpty()) {
             new AlertHelper("No shows available for the selected movie and date.").executeWarningAlert();
+            return;
+        }
+
+        // Check if the selected date is in the past
+        if (selectedDate.isBefore(LocalDate.now())) {
+            new AlertHelper("The selected show date is in the past. Please select a valid date.").executeWarningAlert();
             return;
         }
 
