@@ -5,7 +5,7 @@ package com.example.integrationprojectsdoop2.Models;
  * This interface ensures that implementing controllers can initialize their data with a specific object.
  *
  * @param <T> the type of data to be initialized, extending {@link ShowComponent}.
- * @author Samuel
+ * @author Samuel Mireault
  */
 public interface ModifyController<T extends ShowComponent> {
 

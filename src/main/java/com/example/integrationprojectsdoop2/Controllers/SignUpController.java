@@ -20,7 +20,7 @@ import java.util.Objects;
  * Handles user sign-up operations such as validating input, creating new users, and navigating between views.
  * Implements encapsulation and includes detailed Javadoc for maintainability.
  *
- * @author Samuel
+ * @author Samuel Mireault
  */
 public class SignUpController {
 
@@ -58,10 +58,10 @@ public class SignUpController {
      * Constructs a new SignUpController.
      * Initializes the client list by retrieving it from the {@link UserManager} singleton instance.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public SignUpController() {
-        this.aClientsList = UserManager.getInstance().getaClientsList();
+        this.aClientsList = UserManager.getaInstance().getaClientsList();
     }
 
     /**
@@ -71,7 +71,7 @@ public class SignUpController {
      * Navigate the user to the client dashboard view upon successful sign-up.
      *
      * @throws IllegalArgumentException if there is an issue navigating to the client dashboard view or saving user data.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void onSignUpClickButton()  {
         try {
@@ -89,7 +89,7 @@ public class SignUpController {
             if (email.isEmpty() || !email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
                 throw new IllegalArgumentException("You need to provide a valid email address. \neg: example@example.com");
             }
-            for (User client : UserManager.getInstance().getaClientsList()) {
+            for (User client : UserManager.getaInstance().getaClientsList()) {
                 if (email.equals(client.getUser_Email())) {
                     throw new IllegalArgumentException("This email is already subscribed. Please try again.");
                 }
@@ -113,7 +113,7 @@ public class SignUpController {
 
             // Create a new client and add to UserManager
             Client newClient = new Client(fullName, email, password);
-            UserManager.getInstance().addClient(newClient);
+            UserManager.getaInstance().addClient(newClient);
             System.out.println("New client created: " +
                     newClient.getClientID() + ", " +
                     newClient.getUser_Name() + ", " +
@@ -139,7 +139,7 @@ public class SignUpController {
      * Navigates the user back to the login view.
      *
      * @param pActionEvent the action event triggered by the button click.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void onCancelClickButton(ActionEvent pActionEvent) {
         try {

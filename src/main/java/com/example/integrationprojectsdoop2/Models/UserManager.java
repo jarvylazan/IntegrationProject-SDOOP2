@@ -17,12 +17,12 @@ import java.util.List;
  * <p>Handles user data storage and retrieval using helper classes {@link ReadObjects}
  * and {@link WriteObjects} for file I/O operations.</p>
  *
- * @author Samuel
+ * @author Samuel Mireault
  */
 public class UserManager {
 
     /** The single instance of UserManager. */
-    private static UserManager instance;
+    private static UserManager aInstance;
 
     /** List of managers, initialized from the serialized file. */
     private final List<User> aManagersList;
@@ -34,7 +34,7 @@ public class UserManager {
      * Private constructor to enforce the singleton pattern.
      * Initializes user lists by reading from serialized files.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private UserManager() {
         aManagersList = usersReader("managers.ser");
@@ -47,13 +47,13 @@ public class UserManager {
      *
      * @return the singleton instance of {@code UserManager}.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public static synchronized UserManager getInstance() {
-        if (instance == null) {
-            instance = new UserManager();
+    public static synchronized UserManager getaInstance() {
+        if (aInstance == null) {
+            aInstance = new UserManager();
         }
-        return instance;
+        return aInstance;
     }
 
     /**
@@ -61,7 +61,7 @@ public class UserManager {
      *
      * @return an unmodifiable view of the list of managers.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public List<User> getaManagersList() {
         return Collections.unmodifiableList(aManagersList);
@@ -72,7 +72,7 @@ public class UserManager {
      *
      * @return an unmodifiable view of the list of clients.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public List<User> getaClientsList() {
         return Collections.unmodifiableList(aClientsList);
@@ -84,7 +84,7 @@ public class UserManager {
      * @param pManager the manager to add.
      * @throws IOException if an error occurs during file writing.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void addManager(User pManager) throws IOException {
         aManagersList.add(pManager);
@@ -97,7 +97,7 @@ public class UserManager {
      * @param pManager the manager to remove.
      * @throws IOException if an error occurs during file writing.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void removeManager(User pManager) throws IOException {
         aManagersList.remove(pManager);
@@ -110,7 +110,7 @@ public class UserManager {
      * @param pClient the client to add.
      * @throws IOException if an error occurs during file writing.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void addClient(User pClient) throws IOException {
         aClientsList.add(pClient);
@@ -123,7 +123,7 @@ public class UserManager {
      * @param pClient the client to remove.
      * @throws IOException if an error occurs during file writing.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void removeClient(User pClient) throws IOException {
         aClientsList.remove(pClient);
@@ -136,7 +136,7 @@ public class UserManager {
      * @param pFilename the name of the file to read from.
      * @return a list of users read from the file.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private List<User> usersReader(String pFilename) {
         List<User> users = new ArrayList<>();
@@ -164,7 +164,7 @@ public class UserManager {
      * @param pUsers   the list of users to serialize and save.
      * @throws IOException if an error occurs during file writing.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private void usersWriter(String pFilename, List<User> pUsers) throws IOException {
         WriteObjects writeObjects = new WriteObjects(pFilename);

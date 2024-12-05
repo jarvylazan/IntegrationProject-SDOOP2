@@ -22,7 +22,7 @@ import java.util.List;
  * }
  * </pre>
  *
- * @author Samuel
+ * @author Samuel Mireault
  */
 public class ReadObjects {
 
@@ -36,7 +36,7 @@ public class ReadObjects {
      *
      * @param pFileName the name of the file to read objects from.
      *                  Must not be {@code null} or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public ReadObjects(String pFileName) {
         if (pFileName == null || pFileName.isEmpty()) {
@@ -55,7 +55,7 @@ public class ReadObjects {
      * @throws FileNotFoundException  if the specified file does not exist.
      * @throws IOException            if an I/O error occurs while reading the file.
      * @throws ClassNotFoundException if a class of a serialized object cannot be found.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public List<Object> read() throws IOException, ClassNotFoundException {
         List<Object> objectsList = new ArrayList<>();

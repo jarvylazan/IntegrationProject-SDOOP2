@@ -42,16 +42,16 @@ public class ReportViewController {
     public ComboBox<String> reportComboBox;
 
     /** List of users for report generation and sorting. */
-    private List<User> userList = new ArrayList<>();
+    private List<User> aUserList = new ArrayList<>();
 
     /** List of movies for report generation and sorting. */
-    private List<Movie> movieList = new ArrayList<>();
+    private List<Movie> aMovieList = new ArrayList<>();
 
     /** List of shows for report generation and sorting. */
-    private List<Show> showList = new ArrayList<>();
+    private List<Show> aShowList = new ArrayList<>();
 
     /** List of e-tickets for report generation and sorting. */
-    private List<ETicket> eTicketsList = new ArrayList<>();
+    private List<ETicket> aETicketsList = new ArrayList<>();
 
     /**
      * Initializes the report view by setting up the ComboBox listeners and loading show data.
@@ -61,7 +61,7 @@ public class ReportViewController {
      */
     public void initialize() {
         List<Object> objects = readObjectsFromFile("shows.ser");
-        showList = objects.stream()
+        aShowList = objects.stream()
                 .filter(Show.class::isInstance)
                 .map(Show.class::cast)
                 .collect(Collectors.toList());
@@ -73,7 +73,7 @@ public class ReportViewController {
                 switch (selectedOption) {
                     case "Alphabetical (A-Z)" -> sortData(true);
                     case "Alphabetical (Z-A)" -> sortData(false);
-                    case "Movie Sold" -> sortByMovieSold(eTicketsList);
+                    case "Movie Sold" -> sortByMovieSold(aETicketsList);
                     case "Show" -> sortByShow();
                 }
             }
@@ -87,13 +87,13 @@ public class ReportViewController {
      * @author Jarvy Lazan & Samuel Mireault
      */
     private void sortByShow() {
-        showList.sort(Comparator.comparing(
+        aShowList.sort(Comparator.comparing(
                 Show::getShowDate,
                 Comparator.nullsLast(Comparator.naturalOrder())
         ));
 
         ObservableList<String> sortedShowList = FXCollections.observableArrayList(
-                showList.stream()
+                aShowList.stream()
                         .map(show -> String.format("%s | Tickets Sold: %d\n",
                                 show.getMovie().getMovie_Title() + " at " + show.getShowtime().getShowtimeTime() + " in " + show.getScreenroom().getScreenroom_Name(),
                                 calculateTicketsSoldForShow(show)))
@@ -106,13 +106,13 @@ public class ReportViewController {
     /**
      * Calculates the number of tickets sold for a given show.
      *
-     * @param show the show for which ticket sales are calculated.
+     * @param pShow the show for which ticket sales are calculated.
      * @return the number of tickets sold for the given show.
      * @author Samuel Mireault
      */
-    private int calculateTicketsSoldForShow(Show show) {
-        return (int) eTicketsList.stream()
-                .filter(ticket -> ticket.getShow().getShowID().equals(show.getShowID()))
+    private int calculateTicketsSoldForShow(Show pShow) {
+        return (int) aETicketsList.stream()
+                .filter(ticket -> ticket.getShow().getShowID().equals(pShow.getShowID()))
                 .count();
     }
 
@@ -127,7 +127,7 @@ public class ReportViewController {
 
         for (ETicket eticket : pEticketList) {
             String showID = eticket.getShow().getShowID();
-            Optional<Show> matchingShow = showList.stream()
+            Optional<Show> matchingShow = aShowList.stream()
                     .filter(show -> show.getShowID().equals(showID))
                     .findFirst();
 
@@ -158,52 +158,52 @@ public class ReportViewController {
     public void setManagementView(String pFilename) {
         List<Object> objects = readObjectsFromFile(pFilename);
 
-        userList = objects.stream()
+        aUserList = objects.stream()
                 .filter(User.class::isInstance)
                 .map(User.class::cast)
                 .collect(Collectors.toList());
 
-        movieList = objects.stream()
+        aMovieList = objects.stream()
                 .filter(Movie.class::isInstance)
                 .map(Movie.class::cast)
                 .collect(Collectors.toList());
 
-        eTicketsList = objects.stream()
+        aETicketsList = objects.stream()
                 .filter(ETicket.class::isInstance)
                 .map(ETicket.class::cast)
                 .collect(Collectors.toList());
 
-        populateListView(userList, movieList, eTicketsList);
+        populateListView(aUserList, aMovieList, aETicketsList);
 
-        if (!userList.isEmpty()) {
+        if (!aUserList.isEmpty()) {
             reportComboBox.getItems().addAll("Alphabetical (A-Z)", "Alphabetical (Z-A)");
             sortData(true);
         } else {
             reportComboBox.getItems().addAll("Movie Sold", "Show");
-            sortByMovieSold(eTicketsList);
+            sortByMovieSold(aETicketsList);
         }
     }
 
     /**
      * Populates the ListView with user, movie, and e-ticket data.
      *
-     * @param users  the list of user objects to display.
-     * @param movies the list of movie objects to display.
-     * @param eTickets the list of e-ticket objects to display.
+     * @param pUsers  the list of user objects to display.
+     * @param pMovies the list of movie objects to display.
+     * @param pETickets the list of e-ticket objects to display.
      * @author Jarvy Lazan & Samuel Mireault
      */
-    private void populateListView(List<User> users, List<Movie> movies, List<ETicket> eTickets) {
+    private void populateListView(List<User> pUsers, List<Movie> pMovies, List<ETicket> pETickets) {
         ObservableList<String> displayList = FXCollections.observableArrayList();
 
-        for (User user : users) {
+        for (User user : pUsers) {
             displayList.add("User: " + user.toString());
         }
 
-        for (Movie movie : movies) {
+        for (Movie movie : pMovies) {
             displayList.add("Movie: " + movie.toString());
         }
 
-        for (ETicket eTicket : eTickets) {
+        for (ETicket eTicket : pETickets) {
             displayList.add("Show: " + eTicket.toString());
         }
 
@@ -213,22 +213,22 @@ public class ReportViewController {
     /**
      * Sorts users and movies alphabetically based on the selected order.
      *
-     * @param ascending true for ascending order, false for descending order.
+     * @param pAscending true for ascending order, false for descending order.
      * @author Jarvy Lazan & Samuel Mireault
      */
-    private void sortData(boolean ascending) {
+    private void sortData(boolean pAscending) {
         Comparator<User> userComparator = Comparator.comparing(User::getUser_Name, String.CASE_INSENSITIVE_ORDER);
         Comparator<Movie> movieComparator = Comparator.comparing(Movie::getMovie_Title, String.CASE_INSENSITIVE_ORDER);
 
-        if (!ascending) {
+        if (!pAscending) {
             userComparator = userComparator.reversed();
             movieComparator = movieComparator.reversed();
         }
 
-        userList.sort(userComparator);
-        movieList.sort(movieComparator);
+        aUserList.sort(userComparator);
+        aMovieList.sort(movieComparator);
 
-        populateListView(userList, movieList, eTicketsList);
+        populateListView(aUserList, aMovieList, aETicketsList);
     }
 
     /**

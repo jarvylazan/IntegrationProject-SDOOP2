@@ -11,7 +11,7 @@ import java.util.List;
  * Each Manager is assigned a unique manager ID upon creation.
  * The class is part of a user management system for the application.
  *
- * @author Samuel
+ * @author Samuel Mireault
  * @version 1.0
  */
 public class Manager extends User {
@@ -21,7 +21,7 @@ public class Manager extends User {
     private static final long serialVersionUID = 1824568323534453788L;
 
     /** List of all managers managed by the {@link UserManager}. */
-    private final List<User> aManagersList = UserManager.getInstance().getaManagersList();
+    private final List<User> aManagersList = UserManager.getaInstance().getaManagersList();
 
     /** Counter for generating unique Manager IDs. */
     private int aManagerIDCounter = lastIncrement();
@@ -36,7 +36,7 @@ public class Manager extends User {
      * @param pUser_Email    the email address of the user.
      * @param pUser_Password the password of the user.
      * @throws IllegalArgumentException if the email is invalid or any parameter is null/empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public Manager(String pUser_Name, String pUser_Email, String pUser_Password) {
         super(pUser_Name, pUser_Email, pUser_Password);
@@ -48,7 +48,7 @@ public class Manager extends User {
      * The format of the ID is "M<number>", where the number is generated sequentially.
      *
      * @return the generated Manager ID.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private synchronized String generateManagerID() {
         return "M" + aManagerIDCounter++;
@@ -58,7 +58,7 @@ public class Manager extends User {
      * Gets the unique Manager ID assigned to this Manager.
      *
      * @return the Manager ID as a string in the format "M<number>".
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public String getManagerID() {
         return aManagerID;
@@ -70,7 +70,7 @@ public class Manager extends User {
      *
      * @return the next increment value for generating unique Manager IDs.
      * @throws ClassCastException if the list contains objects that are not of type {@link Manager}.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private int lastIncrement() {
         if (this.aManagersList == null || this.aManagersList.isEmpty()) {
