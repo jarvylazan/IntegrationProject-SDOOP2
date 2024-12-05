@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="513.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.ClientDashboardController">
    <children>
       <Label fx:id="welcomeLabel" layoutX="21.0" layoutY="29.0" text="Welcome, *user name*">
@@ -22,7 +21,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="signOutButton" layoutX="324.0" layoutY="437.0" mnemonicParsing="false" onAction="#onSignOutButtonClick" prefHeight="35.0" prefWidth="112.0" text="Sign Out">
+      <Button fx:id="signOutButton" layoutX="324.0" layoutY="463.0" mnemonicParsing="false" onAction="#onSignOutButtonClick" prefHeight="35.0" prefWidth="112.0" text="Sign Out">
          <font>
             <Font size="14.0" />
          </font>
