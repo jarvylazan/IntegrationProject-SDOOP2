@@ -42,7 +42,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
     @FXML
     private DatePicker ShowDatePicker;
 
-    private Show currentShow;
+    private Show aCurrentShow;
 
     /**
      * Initializes the controller and loads movies, showtimes, and screenrooms into their respective ComboBoxes.
@@ -121,17 +121,17 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
     /**
      * Populates the form with the data of the provided show.
      *
-     * @param show the show to populate in the form, or null to clear the form.
+     * @param pShow the show to populate in the form, or null to clear the form.
      * @author Jarvy Lazan
      */
     @Override
-    public void initializeData(Show show) {
-        if (show != null) {
-            this.currentShow = show;
-            MovieComboBox.setValue(show.getMovie().getMovie_Title());
-            ShowtimeComboBox.setValue(show.getShowtime().getShowtimeTime());
-            ScreenroomComboBox.setValue(show.getScreenroom().getScreenroom_Name());
-            ShowDatePicker.setValue(show.getShowDate());
+    public void initializeData(Show pShow) {
+        if (pShow != null) {
+            this.aCurrentShow = pShow;
+            MovieComboBox.setValue(pShow.getMovie().getMovie_Title());
+            ShowtimeComboBox.setValue(pShow.getShowtime().getShowtimeTime());
+            ScreenroomComboBox.setValue(pShow.getScreenroom().getScreenroom_Name());
+            ShowDatePicker.setValue(pShow.getShowDate());
         }
     }
 
@@ -139,10 +139,10 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
      * Handles the save button click. Validates input, checks for duplicates, updates or creates a show,
      * and saves the list of shows to a file.
      *
-     * @param actionEvent the event triggered by clicking the save button.
+     * @param pActionEvent the event triggered by clicking the save button.
      * @author Jarvy Lazan
      */
-    public void onSaveButtonClick(ActionEvent actionEvent) {
+    public void onSaveButtonClick(ActionEvent pActionEvent) {
         try {
             String filePath = "shows.ser";
 
@@ -158,7 +158,7 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
                     .map(Show.class::cast)
                     .collect(Collectors.toList());
 
-            boolean isNewShow = (currentShow == null);
+            boolean isNewShow = (aCurrentShow == null);
 
             String selectedMovieTitle = MovieComboBox.getValue();
             String selectedShowtimeTime = ShowtimeComboBox.getValue();
@@ -197,20 +197,20 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
             }
 
             if (isNewShow) {
-                currentShow = new Show();
-                showList.add(currentShow);
+                aCurrentShow = new Show();
+                showList.add(aCurrentShow);
             }
 
-            currentShow.setMovie(selectedMovie);
-            currentShow.setShowtime(selectedShowtime);
-            currentShow.setScreenroom(selectedScreenroom);
-            currentShow.setShowDate(selectedDate);
+            aCurrentShow.setMovie(selectedMovie);
+            aCurrentShow.setShowtime(selectedShowtime);
+            aCurrentShow.setScreenroom(selectedScreenroom);
+            aCurrentShow.setShowDate(selectedDate);
 
             WriteObjects writer = new WriteObjects(filePath);
             writer.write(showList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 
             new AlertHelper(isNewShow ? "New show added successfully!" : "Show updated successfully!").executeSuccessAlert();
-            onBackButtonClick(actionEvent);
+            onBackButtonClick(pActionEvent);
 
         } catch (IOException | ClassNotFoundException e) {
             new AlertHelper("Error saving show: " + e.getMessage()).executeErrorAlert();
@@ -220,18 +220,18 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
     /**
      * Retrieves a movie by its title.
      *
-     * @param title the title of the movie.
+     * @param pTitle the title of the movie.
      * @return the matching Movie object, or null if not found.
      * @throws IOException           if an error occurs while reading the file.
      * @throws ClassNotFoundException if deserialization fails.
      * @author Jarvy Lazan
      */
-    private Movie getMovieByTitle(String title) throws IOException, ClassNotFoundException {
+    private Movie getMovieByTitle(String pTitle) throws IOException, ClassNotFoundException {
         ReadObjects reader = new ReadObjects("movies.ser");
         return reader.read().stream()
                 .filter(Movie.class::isInstance)
                 .map(Movie.class::cast)
-                .filter(movie -> movie.getMovie_Title().equals(title))
+                .filter(movie -> movie.getMovie_Title().equals(pTitle))
                 .findFirst()
                 .orElse(null);
     }
@@ -239,18 +239,18 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
     /**
      * Retrieves a showtime by its time.
      *
-     * @param time the time of the showtime.
+     * @param pTime the time of the showtime.
      * @return the matching Showtime object, or null if not found.
      * @throws IOException           if an error occurs while reading the file.
      * @throws ClassNotFoundException if deserialization fails.
      * @author Jarvy Lazan
      */
-    private Showtime getShowtimeByTime(String time) throws IOException, ClassNotFoundException {
+    private Showtime getShowtimeByTime(String pTime) throws IOException, ClassNotFoundException {
         ReadObjects reader = new ReadObjects("showtimes.ser");
         return reader.read().stream()
                 .filter(Showtime.class::isInstance)
                 .map(Showtime.class::cast)
-                .filter(showtime -> showtime.getShowtimeTime().equals(time))
+                .filter(showtime -> showtime.getShowtimeTime().equals(pTime))
                 .findFirst()
                 .orElse(null);
     }
@@ -258,18 +258,18 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
     /**
      * Retrieves a screenroom by its name.
      *
-     * @param name the name of the screenroom.
+     * @param pName the name of the screenroom.
      * @return the matching Screenroom object, or null if not found.
      * @throws IOException           if an error occurs while reading the file.
      * @throws ClassNotFoundException if deserialization fails.
      * @author Jarvy Lazan
      */
-    private Screenroom getScreenroomByName(String name) throws IOException, ClassNotFoundException {
+    private Screenroom getScreenroomByName(String pName) throws IOException, ClassNotFoundException {
         ReadObjects reader = new ReadObjects("screenrooms.ser");
         return reader.read().stream()
                 .filter(Screenroom.class::isInstance)
                 .map(Screenroom.class::cast)
-                .filter(screenroom -> screenroom.getScreenroom_Name().equals(name))
+                .filter(screenroom -> screenroom.getScreenroom_Name().equals(pName))
                 .findFirst()
                 .orElse(null);
     }

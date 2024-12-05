@@ -28,20 +28,20 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
     @FXML
     public TextField TimeTextField;
 
-    private Showtime currentShowtime; // The showtime being modified or added
+    private Showtime pCurrentShowtime; // The showtime being modified or added
 
     /**
      * Initializes the data for the given showtime, or clears the form if the showtime is null.
      *
-     * @param showtime the showtime to populate in the form, or null to clear the form.
+     * @param pShowtime the showtime to populate in the form, or null to clear the form.
      * @author Jarvy Lazan
      */
-    public void initializeData(Showtime showtime) {
-        if (showtime != null) {
-            this.currentShowtime = showtime;
-            TimeTextField.setText(showtime.getShowtimeTime());
+    public void initializeData(Showtime pShowtime) {
+        if (pShowtime != null) {
+            this.pCurrentShowtime = pShowtime;
+            TimeTextField.setText(pShowtime.getShowtimeTime());
         } else {
-            this.currentShowtime = null;
+            this.pCurrentShowtime = null;
             TimeTextField.clear();
         }
     }
@@ -50,13 +50,13 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
      * Handles the save button click. Validates the entered showtime, checks for duplicates,
      * updates or creates a showtime, sorts the list of showtimes, and saves the list to a file.
      *
-     * @param actionEvent the event triggered by clicking the save button.
+     * @param pActionEvent the event triggered by clicking the save button.
      * @throws IOException           if an error occurs while reading or writing to the file.
      * @throws IllegalArgumentException if the entered time format is invalid.
      * @throws ClassNotFoundException if deserialization fails during reading objects from the file.
      * @author Jarvy Lazan
      */
-    public void onSaveButtonClick(ActionEvent actionEvent) {
+    public void onSaveButtonClick(ActionEvent pActionEvent) {
         try {
             // Read the list of existing showtimes
             ReadObjects reader = new ReadObjects("showtimes.ser");
@@ -79,7 +79,7 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             // Check for duplicates
             boolean duplicateExists = showtimeList.stream()
                     .anyMatch(showtime -> normalizeTime(showtime.getShowtimeTime()).equals(normalizeTime(enteredTime)) &&
-                            (currentShowtime == null || !showtime.getShowtimeID().equals(currentShowtime.getShowtimeID())));
+                            (pCurrentShowtime == null || !showtime.getShowtimeID().equals(pCurrentShowtime.getShowtimeID())));
 
             if (duplicateExists) {
                 AlertHelper errorAlert = new AlertHelper("A showtime with the same time already exists.");
@@ -87,24 +87,24 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
                 return;
             }
 
-            boolean isNewShowtime = (currentShowtime == null);
+            boolean isNewShowtime = (pCurrentShowtime == null);
 
             if (isNewShowtime) {
                 // If this is a new showtime, create and add it to the list
-                currentShowtime = new Showtime();
-                showtimeList.add(currentShowtime);
+                pCurrentShowtime = new Showtime();
+                showtimeList.add(pCurrentShowtime);
             }
 
             // Update the details of the current showtime
             String normalizedTime = normalizeTime(enteredTime);
-            currentShowtime.setShowtimeTime(normalizedTime);
+            pCurrentShowtime.setShowtimeTime(normalizedTime);
 
 
             if (!isNewShowtime) {
                 // Find the existing showtime and replace it
                 for (int i = 0; i < showtimeList.size(); i++) {
-                    if (showtimeList.get(i).getShowtimeID().equals(currentShowtime.getShowtimeID())) {
-                        showtimeList.set(i, currentShowtime);
+                    if (showtimeList.get(i).getShowtimeID().equals(pCurrentShowtime.getShowtimeID())) {
+                        showtimeList.set(i, pCurrentShowtime);
                         break;
                     }
                 }
@@ -134,7 +134,7 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
             successAlert.executeSuccessAlert();
 
             // Navigate back to the management view
-            onBackButtonClick(actionEvent);
+            onBackButtonClick(pActionEvent);
 
         } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
             AlertHelper errorAlert = new AlertHelper("Error saving showtime: " + e.getMessage());
@@ -145,12 +145,12 @@ public class ManagerShowtimeAddModifyController implements ModifyController<Show
     /**
      * Normalizes a time string to HH:mm format.
      *
-     * @param time the input time string in H:mm or HH:mm format.
+     * @param pTime the input time string in H:mm or HH:mm format.
      * @return the normalized time string in HH:mm format.
      * @author Jarvy Lazan
      */
-    private static String normalizeTime(String time) {
-        String[] parts = time.split(":");
+    private static String normalizeTime(String pTime) {
+        String[] parts = pTime.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
         return String.format("%02d:%02d", hour, minute);

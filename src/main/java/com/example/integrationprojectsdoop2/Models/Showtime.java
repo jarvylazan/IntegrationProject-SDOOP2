@@ -22,7 +22,7 @@ public class Showtime implements Serializable, ShowComponent {
     private static final long serialVersionUID = 68L;
 
     /** Counter for generating unique showtime IDs, incremented with each instance. */
-    private static int showtimeIDCounter = 1;
+    private static int aShowtimeIDCounter = 1;
 
     /** Unique identifier for the showtime, auto-generated. */
     private final String aShowtime_ID;
@@ -61,7 +61,7 @@ public class Showtime implements Serializable, ShowComponent {
      * @author Mohammad Tarin Wahidi
      */
     private static synchronized String generateShowtimeID() {
-        return "T" + (showtimeIDCounter++);
+        return "T" + (aShowtimeIDCounter++);
     }
 
     /**
@@ -109,13 +109,13 @@ public class Showtime implements Serializable, ShowComponent {
      * splits it into hours and minutes, and ensures that the output is
      * consistently formatted as "HH:mm" with leading zeros if necessary.
      *
-     * @param time the input time string to normalize, in the format "H:mm" or "HH:mm".
+     * @param pTime the input time string to normalize, in the format "H:mm" or "HH:mm".
      * @return the normalized time string in "HH:mm" format.
      * @throws NumberFormatException if the time string contains invalid numeric values.
      * @throws ArrayIndexOutOfBoundsException if the time string is improperly formatted.
      */
-    private static String normalizeTime(String time) {
-        String[] parts = time.split(":");
+    private static String normalizeTime(String pTime) {
+        String[] parts = pTime.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
         return String.format("%02d:%02d", hour, minute);
@@ -149,12 +149,12 @@ public class Showtime implements Serializable, ShowComponent {
      * Resets the Showtime ID counter based on the highest existing ID.
      * Ensures the counter starts from the next ID after the highest existing ID.
      *
-     * @param existingShowtimes a list of existing Showtime objects.
+     * @param pExistingShowtimes a list of existing Showtime objects.
      * @author Jarvy Lazan
      */
-    public static void resetShowtimeIDCounter(List<Showtime> existingShowtimes) {
-        if (existingShowtimes != null && !existingShowtimes.isEmpty()) {
-            showtimeIDCounter = existingShowtimes.stream()
+    public static void resetShowtimeIDCounter(List<Showtime> pExistingShowtimes) {
+        if (pExistingShowtimes != null && !pExistingShowtimes.isEmpty()) {
+            aShowtimeIDCounter = pExistingShowtimes.stream()
                     .mapToInt(showtime -> Integer.parseInt(showtime.getShowtimeID().substring(1)))
                     .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
         }
@@ -182,8 +182,8 @@ public class Showtime implements Serializable, ShowComponent {
      */
     private void updateShowtimeIDCounter() {
         int currentID = Integer.parseInt(this.aShowtime_ID.substring(1));
-        if (currentID >= showtimeIDCounter) { // Only update if the current ID is greater than the counter
-            showtimeIDCounter = currentID + 1;
+        if (currentID >= aShowtimeIDCounter) { // Only update if the current ID is greater than the counter
+            aShowtimeIDCounter = currentID + 1;
         }
     }
 }

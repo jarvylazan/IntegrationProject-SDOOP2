@@ -23,7 +23,7 @@ public class Client extends User {
     private static final long serialVersionUID = -5727091206595037865L;
 
     /** The list of all clients managed by the {@link UserManager}. */
-    private final List<User> aClientsList = UserManager.getaInstance().getaClientsList();
+    private final List<User> aClientsList = UserManager.getInstance().getClientList();
 
     /** Counter for generating unique Client IDs. */
     private int aClientIDCounter = lastIncrement();

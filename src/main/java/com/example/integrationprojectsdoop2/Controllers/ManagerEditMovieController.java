@@ -35,23 +35,23 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
     @FXML
     private TextArea synopsisTextArea;
 
-    private Movie currentMovie; // The movie being edited
+    private Movie aCurrentMovie; // The movie being edited
 
     /**
      * Initializes the data for the controller. If a movie is provided, its details are populated in the form.
      * If no movie is provided, the form is cleared.
      *
-     * @param movie the movie to initialize the form with, or null for a blank form.
+     * @param pMovie the movie to initialize the form with, or null for a blank form.
      * @author Jarvy Lazan
      */
-    public void initializeData(Movie movie) {
-        if (movie != null) {
-            this.currentMovie = movie;
-            TitleTextField.setText(movie.getMovie_Title());
-            genreTextField.setText(movie.getMovie_Genre());
-            synopsisTextArea.setText(movie.getMovie_Synopsis());
+    public void initializeData(Movie pMovie) {
+        if (pMovie != null) {
+            this.aCurrentMovie = pMovie;
+            TitleTextField.setText(pMovie.getMovie_Title());
+            genreTextField.setText(pMovie.getMovie_Genre());
+            synopsisTextArea.setText(pMovie.getMovie_Synopsis());
         } else {
-            this.currentMovie = null;
+            this.aCurrentMovie = null;
             TitleTextField.clear();
             genreTextField.clear();
             synopsisTextArea.clear();
@@ -62,13 +62,13 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
      * Handles the save button click event. Validates inputs, checks for duplicates,
      * updates the movie list, sorts it by title, and saves it back to the file.
      *
-     * @param actionEvent the event triggered by clicking the save button.
+     * @param pActionEvent the event triggered by clicking the save button.
      * @throws IOException if an error occurs during file operations.
      * @throws ClassNotFoundException if the deserialization fails.
      * @throws IllegalArgumentException if input validation fails.
      * @author Jarvy Lazan
      */
-    public void onSaveButtonClick(ActionEvent actionEvent) {
+    public void onSaveButtonClick(ActionEvent pActionEvent) {
         try {
             ReadObjects reader = new ReadObjects("movies.ser");
             List<Object> rawObjects = reader.read();
@@ -77,7 +77,7 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
                     .map(Movie.class::cast)
                     .collect(Collectors.toList());
 
-            boolean isNewMovie = (currentMovie == null);
+            boolean isNewMovie = (aCurrentMovie == null);
 
             // Get the entered movie title
             String enteredTitle = TitleTextField.getText().trim();
@@ -85,7 +85,7 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
             // Validate for duplicate movie title
             boolean isDuplicate = movieList.stream()
                     .anyMatch(movie -> movie.getMovie_Title().equalsIgnoreCase(enteredTitle) &&
-                            (isNewMovie || !movie.getMovie_ID().equals(currentMovie.getMovie_ID())));
+                            (isNewMovie || !movie.getMovie_ID().equals(aCurrentMovie.getMovie_ID())));
 
             if (isDuplicate) {
                 AlertHelper errorAlert = new AlertHelper("A movie with the same title already exists. Please use a unique title.");
@@ -95,20 +95,20 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
 
             if (isNewMovie) {
                 // If it's a new movie, create an instance and add it to the list
-                currentMovie = new Movie();
-                movieList.add(currentMovie);
+                aCurrentMovie = new Movie();
+                movieList.add(aCurrentMovie);
             }
 
             // Update the movie's details from the form
-            currentMovie.setMovie_Title(enteredTitle);
-            currentMovie.setMovie_Genre(genreTextField.getText().trim());
-            currentMovie.setMovie_Synopsis(synopsisTextArea.getText().trim());
+            aCurrentMovie.setMovie_Title(enteredTitle);
+            aCurrentMovie.setMovie_Genre(genreTextField.getText().trim());
+            aCurrentMovie.setMovie_Synopsis(synopsisTextArea.getText().trim());
 
             if (!isNewMovie) {
                 // Find the movie with the same ID and replace it
                 for (int i = 0; i < movieList.size(); i++) {
-                    if (movieList.get(i).getMovie_ID().equals(currentMovie.getMovie_ID())) {
-                        movieList.set(i, currentMovie);  // Replace the movie with updated details
+                    if (movieList.get(i).getMovie_ID().equals(aCurrentMovie.getMovie_ID())) {
+                        movieList.set(i, aCurrentMovie);  // Replace the movie with updated details
                         break;
                     }
                 }
@@ -130,7 +130,7 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
             successAlert.executeSuccessAlert();
 
             // Close the current window
-            onBackButtonClick(actionEvent);
+            onBackButtonClick(pActionEvent);
 
         } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
             AlertHelper errorAlert = new AlertHelper("Error saving movie: " + e.getMessage());
@@ -141,11 +141,11 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
     /**
      * Handles the back button click event. Navigates back to the management view.
      *
-     * @param actionEvent the event triggered by clicking the back button.
+     * @param pActionEvent the event triggered by clicking the back button.
      * @throws IOException if an error occurs during navigation to the management view.
      * @author Jarvy Lazan
      */
-    public void onBackButtonClick(ActionEvent actionEvent) {
+    public void onBackButtonClick(ActionEvent pActionEvent) {
         try {
             // Load the management view FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/management-view.fxml"));
@@ -155,7 +155,7 @@ public class ManagerEditMovieController implements ModifyController<Movie> {
 
             // Set the new scene
             Scene newScene = new Scene(managementView);
-            Stage currentStage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+            Stage currentStage = (Stage) ((javafx.scene.Node) pActionEvent.getSource()).getScene().getWindow();
             currentStage.setScene(newScene);
             currentStage.show();
 

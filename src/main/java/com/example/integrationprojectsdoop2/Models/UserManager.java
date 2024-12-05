@@ -49,7 +49,7 @@ public class UserManager {
      *
      * @author Samuel Mireault
      */
-    public static synchronized UserManager getaInstance() {
+    public static synchronized UserManager getInstance() {
         if (aInstance == null) {
             aInstance = new UserManager();
         }
@@ -63,7 +63,7 @@ public class UserManager {
      *
      * @author Samuel Mireault
      */
-    public List<User> getaManagersList() {
+    public List<User> getManagerList() {
         return Collections.unmodifiableList(aManagersList);
     }
 
@@ -74,7 +74,7 @@ public class UserManager {
      *
      * @author Samuel Mireault
      */
-    public List<User> getaClientsList() {
+    public List<User> getClientList() {
         return Collections.unmodifiableList(aClientsList);
     }
 

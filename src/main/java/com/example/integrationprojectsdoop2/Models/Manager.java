@@ -21,7 +21,7 @@ public class Manager extends User {
     private static final long serialVersionUID = 1824568323534453788L;
 
     /** List of all managers managed by the {@link UserManager}. */
-    private final List<User> aManagersList = UserManager.getaInstance().getaManagersList();
+    private final List<User> aManagersList = UserManager.getInstance().getManagerList();
 
     /** Counter for generating unique Manager IDs. */
     private int aManagerIDCounter = lastIncrement();
