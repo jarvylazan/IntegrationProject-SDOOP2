@@ -1,5 +1,6 @@
 package com.example.integrationprojectsdoop2.Models;
 
+import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
 
@@ -149,7 +150,8 @@ public class UserManager {
                     .map(User.class::cast)
                     .toList();
         } catch (Exception e) {
-            e.printStackTrace(); // Log exceptions for debugging
+            AlertHelper error = new AlertHelper(e.getMessage());
+            error.executeErrorAlert();
         }
 
         return new ArrayList<>(users);
