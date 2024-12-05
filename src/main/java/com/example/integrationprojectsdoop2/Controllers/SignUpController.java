@@ -63,7 +63,7 @@ public class SignUpController {
      * @author Samuel
      */
     public SignUpController() {
-        this.aClientsList = UserManager.getInstance().getaClientsList();
+        this.aClientsList = UserManager.getInstance().getClientList();
     }
 
     /**
@@ -92,7 +92,7 @@ public class SignUpController {
             if (email.isEmpty() || !email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
                 throw new IllegalArgumentException("You need to provide a valid email address. \neg: example@example.com");
             }
-            for (User client : UserManager.getInstance().getaClientsList()) {
+            for (User client : UserManager.getInstance().getClientList()) {
                 if (email.equals(client.getUser_Email())) {
                     throw new IllegalArgumentException("This email is already subscribed. Please try again.");
                 }

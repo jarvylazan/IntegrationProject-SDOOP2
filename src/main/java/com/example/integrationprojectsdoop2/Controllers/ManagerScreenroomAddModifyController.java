@@ -28,21 +28,21 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
     @FXML
     private TextField NameTextField;
 
-    private Screenroom currentScreenroom;
+    private Screenroom aCurrentScreenroom;
 
     /**
      * Initializes the form with the provided Screenroom's data.
      * Clears the form if no Screenroom is provided.
      *
-     * @param screenroom the Screenroom to populate in the form, or null to clear the form.
+     * @param pScreenroom the Screenroom to populate in the form, or null to clear the form.
      * @author Jarvy Lazan
      */
-    public void initializeData(Screenroom screenroom) {
-        if (screenroom != null) {
-            this.currentScreenroom = screenroom;
-            NameTextField.setText(screenroom.getScreenroom_Name());
+    public void initializeData(Screenroom pScreenroom) {
+        if (pScreenroom != null) {
+            this.aCurrentScreenroom = pScreenroom;
+            NameTextField.setText(pScreenroom.getScreenroom_Name());
         } else {
-            this.currentScreenroom = null;
+            this.aCurrentScreenroom = null;
             NameTextField.clear();
         }
     }
@@ -51,13 +51,13 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
      * Handles the save button click event. Validates inputs, checks for duplicates,
      * updates the Screenroom list, sorts it alphabetically, and saves it back to the file.
      *
-     * @param actionEvent the event triggered by clicking the save button.
+     * @param pActionEvent the event triggered by clicking the save button.
      * @throws IOException              if an error occurs during file operations.
      * @throws IllegalArgumentException if input validation fails.
      * @throws ClassNotFoundException   if the deserialization fails.
      * @author Jarvy Lazan
      */
-    public void onSaveButtonClick(ActionEvent actionEvent) {
+    public void onSaveButtonClick(ActionEvent pActionEvent) {
         try {
             // Read the list of existing screenrooms
             ReadObjects reader = new ReadObjects("screenrooms.ser");
@@ -67,14 +67,14 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
                     .map(Screenroom.class::cast)
                     .collect(Collectors.toList());
 
-            boolean isNewScreenroom = (currentScreenroom == null);
+            boolean isNewScreenroom = (aCurrentScreenroom == null);
 
             String enteredName = NameTextField.getText().trim();
 
             // Check if a screenroom with the same name already exists
             boolean isDuplicate = screenroomList.stream()
                     .anyMatch(screenroom -> screenroom.getScreenroom_Name().equalsIgnoreCase(enteredName) &&
-                            (isNewScreenroom || !screenroom.getScreenroom_ID().equals(currentScreenroom.getScreenroom_ID())));
+                            (isNewScreenroom || !screenroom.getScreenroom_ID().equals(aCurrentScreenroom.getScreenroom_ID())));
 
             if (isDuplicate) {
                 AlertHelper errorAlert = new AlertHelper("A screenroom with the same name already exists. Please use a unique name.");
@@ -84,18 +84,18 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
 
             if (isNewScreenroom) {
                 // If this is a new screenroom, create and add it to the list
-                currentScreenroom = new Screenroom();
-                screenroomList.add(currentScreenroom);
+                aCurrentScreenroom = new Screenroom();
+                screenroomList.add(aCurrentScreenroom);
             }
 
             // Update the details of the current screenroom
-            currentScreenroom.setScreenroom_Name(enteredName);
+            aCurrentScreenroom.setScreenroom_Name(enteredName);
 
             if (!isNewScreenroom) {
                 // Find the existing screenroom and replace it
                 for (int i = 0; i < screenroomList.size(); i++) {
-                    if (screenroomList.get(i).getScreenroom_ID().equals(currentScreenroom.getScreenroom_ID())) {
-                        screenroomList.set(i, currentScreenroom);
+                    if (screenroomList.get(i).getScreenroom_ID().equals(aCurrentScreenroom.getScreenroom_ID())) {
+                        screenroomList.set(i, aCurrentScreenroom);
                         break;
                     }
                 }
@@ -117,7 +117,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             successAlert.executeSuccessAlert();
 
             // Navigate back to the management view
-            onBackButtonClick(actionEvent);
+            onBackButtonClick(pActionEvent);
 
         } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
             AlertHelper errorAlert = new AlertHelper("Error saving screenroom: " + e.getMessage());

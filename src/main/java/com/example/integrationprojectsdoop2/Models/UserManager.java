@@ -62,7 +62,7 @@ public class UserManager {
      *
      * @author Samuel
      */
-    public List<User> getaManagersList() {
+    public List<User> getManagerList() {
         return Collections.unmodifiableList(aManagersList);
     }
 
@@ -73,7 +73,7 @@ public class UserManager {
      *
      * @author Samuel
      */
-    public List<User> getaClientsList() {
+    public List<User> getClientList() {
         return Collections.unmodifiableList(aClientsList);
     }
 

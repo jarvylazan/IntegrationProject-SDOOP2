@@ -233,9 +233,9 @@ public class Show implements Serializable, ShowComponent {
                 + aScreenroom.getScreenroom_Name();
     }
 
-    public static void resetMovieIDCounter(List<Movie> existingMovies) {
-        if (existingMovies != null && !existingMovies.isEmpty()) {
-            aShowIDCounter = existingMovies.stream()
+    public static void resetMovieIDCounter(List<Movie> pExistingMovies) {
+        if (pExistingMovies != null && !pExistingMovies.isEmpty()) {
+            aShowIDCounter = pExistingMovies.stream()
                     .mapToInt(movie -> Integer.parseInt(movie.getMovie_ID().substring(3)))
                     .max().orElse(0) + 1;  // Find the max ID and set counter to max + 1
         }

@@ -24,7 +24,7 @@ public class Movie implements Serializable, ShowComponent {
     private static final long serialVersionUID = 69L;
 
     /** Counter for generating unique Movie IDs. */
-    private static int movieIDCounter = 1;
+    private static int aMovieIDCounter = 1;
 
     /** Unique ID for each Movie. */
     private final String aMovie_ID;
@@ -73,7 +73,7 @@ public class Movie implements Serializable, ShowComponent {
      * @author Jarvy Lazan
      */
     private synchronized static String generateMovieID() {
-        return "MOV" + movieIDCounter++;
+        return "MOV" + aMovieIDCounter++;
     }
 
     /**
@@ -187,12 +187,12 @@ public class Movie implements Serializable, ShowComponent {
      * Resets the Movie ID counter based on existing movies.
      * Sets the counter to the highest existing ID + 1.
      *
-     * @param existingMovies the list of existing movies.
+     * @param pExistingMovies the list of existing movies.
      * @author Jarvy Lazan
      */
-    public static void resetMovieIDCounter(List<Movie> existingMovies) {
-        if (existingMovies != null && !existingMovies.isEmpty()) {
-            movieIDCounter = existingMovies.stream()
+    public static void resetMovieIDCounter(List<Movie> pExistingMovies) {
+        if (pExistingMovies != null && !pExistingMovies.isEmpty()) {
+            aMovieIDCounter = pExistingMovies.stream()
                     .mapToInt(movie -> Integer.parseInt(movie.getMovie_ID().substring(3)))
                     .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
         }
@@ -219,8 +219,8 @@ public class Movie implements Serializable, ShowComponent {
      */
     private void updateMovieIDCounter() {
         int currentID = Integer.parseInt(this.aMovie_ID.substring(3));
-        if (currentID >= movieIDCounter) { // Only update if the current ID is greater than the counter
-            movieIDCounter = currentID + 1;
+        if (currentID >= aMovieIDCounter) { // Only update if the current ID is greater than the counter
+            aMovieIDCounter = currentID + 1;
         }
     }
 }

@@ -22,7 +22,7 @@ public class Screenroom implements Serializable, ShowComponent {
     private static final long serialVersionUID = 34L;
 
     /** Counter for generating unique Screenroom IDs. */
-    private static int screenroomIDCounter = 1;
+    private static int aScreenroomIDCounter = 1;
 
     /** Unique ID for each Screenroom. */
     private final String aScreenroom_ID;
@@ -61,7 +61,7 @@ public class Screenroom implements Serializable, ShowComponent {
      * @author Jarvy Lazan
      */
     private static synchronized String generateScreenroomID() {
-        return "R" + screenroomIDCounter++;
+        return "R" + aScreenroomIDCounter++;
     }
 
     /**
@@ -126,12 +126,12 @@ public class Screenroom implements Serializable, ShowComponent {
      * Resets the Screenroom ID counter based on the highest existing ID.
      * Ensures the counter starts from the next ID after the highest existing ID.
      *
-     * @param existingScreenrooms a list of existing Screenroom objects.
+     * @param pExistingScreenrooms a list of existing Screenroom objects.
      * @author Jarvy Lazan
      */
-    public static void resetScreenroomIDCounter(List<Screenroom> existingScreenrooms) {
-        if (existingScreenrooms != null && !existingScreenrooms.isEmpty()) {
-            screenroomIDCounter = existingScreenrooms.stream()
+    public static void resetScreenroomIDCounter(List<Screenroom> pExistingScreenrooms) {
+        if (pExistingScreenrooms != null && !pExistingScreenrooms.isEmpty()) {
+            aScreenroomIDCounter = pExistingScreenrooms.stream()
                     .mapToInt(screenroom -> Integer.parseInt(screenroom.getScreenroom_ID().substring(1)))
                     .max().orElse(0) + 1; // Find the max ID and set counter to max + 1
         }
@@ -159,8 +159,8 @@ public class Screenroom implements Serializable, ShowComponent {
      */
     private void updateScreenroomIDCounter() {
         int currentID = Integer.parseInt(this.aScreenroom_ID.substring(1));
-        if (currentID >= screenroomIDCounter) { // Only update if the current ID is greater than the counter
-            screenroomIDCounter = currentID + 1;
+        if (currentID >= aScreenroomIDCounter) { // Only update if the current ID is greater than the counter
+            aScreenroomIDCounter = currentID + 1;
         }
     }
 }

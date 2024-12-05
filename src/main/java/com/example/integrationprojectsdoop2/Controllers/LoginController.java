@@ -56,8 +56,8 @@ public class LoginController {
      * @author Samuel
      */
     public LoginController() {
-        this.aManagersList = UserManager.getInstance().getaManagersList();
-        this.aClientsList = UserManager.getInstance().getaClientsList();
+        this.aManagersList = UserManager.getInstance().getManagerList();
+        this.aClientsList = UserManager.getInstance().getClientList();
     }
 
     /**

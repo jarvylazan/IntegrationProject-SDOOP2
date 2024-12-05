@@ -145,10 +145,9 @@ public class ManagementViewController {
     /**
      * Handles the action of modifying the selected item by navigating to the modify view.
      *
-     * @param actionEvent the action event triggered by clicking the modify button.
      * @author Samuel Mireault
      */
-    public void onModifyButton(ActionEvent actionEvent) {
+    public void onModifyButton() {
         int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             ShowComponent selectedItem = aManagementList.get(selectedIndex);
@@ -226,17 +225,17 @@ public class ManagementViewController {
     /**
      * Displays a confirmation dialog with the specified title, header, and content.
      *
-     * @param title   the title of the dialog.
-     * @param header  the header text of the dialog.
-     * @param content the content text of the dialog.
+     * @param pTitle   the title of the dialog.
+     * @param pHeader  the header text of the dialog.
+     * @param pContent the content text of the dialog.
      * @return {@code true} if the user confirms, {@code false} otherwise.
      * @author Samuel Mireault
      */
-    private boolean showConfirmationDialog(String title, String header, String content) {
+    private boolean showConfirmationDialog(String pTitle, String pHeader, String pContent) {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle(title);
-        confirmationAlert.setHeaderText(header);
-        confirmationAlert.setContentText(content);
+        confirmationAlert.setTitle(pTitle);
+        confirmationAlert.setHeaderText(pHeader);
+        confirmationAlert.setContentText(pContent);
 
         ButtonType result = confirmationAlert.showAndWait().orElse(ButtonType.CANCEL);
         return result == ButtonType.OK;
@@ -246,19 +245,19 @@ public class ManagementViewController {
      * Deletes the selected item from the management list and saves the updated list to the file.
      * Ensures that the selected item is not associated with any existing `Show` objects.
      *
-     * @param selectedIndex the index of the item to delete.
+     * @param pSelectedIndex the index of the item to delete.
      * @throws IOException if an error occurs while saving the updated list to the file.
      * @author Jarvy Lazan
      */
-    private void deleteItem(int selectedIndex) throws IOException {
-        if (selectedIndex < 0 || selectedIndex >= aManagementList.size()) {
+    private void deleteItem(int pSelectedIndex) throws IOException {
+        if (pSelectedIndex < 0 || pSelectedIndex >= aManagementList.size()) {
             System.out.println("Invalid selection. No item to delete.");
             AlertHelper nothingChosen = new AlertHelper("Invalid selection. No item to delete.");
             nothingChosen.executeErrorAlert();
             return;
         }
 
-        ShowComponent selectedItem = aManagementList.get(selectedIndex);
+        ShowComponent selectedItem = aManagementList.get(pSelectedIndex);
 
         // Check for dependencies in existing Shows
         if (isAssociatedWithExistingShow(selectedItem)) {
@@ -269,18 +268,18 @@ public class ManagementViewController {
 
         // Proceed with deletion
         aManagementList.remove(selectedItem);
-        managementListView.getItems().remove(selectedIndex);
+        managementListView.getItems().remove(pSelectedIndex);
         saveManagementListToFile(aFileName, aManagementList);
         System.out.println("Item deleted successfully.");
     }
     /**
      * Checks if the given `ShowComponent` is associated with any existing `Show` objects.
      *
-     * @param component the `ShowComponent` to check for dependencies.
+     * @param pComponent the `ShowComponent` to check for dependencies.
      * @return {@code true} if the component is associated with an existing `Show`, {@code false} otherwise.
      * @author Jarvy Lazan
      */
-    private boolean isAssociatedWithExistingShow(ShowComponent component) {
+    private boolean isAssociatedWithExistingShow(ShowComponent pComponent) {
         try {
             // Read the list of existing Shows
             ReadObjects readObjects = new ReadObjects("shows.ser");
@@ -291,14 +290,14 @@ public class ManagementViewController {
                     .collect(Collectors.toList());
 
             // Check for associations based on the type of ShowComponent
-            if (component instanceof Movie) {
-                String movieID = ((Movie) component).getMovie_ID();
+            if (pComponent instanceof Movie) {
+                String movieID = ((Movie) pComponent).getMovie_ID();
                 return existingShows.stream().anyMatch(show -> show.getMovie().getMovie_ID().equals(movieID));
-            } else if (component instanceof Showtime) {
-                String showtimeID = ((Showtime) component).getShowtimeID();
+            } else if (pComponent instanceof Showtime) {
+                String showtimeID = ((Showtime) pComponent).getShowtimeID();
                 return existingShows.stream().anyMatch(show -> show.getShowtime().getShowtimeID().equals(showtimeID));
-            } else if (component instanceof Screenroom) {
-                String screenroomID = ((Screenroom) component).getScreenroom_ID();
+            } else if (pComponent instanceof Screenroom) {
+                String screenroomID = ((Screenroom) pComponent).getScreenroom_ID();
                 return existingShows.stream().anyMatch(show -> show.getScreenroom().getScreenroom_ID().equals(screenroomID));
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -310,12 +309,12 @@ public class ManagementViewController {
     /**
      * Navigates to the view for adding a new component.
      *
-     * @param viewName the name of the view to navigate to.
+     * @param pViewName the name of the view to navigate to.
      * @author Samuel Mireault
      */
-    private void navigateToAdd(String viewName) {
+    private void navigateToAdd(String pViewName) {
         try {
-            FXMLLoader addLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + viewName));
+            FXMLLoader addLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + pViewName));
             Parent addView = addLoader.load();
             managementTitleViewLabel.getScene().setRoot(addView);
         } catch (IOException e) {
@@ -326,14 +325,14 @@ public class ManagementViewController {
     /**
      * Navigates to the modify view with the selected item.
      *
-     * @param selectedItem the selected item to be modified.
+     * @param pSelectedItem the selected item to be modified.
      * @author Samuel Mireault
      */
-    private void navigateToModifyView(ShowComponent selectedItem) {
+    private void navigateToModifyView(ShowComponent pSelectedItem) {
         try {
-            String viewPath = VIEW_MAP.get(selectedItem.getClass());
+            String viewPath = VIEW_MAP.get(pSelectedItem.getClass());
             if (viewPath == null) {
-                throw new IllegalStateException("No view mapping found for: " + selectedItem.getClass());
+                throw new IllegalStateException("No view mapping found for: " + pSelectedItem.getClass());
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
@@ -341,8 +340,8 @@ public class ManagementViewController {
 
             Object controller = loader.getController();
             controller.getClass()
-                    .getMethod("initializeData", selectedItem.getClass())
-                    .invoke(controller, selectedItem);
+                    .getMethod("initializeData", pSelectedItem.getClass())
+                    .invoke(controller, pSelectedItem);
 
             managementTitleViewLabel.getScene().setRoot(root);
         } catch (IOException e) {
