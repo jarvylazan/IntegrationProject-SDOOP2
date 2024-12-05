@@ -71,6 +71,8 @@ public class ReportViewController {
             String selectedOption = reportComboBox.getValue();
             if (selectedOption != null) {
                 switch (selectedOption) {
+                    case "Alphabetical (A-Z)" -> sortData(true);
+                    case "Alphabetical (Z-A)" -> sortData(false);
                     case "Movies Sold" -> sortByMovieSold(aETicketsList); // Chronological sorting
                     case "Show by Tickets Sold" -> sortByShow(true); // Sorting by tickets sold
                 }
