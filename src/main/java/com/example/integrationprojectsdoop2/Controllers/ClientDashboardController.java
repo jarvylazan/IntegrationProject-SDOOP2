@@ -32,17 +32,11 @@ import java.util.*;
  * @author Mohammad Tarin Wahidi
  */
 public class ClientDashboardController {
-    /**
-     * The file path to the login view FXML file.
-     */
+    /** The file path to the login view FXML file. */
     private static final String LOGIN_VIEW_PATH = "/com/example/integrationprojectsdoop2/Login-View.fxml";
 
-    /**
-     * The file path to the movie shows view FXML file.
-     */
+    /** The file path to the movie shows view FXML file. */
     private static final String MOVIE_SHOWS_VIEW_PATH = "/com/example/integrationprojectsdoop2/movie-shows-view.fxml";
-
-
 
     /** The logged-in client. */
     private Client aLoggedClient;
@@ -184,7 +178,7 @@ public class ClientDashboardController {
             Parent root = fxmlLoader.load();
 
             MovieShowsController controller = fxmlLoader.getController();
-            controller.setMovieShowsView(filteredShows.get(0), aLoggedClient, filteredShows);
+            controller.setMovieShowsView(filteredShows.getFirst(), aLoggedClient, filteredShows);
 
             Stage currentStage = (Stage) ((Node) pEvent.getSource()).getScene().getWindow();
             currentStage.setTitle("Movie Shows");

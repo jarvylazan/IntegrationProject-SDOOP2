@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * Controller class for the E-Ticket View.
  * Displays the details of an e-ticket and allows the user to navigate back to the client dashboard.
@@ -55,25 +57,26 @@ public class ETicketViewController {
      */
     private void updateETicketLabel() {
         // Extract details from the ticket
-        String ticketId = this.aETicket.getETicketID(); // Assuming getId() returns a String or unique identifier
+        String ticketId = this.aETicket.getETicketID();
         String movieTitle = this.aETicket.getShow().getMovie().getMovie_Title();
-        String showtime = this.aETicket.getShow().getShowtime().toString(); // Assuming Showtime has a meaningful toString()
-        String screeningRoom = this.aETicket.getShow().getScreenroom().getScreenroom_Name(); // Adjust based on your model
-        String clientName = this.aETicket.getClient().getUser_Name(); // Assuming getClient() returns a Client object with a getName() method
-        String purchaseDateTime = this.aETicket.getPurchaseDateTime().toString(); // Assuming this returns a formatted date-time string
+        String screeningRoom = this.aETicket.getShow().getScreenroom().getScreenroom_Name();
+        String clientName = this.aETicket.getClient().getUser_Name();
+
+        // Format date and time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String showtime = this.aETicket.getShow().getShowtime().toString();
+        String purchaseDateTime = this.aETicket.getPurchaseDateTime().format(formatter);
 
         // Build the label text
-        StringBuilder labelText = new StringBuilder();
-        labelText.append("🎟️ E-Ticket Details 🎟️\n\n")
-                .append("Ticket ID: ").append(ticketId).append("\n")
-                .append("Movie Title: ").append(movieTitle).append("\n")
-                .append("Showtime: ").append(showtime).append("\n")
-                .append("Screening Room: ").append(screeningRoom).append("\n")
-                .append("Client Name: ").append(clientName).append("\n")
-                .append("Purchase Date & Time: ").append(purchaseDateTime).append("\n");
+        String labelText = "Ticket ID: " + ticketId + "\n" +
+                "Movie Title: " + movieTitle + "\n" +
+                "Showtime: " + showtime + "\n" +
+                "Screening Room: " + screeningRoom + "\n" +
+                "Client Name: " + clientName + "\n" +
+                "Purchase Date & Time: " + purchaseDateTime + "\n";
 
         // Set the text to the label
-        eTicketLabel.setText(labelText.toString());
+        eTicketLabel.setText(labelText);
     }
 
     /**

@@ -19,6 +19,9 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -124,9 +127,23 @@ public class MovieShowsController {
         Show selectedShow = aShowMap.get(selectedShowDetails);
 
         if (selectedShow != null) {
-            ETicket eTicket = new ETicket(selectedShow, aLoggedClient);
-
             try {
+                // Check if the current date and time allow for purchasing the ticket
+                LocalDate today = LocalDate.now();
+                LocalTime now = LocalTime.now();
+
+                String showtimeString = String.valueOf(selectedShow.getShowtime()); // Assuming format "HH:mm"
+                LocalTime showtime = LocalTime.parse(showtimeString);
+
+                LocalDate showDate = selectedShow.getShowDate(); // Assuming `Show` has a method to get its date
+
+                if (showDate.equals(today) && now.isAfter(showtime)) {
+                    throw new IllegalArgumentException("You cannot buy a ticket for a show that has started or a show that has passed.");
+                }
+
+                // Proceed to create and save the e-ticket
+                ETicket eTicket = new ETicket(selectedShow, aLoggedClient);
+
                 ReadObjects reader = new ReadObjects("etickets.ser");
                 List<ETicket> eTicketList = reader.read().stream()
                         .filter(ETicket.class::isInstance)
@@ -138,18 +155,21 @@ public class MovieShowsController {
                 WriteObjects writer = new WriteObjects("etickets.ser");
                 writer.write(eTicketList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 
+                navigateToETicketView(pEvent, eTicket);
+
+            } catch (IllegalArgumentException e) {
+                AlertHelper alert = new AlertHelper(e.getMessage());
+                alert.executeWarningAlert();
             } catch (IOException | ClassNotFoundException e) {
                 AlertHelper errorAlert = new AlertHelper("Error saving ETicket: " + e.getMessage());
                 errorAlert.executeErrorAlert();
             }
-
-            navigateToETicketView(pEvent, eTicket);
-
         } else {
             AlertHelper alert = new AlertHelper("Selected show not found. Please try again.");
             alert.executeWarningAlert();
         }
     }
+
 
     /**
      * Navigates to the ETicket view.
