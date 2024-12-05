@@ -206,6 +206,16 @@ public class ManagerShowAddModifyController implements ModifyController<Show> {
             aCurrentShow.setScreenroom(selectedScreenroom);
             aCurrentShow.setShowDate(selectedDate);
 
+            if (!isNewShow) {
+                for (int i = 0; i < showList.size(); i++) {
+                    if (showList.get(i).getShowID().equals(aCurrentShow.getShowID())) {
+                        showList.set(i, aCurrentShow);
+                        break;
+                    }
+                }
+            }
+
+            // Save to file
             WriteObjects writer = new WriteObjects(filePath);
             writer.write(showList.stream().map(s -> (Object) s).collect(Collectors.toList()));
 
