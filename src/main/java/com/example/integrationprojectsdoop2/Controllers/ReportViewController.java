@@ -71,26 +71,33 @@ public class ReportViewController {
             String selectedOption = reportComboBox.getValue();
             if (selectedOption != null) {
                 switch (selectedOption) {
-                    case "Alphabetical (A-Z)" -> sortData(true);
-                    case "Alphabetical (Z-A)" -> sortData(false);
-                    case "Movie Sold" -> sortByMovieSold(eTicketsList);
-                    case "Show" -> sortByShow();
+                    case "Movies Sold" -> sortByMovieSold(eTicketsList); // Chronological sorting
+                    case "Show by Tickets Sold" -> sortByShow(true); // Sorting by tickets sold
                 }
             }
         });
     }
 
     /**
-     * Sorts shows by their shows in chronological order and updates the ListView.
-     * This method uses the show's date and time to determine the order.
+     * Sorts shows based on the selected criteria and updates the ListView.
+     * Options include chronological sorting and sorting by ticket sales.
+     * This method updates the ComboBox to support "Tickets Sold" sorting.
      *
-     * @author Jarvy Lazan & Samuel Mireault
+     * @param byTicketsSold a boolean indicating whether to sort by ticket sales (true)
+     *                      or by chronological order (false).
+     * @author Jarvy Lazan
      */
-    private void sortByShow() {
-        showList.sort(Comparator.comparing(
-                Show::getShowDate,
-                Comparator.nullsLast(Comparator.naturalOrder())
-        ));
+    private void sortByShow(boolean byTicketsSold) {
+        if (byTicketsSold) {
+            // Sort by number of tickets sold in descending order
+            showList.sort(Comparator.comparingInt(this::calculateTicketsSoldForShow).reversed());
+        } else {
+            // Sort by chronological order of the shows
+            showList.sort(Comparator.comparing(
+                    Show::getShowDate,
+                    Comparator.nullsLast(Comparator.naturalOrder())
+            ));
+        }
 
         ObservableList<String> sortedShowList = FXCollections.observableArrayList(
                 showList.stream()
@@ -179,7 +186,8 @@ public class ReportViewController {
             reportComboBox.getItems().addAll("Alphabetical (A-Z)", "Alphabetical (Z-A)");
             sortData(true);
         } else {
-            reportComboBox.getItems().addAll("Movie Sold", "Show");
+//            reportComboBox.getItems().addAll("Movie Sold", "Show");
+            reportComboBox.getItems().addAll("Movies Sold", "Show by Tickets Sold");
             sortByMovieSold(eTicketsList);
         }
     }
