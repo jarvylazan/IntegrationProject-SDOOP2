@@ -113,7 +113,7 @@ public class SignUpController {
 
             // Create a new client and add to UserManager
             Client newClient = new Client(fullName, email, password);
-            UserManager.getaInstance().addClient(newClient);
+            UserManager.getInstance().addClient(newClient);
             System.out.println("New client created: " +
                     newClient.getClientID() + ", " +
                     newClient.getUser_Name() + ", " +
