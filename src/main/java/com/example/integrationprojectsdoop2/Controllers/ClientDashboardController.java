@@ -184,7 +184,7 @@ public class ClientDashboardController {
             Parent root = fxmlLoader.load();
 
             MovieShowsController controller = fxmlLoader.getController();
-            controller.setMovieShowsView(filteredShows.get(0), aLoggedClient, filteredShows);
+            controller.setMovieShowsView(filteredShows.getFirst(), aLoggedClient, filteredShows);
 
             Stage currentStage = (Stage) ((Node) pEvent.getSource()).getScene().getWindow();
             currentStage.setTitle("Movie Shows");

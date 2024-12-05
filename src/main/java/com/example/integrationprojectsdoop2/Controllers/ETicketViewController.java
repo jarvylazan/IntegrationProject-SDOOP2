@@ -68,16 +68,15 @@ public class ETicketViewController {
         String purchaseDateTime = this.aETicket.getPurchaseDateTime().format(formatter);
 
         // Build the label text
-        StringBuilder labelText = new StringBuilder();
-        labelText.append("Ticket ID: ").append(ticketId).append("\n")
-                .append("Movie Title: ").append(movieTitle).append("\n")
-                .append("Showtime: ").append(showtime).append("\n")
-                .append("Screening Room: ").append(screeningRoom).append("\n")
-                .append("Client Name: ").append(clientName).append("\n")
-                .append("Purchase Date & Time: ").append(purchaseDateTime).append("\n");
+        String labelText = "Ticket ID: " + ticketId + "\n" +
+                "Movie Title: " + movieTitle + "\n" +
+                "Showtime: " + showtime + "\n" +
+                "Screening Room: " + screeningRoom + "\n" +
+                "Client Name: " + clientName + "\n" +
+                "Purchase Date & Time: " + purchaseDateTime + "\n";
 
         // Set the text to the label
-        eTicketLabel.setText(labelText.toString());
+        eTicketLabel.setText(labelText);
     }
 
     /**
