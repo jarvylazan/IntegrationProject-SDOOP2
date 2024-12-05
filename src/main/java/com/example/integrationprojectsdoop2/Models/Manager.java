@@ -66,7 +66,7 @@ public class Manager extends User {
 
     /**
      * Determines the last increment value for generating unique Manager IDs.
-     * If the managers list is empty or uninitialized, the increment starts at 1.
+     * If the manager's list is empty or uninitialized, the increment starts at 1.
      *
      * @return the next increment value for generating unique Manager IDs.
      * @throws ClassCastException if the list contains objects that are not of type {@link Manager}.
