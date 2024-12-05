@@ -12,8 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +20,7 @@ import java.util.Objects;
  * Handles user sign-up operations such as validating input, creating new users, and navigating between views.
  * Implements encapsulation and includes detailed Javadoc for maintainability.
  *
- * @author Samuel
+ * @author Samuel Mireault
  */
 public class SignUpController {
 
@@ -58,25 +56,24 @@ public class SignUpController {
 
     /**
      * Constructs a new SignUpController.
-     * Initializes the clients list by retrieving it from the {@link UserManager} singleton instance.
+     * Initializes the client list by retrieving it from the {@link UserManager} singleton instance.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public SignUpController() {
-        this.aClientsList = UserManager.getInstance().getaClientsList();
+        this.aClientsList = UserManager.getaInstance().getaClientsList();
     }
 
     /**
      * Handles the "Sign Up" button click event.
      * Validates the user's input fields including full name, email, and password.
      * If the input is valid, creates a new {@link Client} object and adds it to the {@link UserManager}.
-     * Navigates the user to the client dashboard view upon successful sign-up.
+     * Navigate the user to the client dashboard view upon successful sign-up.
      *
-     * @param pActionEvent the action event triggered by the button click.
-     * @throws IOException if there is an issue navigating to the client dashboard view or saving user data.
-     * @author Samuel
+     * @throws IllegalArgumentException if there is an issue navigating to the client dashboard view or saving user data.
+     * @author Samuel Mireault
      */
-    public void onSignUpClickButton(ActionEvent pActionEvent) throws IOException {
+    public void onSignUpClickButton()  {
         try {
             // Validate the user's full name
             String fullName = signUpName.getText().trim();
@@ -92,7 +89,7 @@ public class SignUpController {
             if (email.isEmpty() || !email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
                 throw new IllegalArgumentException("You need to provide a valid email address. \neg: example@example.com");
             }
-            for (User client : UserManager.getInstance().getaClientsList()) {
+            for (User client : UserManager.getaInstance().getaClientsList()) {
                 if (email.equals(client.getUser_Email())) {
                     throw new IllegalArgumentException("This email is already subscribed. Please try again.");
                 }
@@ -115,22 +112,20 @@ public class SignUpController {
             }
 
             // Create a new client and add to UserManager
-            User newClient = new Client(fullName, email, password);
-            UserManager.getInstance().addClient(newClient);
+            Client newClient = new Client(fullName, email, password);
+            UserManager.getaInstance().addClient(newClient);
             System.out.println("New client created: " +
-                    ((Client) newClient).getClientID() + ", " +
+                    newClient.getClientID() + ", " +
                     newClient.getUser_Name() + ", " +
                     newClient.getUser_Email() + ", " +
                     newClient.getUser_Password() + ", " +
-                    ((Client) newClient).getFormattedSubscriptionDate());
-            // TODO: might want to change the title and message inside the alert. ( need to change the AlertHelper)
-            // Show success alert
+                    newClient.getFormattedSubscriptionDate());
             AlertHelper clientAdd = new AlertHelper("Client Added: " + newClient.getUser_Email());
             clientAdd.setMessage("You have successfully signed up. \n\nWelcome to TJS Theater!");
             clientAdd.executeSuccessAlert();
 
             // Navigate to the client dashboard
-            LoginController.clientDashboard((Client) newClient, signUpEmail);
+            LoginController.clientDashboard(newClient, signUpEmail);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -144,8 +139,7 @@ public class SignUpController {
      * Navigates the user back to the login view.
      *
      * @param pActionEvent the action event triggered by the button click.
-     * @throws IOException if the login view cannot be loaded or displayed correctly.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void onCancelClickButton(ActionEvent pActionEvent) {
         try {

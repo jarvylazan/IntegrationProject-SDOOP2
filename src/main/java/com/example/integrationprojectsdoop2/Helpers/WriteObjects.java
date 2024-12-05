@@ -20,7 +20,7 @@ import java.util.List;
  * }
  * </pre>
  *
- * @author Samuel
+ * @author Samuel Mireault
  */
 public class WriteObjects {
 
@@ -36,7 +36,7 @@ public class WriteObjects {
      * @param pFileName the name of the file where objects will be written.
      *                  Must not be {@code null} or empty.
      * @throws IllegalArgumentException if the provided file name is {@code null} or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public WriteObjects(String pFileName) {
         if (pFileName == null || pFileName.isEmpty()) {
@@ -54,7 +54,7 @@ public class WriteObjects {
      *                     Must not be {@code null}.
      * @throws IllegalArgumentException if {@code pObjectsList} is {@code null}.
      * @throws IOException              if an I/O error occurs while writing the objects to the file.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public void write(List<Object> pObjectsList) throws IOException {
         if (pObjectsList == null) {

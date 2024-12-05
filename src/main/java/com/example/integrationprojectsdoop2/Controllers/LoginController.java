@@ -11,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ import java.util.List;
  * controller.onLoginButtonClicked(event);
  * }
  * </pre>
- * @author Samuel
+ * @author Samuel Mireault
  */
 public class LoginController {
     /** Text field for entering the user's email address. */
@@ -53,27 +52,26 @@ public class LoginController {
      * Initializes a new instance of the {@code LoginController} class.
      * Retrieves the manager and client lists from {@link UserManager}.
      *
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public LoginController() {
-        this.aManagersList = UserManager.getInstance().getaManagersList();
-        this.aClientsList = UserManager.getInstance().getaClientsList();
+        this.aManagersList = UserManager.getaInstance().getaManagersList();
+        this.aClientsList = UserManager.getaInstance().getaClientsList();
     }
 
     /**
      * Handles the login button click event.
      * Validates the user's credentials and navigates to the appropriate dashboard.
      *
-     * @param pEvent the event triggered by clicking the login button.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     @FXML
-    protected void onLoginButtonClicked(javafx.event.ActionEvent pEvent) {
+    protected void onLoginButtonClicked() {
         try {
             validateManagersExist();
             String email = validateAndGetEmail();
             String password = validateAndGetPassword();
-            authenticateUser(email, password); // TODO:Maybe not creating a new window but using the one we are currently using or closing the back one. See exemple login view -> Singup view
+            authenticateUser(email, password);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             AlertHelper loginError = new AlertHelper(e.getMessage());
@@ -85,10 +83,9 @@ public class LoginController {
      * Handles the sign-up button click event.
      * Opens the Sign-Up view and updates the stage title.
      *
-     * @param pMouseEvent the mouse event triggered by clicking the sign-up button.
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public void onSignUpClick(MouseEvent pMouseEvent) {
+    public void onSignUpClick() {
         try {
             FXMLLoader signUpLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/sign-up-view.fxml"));
             Parent signUpView = signUpLoader.load();
@@ -112,7 +109,7 @@ public class LoginController {
      * Validates that there is at least one manager in the system.
      *
      * @throws Exception if no managers exist in the system.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private void validateManagersExist() throws Exception {
         if (aManagersList == null || aManagersList.isEmpty()) {
@@ -125,7 +122,7 @@ public class LoginController {
      *
      * @return the validated email address.
      * @throws Exception if the email is invalid or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private String validateAndGetEmail() throws Exception {
         String email = emailLoginTextField.getText().trim();
@@ -143,7 +140,7 @@ public class LoginController {
      *
      * @return the validated password.
      * @throws Exception if the password is invalid or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private String validateAndGetPassword() throws Exception {
         String password = loginPasswordField.getText().trim();
@@ -163,7 +160,7 @@ public class LoginController {
      * @param pEmail    the user's email address.
      * @param pPassword the user's password.
      * @throws Exception if authentication fails due to invalid credentials.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     private void authenticateUser(String pEmail, String pPassword) throws Exception {
         boolean isUserAuthenticated = false;
@@ -208,7 +205,7 @@ public class LoginController {
      * @param pClient    the {@link Client} instance to be used for initializing the dashboard.
      * @param pTextfield the {@link TextField} from which the current stage is obtained to display the new scene.
      * @throws IOException if an error occurs while loading the FXML file.
-     * @author Samuel
+     * @author Samuel Mireault
      */
 
     static void clientDashboard(Client pClient, TextField pTextfield) throws IOException {

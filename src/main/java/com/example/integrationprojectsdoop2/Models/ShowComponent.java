@@ -4,7 +4,7 @@ package com.example.integrationprojectsdoop2.Models;
  * Interface representing a component that can provide a display name.
  * This is used, for example, in UI components such as a ListView.
  *
- * @author Samuel
+ * @author Samuel Mireault
  */
 public interface ShowComponent {
 
