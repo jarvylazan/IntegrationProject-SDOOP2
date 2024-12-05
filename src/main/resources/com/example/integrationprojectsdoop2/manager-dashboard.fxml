@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="editMovieView" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.ManagementDashboardController">
+<AnchorPane fx:id="editMovieView" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.ManagementDashboardController">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="450.0">
          <children>
@@ -53,22 +53,22 @@
                               <Font size="16.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onReportsButtonClick" prefHeight="60.0" prefWidth="150.0" text="Reports" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button mnemonicParsing="false" onAction="#onReportsButtonClick" prefHeight="60.0" prefWidth="150.0" text="Reports" GridPane.rowIndex="3">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Button>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onScreeningRoomsButtonClick" prefHeight="60.0" prefWidth="150.0" text="Screening Rooms" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#onScreeningRoomsButtonClick" prefHeight="60.0" prefWidth="150.0" text="Screening Rooms" GridPane.rowIndex="2">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onMoviesButtonClick" prefHeight="60.0" prefWidth="150.0" text="Movies" GridPane.rowIndex="3">
+                        <Button mnemonicParsing="false" onAction="#onMoviesButtonClick" prefHeight="60.0" prefWidth="150.0" text="Movies" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onShowtimesButtonClick" prefHeight="60.0" prefWidth="150.0" text="Showtimes" GridPane.rowIndex="2">
+                        <Button mnemonicParsing="false" onAction="#onShowtimesButtonClick" prefHeight="60.0" prefWidth="150.0" text="Showtimes" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
                               <Font size="16.0" />
                            </font>

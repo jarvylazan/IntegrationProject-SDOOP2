@@ -87,7 +87,7 @@ public class MovieShowsController {
      * Updates the label displaying the movie title and date.
      */
     private void updateMovieTitleAndDateLabel() {
-        this.movieTitleAndDateLabel.setText(this.aShow.getMovie().getAMovie_Title() + ", " + this.aShow.getShowDate());
+        this.movieTitleAndDateLabel.setText(this.aShow.getMovie().getMovie_Title() + ", " + this.aShow.getShowDate());
     }
 
     /**

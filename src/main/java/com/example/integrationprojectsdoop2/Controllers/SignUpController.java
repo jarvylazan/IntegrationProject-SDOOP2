@@ -93,7 +93,7 @@ public class SignUpController {
                 throw new IllegalArgumentException("You need to provide a valid email address. \neg: example@example.com");
             }
             for (User client : UserManager.getInstance().getaClientsList()) {
-                if (email.equals(client.getaUser_Email())) {
+                if (email.equals(client.getUser_Email())) {
                     throw new IllegalArgumentException("This email is already subscribed. Please try again.");
                 }
             }
@@ -119,13 +119,14 @@ public class SignUpController {
             UserManager.getInstance().addClient(newClient);
             System.out.println("New client created: " +
                     ((Client) newClient).getClientID() + ", " +
-                    newClient.getaUser_Name() + ", " +
-                    newClient.getaUser_Email() + ", " +
-                    newClient.getaUser_Password() + ", " +
+                    newClient.getUser_Name() + ", " +
+                    newClient.getUser_Email() + ", " +
+                    newClient.getUser_Password() + ", " +
                     ((Client) newClient).getFormattedSubscriptionDate());
             // TODO: might want to change the title and message inside the alert. ( need to change the AlertHelper)
             // Show success alert
-            AlertHelper clientAdd = new AlertHelper("Client Added: " + newClient.getaUser_Email());
+            AlertHelper clientAdd = new AlertHelper("Client Added: " + newClient.getUser_Email());
+            clientAdd.setMessage("You have successfully signed up. \n\nWelcome to TJS Theater!");
             clientAdd.executeSuccessAlert();
 
             // Navigate to the client dashboard

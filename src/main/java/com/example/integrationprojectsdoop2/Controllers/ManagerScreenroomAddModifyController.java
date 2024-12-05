@@ -17,6 +17,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for adding and modifying Screenrooms in the application.
+ * Provides functionality to create, edit, validate, and save Screenroom data.
+ *
+ * @author Jarvy Lazan
+ */
 public class ManagerScreenroomAddModifyController implements ModifyController<Screenroom> {
 
     @FXML
@@ -24,6 +30,13 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
 
     private Screenroom currentScreenroom;
 
+    /**
+     * Initializes the form with the provided Screenroom's data.
+     * Clears the form if no Screenroom is provided.
+     *
+     * @param screenroom the Screenroom to populate in the form, or null to clear the form.
+     * @author Jarvy Lazan
+     */
     public void initializeData(Screenroom screenroom) {
         if (screenroom != null) {
             this.currentScreenroom = screenroom;
@@ -34,6 +47,16 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
         }
     }
 
+    /**
+     * Handles the save button click event. Validates inputs, checks for duplicates,
+     * updates the Screenroom list, sorts it alphabetically, and saves it back to the file.
+     *
+     * @param actionEvent the event triggered by clicking the save button.
+     * @throws IOException              if an error occurs during file operations.
+     * @throws IllegalArgumentException if input validation fails.
+     * @throws ClassNotFoundException   if the deserialization fails.
+     * @author Jarvy Lazan
+     */
     public void onSaveButtonClick(ActionEvent actionEvent) {
         try {
             // Read the list of existing screenrooms
@@ -51,7 +74,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             // Check if a screenroom with the same name already exists
             boolean isDuplicate = screenroomList.stream()
                     .anyMatch(screenroom -> screenroom.getScreenroom_Name().equalsIgnoreCase(enteredName) &&
-                            (isNewScreenroom || !screenroom.getAScreenroom_ID().equals(currentScreenroom.getAScreenroom_ID())));
+                            (isNewScreenroom || !screenroom.getScreenroom_ID().equals(currentScreenroom.getScreenroom_ID())));
 
             if (isDuplicate) {
                 AlertHelper errorAlert = new AlertHelper("A screenroom with the same name already exists. Please use a unique name.");
@@ -71,7 +94,7 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
             if (!isNewScreenroom) {
                 // Find the existing screenroom and replace it
                 for (int i = 0; i < screenroomList.size(); i++) {
-                    if (screenroomList.get(i).getAScreenroom_ID().equals(currentScreenroom.getAScreenroom_ID())) {
+                    if (screenroomList.get(i).getScreenroom_ID().equals(currentScreenroom.getScreenroom_ID())) {
                         screenroomList.set(i, currentScreenroom);
                         break;
                     }
@@ -102,6 +125,12 @@ public class ManagerScreenroomAddModifyController implements ModifyController<Sc
         }
     }
 
+    /**
+     * Handles the back button click event. Navigates back to the management view.
+     *
+     * @param pActionEvent the event triggered by clicking the back button.
+     * @author Jarvy Lazan
+     */
     public void onBackButtonClick(ActionEvent pActionEvent) {
         try {
             // Load view FXML

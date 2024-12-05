@@ -88,7 +88,7 @@ public class ETicket implements Serializable {
 
         // Get the last ticket and extract its counter
         ETicket lastTicket = eTicketList.getLast();
-        String lastTicketID = lastTicket.getaTicketID(); // Assuming getTicketID() exists
+        String lastTicketID = lastTicket.getETicketID(); // Assuming getTicketID() exists
         String lastYear = lastTicketID.substring(0, 4); // Extract the year from the ID
 
         // If the year has changed, reset the counter
@@ -106,7 +106,7 @@ public class ETicket implements Serializable {
      *
      * @return a formatted ETicket ID.
      */
-    private synchronized String setETicketID() {
+    private static synchronized String setETicketID() {
         String currentYear = String.valueOf(LocalDateTime.now().getYear());
 
         // Reset counter if the year changes
@@ -124,7 +124,7 @@ public class ETicket implements Serializable {
      *
      * @return the ticket ID.
      */
-    public String getaTicketID() {
+    public String getETicketID() {
         return this.aTicketID;
     }
 
@@ -133,7 +133,7 @@ public class ETicket implements Serializable {
      *
      * @return the show.
      */
-    public Show getaShow() {
+    public Show getShow() {
         return this.aShow;
     }
 
@@ -142,7 +142,7 @@ public class ETicket implements Serializable {
      *
      * @return the purchase date and time.
      */
-    public LocalDateTime getaPurchaseDateTime() {
+    public LocalDateTime getPurchaseDateTime() {
         return this.aPurchaseDateTime;
     }
 
@@ -151,7 +151,7 @@ public class ETicket implements Serializable {
      *
      * @return the client.
      */
-    public Client getaClient() {
+    public Client getClient() {
         return this.aClient;
     }
 }

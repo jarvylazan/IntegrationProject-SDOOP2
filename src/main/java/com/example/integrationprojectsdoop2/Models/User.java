@@ -15,27 +15,30 @@ import java.io.Serializable;
  * }
  * </pre>
  * Implements {@link Serializable} for object serialization.
- * @author Samuel
+ *
+ * @author Samuel Mireault & Jarvy Lazan
+ * @version 1.0
  */
 public abstract class User implements Serializable {
 
-    /** The serialID for the files. */
+    /** The serialID for object serialization. */
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /** The name of the user (private for encapsulation). */
+    /** The name of the user. */
     private String aUser_Name;
 
-    /** The email address of the user (private for encapsulation). */
+    /** The email address of the user. */
     private String aUser_Email;
 
-    /** The password of the user (private for encapsulation). */
+    /** The password of the user. */
     private String aUser_Password;
 
     /**
      * Default constructor that initializes all user fields to empty strings.
      * Typically used when creating a subclass instance where the user details are set later.
-     * @author Samuel
+     *
+     * @author Samuel Mireault
      */
     public User() {
         this.aUser_Name = "";
@@ -51,21 +54,21 @@ public abstract class User implements Serializable {
      * @param pUser_Email    the email address of the user. Must not be {@code null} or empty.
      * @param pUser_Password the password of the user. Must not be {@code null} or empty.
      * @throws IllegalArgumentException if any of the parameters are {@code null} or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
     public User(String pUser_Name, String pUser_Email, String pUser_Password) {
-        setaUser_Name(pUser_Name);
-        setaUser_Email(pUser_Email);
-        setaUser_Password(pUser_Password);
+        setUser_Name(pUser_Name);
+        setUser_Email(pUser_Email);
+        setUser_Password(pUser_Password);
     }
 
     /**
      * Gets the user's name.
      *
      * @return the user's name.
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public String getaUser_Name() {
+    public String getUser_Name() {
         return aUser_Name;
     }
 
@@ -74,9 +77,9 @@ public abstract class User implements Serializable {
      *
      * @param pUser_Name the new name to set for the user. Cannot be {@code null} or empty.
      * @throws IllegalArgumentException if the provided name is {@code null} or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public void setaUser_Name(String pUser_Name) {
+    public void setUser_Name(String pUser_Name) {
         if (pUser_Name == null || pUser_Name.isEmpty()) {
             throw new IllegalArgumentException("User name cannot be null or empty.");
         }
@@ -87,9 +90,9 @@ public abstract class User implements Serializable {
      * Gets the user's email address.
      *
      * @return the user's email address.
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public String getaUser_Email() {
+    public String getUser_Email() {
         return aUser_Email;
     }
 
@@ -98,9 +101,9 @@ public abstract class User implements Serializable {
      *
      * @param pUser_Email the new email to set for the user. Cannot be {@code null} or empty.
      * @throws IllegalArgumentException if the provided email is {@code null} or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public void setaUser_Email(String pUser_Email) {
+    public void setUser_Email(String pUser_Email) {
         if (pUser_Email == null || pUser_Email.isEmpty()) {
             throw new IllegalArgumentException("User email cannot be null or empty.");
         }
@@ -111,9 +114,9 @@ public abstract class User implements Serializable {
      * Gets the user's password.
      *
      * @return the user's password.
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public String getaUser_Password() {
+    public String getUser_Password() {
         return aUser_Password;
     }
 
@@ -122,17 +125,24 @@ public abstract class User implements Serializable {
      *
      * @param pUser_Password the new password to set for the user. Cannot be {@code null} or empty.
      * @throws IllegalArgumentException if the provided password is {@code null} or empty.
-     * @author Samuel
+     * @author Samuel Mireault
      */
-    public void setaUser_Password(String pUser_Password) {
+    public void setUser_Password(String pUser_Password) {
         if (pUser_Password == null || pUser_Password.isEmpty()) {
             throw new IllegalArgumentException("User password cannot be null or empty.");
         }
         this.aUser_Password = pUser_Password;
     }
 
+    /**
+     * Returns a string representation of the user.
+     * Includes the user's name and email for a concise description.
+     *
+     * @return a string containing the user's name and email.
+     * @author Jarvy Lazan
+     */
     @Override
     public String toString() {
-        return "Name: " + this.aUser_Name + ", Email: " + this.aUser_Email; // Customize with actual fields
+        return "Name: " + this.aUser_Name + ", Email: " + this.aUser_Email;
     }
 }
