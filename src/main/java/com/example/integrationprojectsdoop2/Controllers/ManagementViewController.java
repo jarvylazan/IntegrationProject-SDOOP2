@@ -3,8 +3,11 @@ package com.example.integrationprojectsdoop2.Controllers;
 import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Helpers.WriteObjects;
-import com.example.integrationprojectsdoop2.Models.ModifyController;
+import com.example.integrationprojectsdoop2.Models.Movie;
+import com.example.integrationprojectsdoop2.Models.Show;
 import com.example.integrationprojectsdoop2.Models.ShowComponent;
+import com.example.integrationprojectsdoop2.Models.Showtime;
+import com.example.integrationprojectsdoop2.Models.Screenroom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,14 +22,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller for managing the view and operations related to the management of show components.
  * This class provides functionalities to add, modify, delete, and display details of components.
  *
- * @author Samuel
+ * @author Samuel Mireault
  * @since 1.0
  */
 public class ManagementViewController {
@@ -49,9 +53,18 @@ public class ManagementViewController {
     @FXML
     private ListView<String> managementListView;
 
+    private static final Map<Class<?>, String> VIEW_MAP = Map.of(
+            Movie.class, "/com/example/integrationprojectsdoop2/manager-edit-movie-view.fxml",
+            Show.class, "/com/example/integrationprojectsdoop2/manager-show-add-modify-view.fxml",
+            Showtime.class, "/com/example/integrationprojectsdoop2/manager-showtime-add-modify-view.fxml",
+            Screenroom.class, "/com/example/integrationprojectsdoop2/manager-screen-room-add-modify-view.fxml"
+    );
+
     /**
      * Initializes the controller after the FXML file is loaded.
      * Sets up a listener for item selection in the ListView and initializes the display label.
+     *
+     * @author Samuel Mireault
      */
     @FXML
     public void initialize() {
@@ -67,6 +80,7 @@ public class ManagementViewController {
      * @param pTitle            the title of the management view.
      * @param pFilename         the filename used for loading and saving data.
      * @param pAddNModifyViewName the name of the view used for adding and modifying components.
+     * @author Samuel Mireault
      */
     public void setManagementView(String pTitle, String pFilename, String pAddNModifyViewName) {
         this.aFileName = pFilename;
@@ -84,9 +98,9 @@ public class ManagementViewController {
     /**
      * Handles the action of adding a new item by navigating to the add view.
      *
-     * @param actionEvent the action event triggered by clicking the add button.
+     * @author Samuel Mireault
      */
-    public void onAddClickButton(ActionEvent actionEvent) {
+    public void onAddClickButton() {
         navigateToAdd(aAddNModifyViewName);
     }
 
@@ -94,10 +108,10 @@ public class ManagementViewController {
      * Handles the action of deleting the selected item.
      * Shows a confirmation dialog before proceeding with the deletion.
      *
-     * @param actionEvent the action event triggered by clicking the delete button.
      * @throws IOException if an error occurs while saving the updated list to the file.
+     * @author Samuel Mireault
      */
-    public void onDeleteClickButton(ActionEvent actionEvent) throws IOException {
+    public void onDeleteClickButton() throws IOException {
         int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             if (showConfirmationDialog("Confirm Deletion",
@@ -115,9 +129,9 @@ public class ManagementViewController {
     /**
      * Handles the action of going back to the previous stage by closing the current window.
      *
-     * @param actionEvent the action event triggered by clicking the back button.
+     * @author Samuel Mireault
      */
-    public void onBackButton(ActionEvent actionEvent) {
+    public void onBackButton() {
         Stage stage = (Stage) this.managementTitleViewLabel.getScene().getWindow();
         stage.close();
     }
@@ -126,6 +140,7 @@ public class ManagementViewController {
      * Handles the action of modifying the selected item by navigating to the modify view.
      *
      * @param actionEvent the action event triggered by clicking the modify button.
+     * @author Samuel Mireault
      */
     public void onModifyButton(ActionEvent actionEvent) {
         int selectedIndex = managementListView.getSelectionModel().getSelectedIndex();
@@ -138,43 +153,9 @@ public class ManagementViewController {
     }
 
     /**
-     * Navigates to the view for adding a new component.
-     *
-     * @param viewName the name of the view to navigate to.
-     */
-    private void navigateToAdd(String viewName) {
-        try {
-            FXMLLoader addLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + viewName));
-            Parent addView = addLoader.load();
-            managementTitleViewLabel.getScene().setRoot(addView);
-        } catch (IOException e) {
-            new AlertHelper(e.getMessage()).executeErrorAlert();
-        }
-    }
-
-    /**
-     * Navigates to the modify view with the selected item.
-     *
-     * @param selectedItem the selected item to be modified.
-     */
-    private void navigateToModifyView(ShowComponent selectedItem) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + aAddNModifyViewName));
-            Parent modifyView = loader.load();
-
-            Object controller = loader.getController();
-            if (controller instanceof ModifyController) {
-                ((ModifyController<ShowComponent>) controller).initializeData(selectedItem);
-            }
-
-            managementTitleViewLabel.getScene().setRoot(modifyView);
-        } catch (IOException e) {
-            new AlertHelper(e.getMessage()).executeErrorAlert();
-        }
-    }
-
-    /**
      * Updates the detail display when a new item is selected from the ListView.
+     *
+     * @author Samuel Mireault
      */
     @FXML
     private void onListViewItemSelect() {
@@ -189,9 +170,11 @@ public class ManagementViewController {
 
     /**
      * Loads the management list from the specified file.
+     * Sorts the list by display name in a case-insensitive manner.
      *
      * @param pFilename the filename from which to load the data.
      * @return the loaded management list as an observable list.
+     * @author Samuel Mireault & Jarvy Lazan
      */
     private ObservableList<ShowComponent> loadManagementListFrom(String pFilename) {
         List<ShowComponent> components = new ArrayList<>();
@@ -202,7 +185,17 @@ public class ManagementViewController {
             components = rawObjects.stream()
                     .filter(ShowComponent.class::isInstance)
                     .map(ShowComponent.class::cast)
-                    .toList();
+                    .collect(Collectors.toList());
+
+            components.sort((o1, o2) -> {
+                String displayName1 = o1.getDisplayName();
+                String displayName2 = o2.getDisplayName();
+
+                if (displayName1 == null) return (displayName2 == null) ? 0 : -1;
+                if (displayName2 == null) return 1;
+
+                return displayName1.compareToIgnoreCase(displayName2);
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,12 +209,12 @@ public class ManagementViewController {
      * @param pFilename        the filename to which the data should be saved.
      * @param pManagementList the management list to save.
      * @throws IOException if an error occurs while writing to the file.
+     * @author Samuel Mireault
      */
     private void saveManagementListToFile(String pFilename, ObservableList<ShowComponent> pManagementList) throws IOException {
+        List<Object> serializableList = new ArrayList<>(pManagementList);
         WriteObjects writeObjects = new WriteObjects(pFilename);
-        List<Object> components = Collections.singletonList(pManagementList);
-
-        writeObjects.write(components);
+        writeObjects.write(serializableList);
     }
 
     /**
@@ -231,6 +224,7 @@ public class ManagementViewController {
      * @param header  the header text of the dialog.
      * @param content the content text of the dialog.
      * @return {@code true} if the user confirms, {@code false} otherwise.
+     * @author Samuel Mireault
      */
     private boolean showConfirmationDialog(String title, String header, String content) {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -247,13 +241,72 @@ public class ManagementViewController {
      *
      * @param selectedIndex the index of the item to delete.
      * @throws IOException if an error occurs while saving the updated list to the file.
+     * @author Samuel Mireault
      */
     private void deleteItem(int selectedIndex) throws IOException {
-        ShowComponent selectedItem = aManagementList.get(selectedIndex);
-        aManagementList.remove(selectedIndex);
-        managementListView.getItems().remove(selectedIndex);
+        if (selectedIndex < 0 || selectedIndex >= aManagementList.size()) {
+            System.out.println("Invalid selection. No item to delete.");
+            AlertHelper nothingChosen = new AlertHelper("Invalid selection. No item to delete.");
+            nothingChosen.executeErrorAlert();
 
-        saveManagementListToFile(aFileName, aManagementList);
-        System.out.println("Item deleted successfully.");
+            return;
+        }
+
+        Object selectedItem = aManagementList.get(selectedIndex);
+
+        if (selectedItem instanceof ShowComponent) {
+            aManagementList.remove(selectedItem);
+            managementListView.getItems().remove(selectedIndex);
+
+            saveManagementListToFile(aFileName, aManagementList);
+            System.out.println("Item deleted successfully.");
+        } else {
+            System.out.println("Selected item is not a ShowComponent. Cannot delete.");
+        }
+    }
+
+    /**
+     * Navigates to the view for adding a new component.
+     *
+     * @param viewName the name of the view to navigate to.
+     * @author Samuel Mireault
+     */
+    private void navigateToAdd(String viewName) {
+        try {
+            FXMLLoader addLoader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/" + viewName));
+            Parent addView = addLoader.load();
+            managementTitleViewLabel.getScene().setRoot(addView);
+        } catch (IOException e) {
+            new AlertHelper(e.getMessage()).executeErrorAlert();
+        }
+    }
+
+    /**
+     * Navigates to the modify view with the selected item.
+     *
+     * @param selectedItem the selected item to be modified.
+     * @author Samuel Mireault
+     */
+    private void navigateToModifyView(ShowComponent selectedItem) {
+        try {
+            String viewPath = VIEW_MAP.get(selectedItem.getClass());
+            if (viewPath == null) {
+                throw new IllegalStateException("No view mapping found for: " + selectedItem.getClass());
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
+            Parent root = loader.load();
+
+            Object controller = loader.getController();
+            controller.getClass()
+                    .getMethod("initializeData", selectedItem.getClass())
+                    .invoke(controller, selectedItem);
+
+            managementTitleViewLabel.getScene().setRoot(root);
+        } catch (IOException e) {
+            new AlertHelper("Error loading view: " + e.getMessage()).executeErrorAlert();
+        } catch (ReflectiveOperationException e) {
+            new AlertHelper("Error initializing controller: " + e.getMessage()).executeErrorAlert();
+        }
     }
 }

@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="513.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.MovieShowsViewController">
+<AnchorPane prefHeight="513.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integrationprojectsdoop2.Controllers.MovieShowsController">
    <children>
       <Label fx:id="movieTitleAndDateLabel" layoutX="21.0" layoutY="29.0" text="*Movie Title*, *Date Chosen*">
          <font>

@@ -170,7 +170,7 @@ public class LoginController {
 
         // Check in the client list
         for (User client : aClientsList) {
-            if (client.getaUser_Email().equals(pEmail) && client.getaUser_Password().equals(pPassword)) {
+            if (client.getUser_Email().equals(pEmail) && client.getUser_Password().equals(pPassword)) {
                 System.out.println("The Client dashboard view");
                 clientDashboard((Client) client, emailLoginTextField);
                 isUserAuthenticated = true;
@@ -181,7 +181,7 @@ public class LoginController {
         // Check in the manager list if not authenticated yet
         if (!isUserAuthenticated) {
             for (User manager : aManagersList) {
-                if (manager.getaUser_Email().equals(pEmail) && manager.getaUser_Password().equals(pPassword)) {
+                if (manager.getUser_Email().equals(pEmail) && manager.getUser_Password().equals(pPassword)) {
                     System.out.println("The Manager dashboard view");
                     FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(("manager-dashboard.fxml")));
                     Parent root = fxmlLoader.load();

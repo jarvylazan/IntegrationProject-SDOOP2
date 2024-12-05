@@ -4,6 +4,7 @@ import com.example.integrationprojectsdoop2.Helpers.AlertHelper;
 import com.example.integrationprojectsdoop2.Helpers.ReadObjects;
 import com.example.integrationprojectsdoop2.Models.Client;
 import com.example.integrationprojectsdoop2.Models.Show;
+import com.example.integrationprojectsdoop2.MovieTheatreApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,57 +18,82 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 
+/**
+ * Controller for the client dashboard view.
+ *
+ * This controller manages the interaction between the client and the application,
+ * including viewing movies by date, navigating between views, and signing out.
+ *
+ * @author Mohammad Tarin Wahidi
+ */
 public class ClientDashboardController {
+    /**
+     * The file path to the login view FXML file.
+     */
+    private static final String LOGIN_VIEW_PATH = "/com/example/integrationprojectsdoop2/Login-View.fxml";
 
+    /**
+     * The file path to the movie shows view FXML file.
+     */
+    private static final String MOVIE_SHOWS_VIEW_PATH = "/com/example/integrationprojectsdoop2/movie-shows-view.fxml";
+
+
+
+    /** The logged-in client. */
     private Client aLoggedClient;
+
+    /** The list of shows loaded from the serialized file. */
     private List<Show> aShowsList;
+
+    /** Label to display the welcome message. */
     @FXML
     private Label welcomeLabel;
 
+    /** DatePicker for selecting a movie date. */
     @FXML
     private DatePicker movieDatePicker;
 
+    /** ListView to display movie titles and details. */
     @FXML
-    private ListView movieListView;
+    private ListView<String> movieListView;
 
-
+    /**
+     * Sets up the client dashboard view with the provided serialized file and client data.
+     *
+     * @param pSerializedFileName The name of the file containing serialized show data.
+     * @param pClient             The logged-in client.
+     */
     public void setClientDashboardView(String pSerializedFileName, Client pClient) {
         this.aShowsList = showsReader(pSerializedFileName);
         this.aLoggedClient = pClient;
 
-        initialize();
+        updateWelcomeLabel();
+        updateMovieListView(LocalDate.now());
 
-        String filePath = "shows.ser"; // Replace with your file's path
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            Object deserializedObject = ois.readObject();
-
-            // If the file contains a list
-            if (deserializedObject instanceof List<?> list) {
-                list.forEach(System.out::println);
-            } else {
-                System.out.println("Deserialized Object: " + deserializedObject);
+        this.movieDatePicker.valueProperty().addListener((_, _, newValue) -> {
+            if (newValue != null) {
+                updateMovieListView(newValue);
             }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
+    /**
+     * Reads the list of shows from the given serialized file.
+     *
+     * @param pFilename The filename of the serialized shows data.
+     * @return A list of shows read from the file.
+     */
     private List<Show> showsReader(String pFilename) {
         List<Show> shows = new ArrayList<>();
         try {
             ReadObjects readObjects = new ReadObjects(pFilename);
             List<Object> rawObjects = readObjects.read();
 
-            // Safely cast raw objects to Show instances
             shows = rawObjects.stream()
                     .filter(Show.class::isInstance)
                     .map(Show.class::cast)
@@ -76,135 +102,127 @@ public class ClientDashboardController {
             System.err.println("Error reading shows from file: " + e.getMessage());
             e.printStackTrace();
         }
-
         return shows;
     }
 
-
-    private void initialize() {
-        // Set Date Picker value to today's date.
+    /**
+     * Initializes the controller. Sets the default date in the DatePicker to today's date.
+     */
+    @FXML
+    public void initialize() {
         this.movieDatePicker.setValue(LocalDate.now());
-
-        // Update the top label with the user's name
-        updateWelcomeLabel();
-
-        // Populate ListView with today's shows
-        updateMovieListView(LocalDate.now());
-
-        // Add a listener to DatePicker for dynamically updating the ListView
-        this.movieDatePicker.valueProperty().addListener((_, _, newValue) -> {
-            if (newValue != null) {
-                updateMovieListView(newValue);
-            }
-        });
     }
 
-
     /**
-     * Updates the ListView to display movie titles for the selected date.
+     * Updates the ListView to display movie titles and details for the selected date.
      *
-     * @param selectedDate The date to filter shows.
+     * @param selectedDate The selected date to filter movies.
      */
     private void updateMovieListView(LocalDate selectedDate) {
         ObservableList<String> movieTitles = FXCollections.observableArrayList();
+        Set<String> uniqueMovieTitles = new HashSet<>();
+        boolean hasMoviesForDate = false;
 
         for (Show show : this.aShowsList) {
-            if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) { // Filter by date
-                movieTitles.add(show.getMovie().getAMovie_Title());
+            if (show.getShowDate() != null && show.getShowDate().equals(selectedDate)) {
+                // Filter by date and add unique movie titles
+                if (uniqueMovieTitles.add(show.getMovie().getMovie_Title())) {
+                    movieTitles.add("Title : " + show.getMovie().getMovie_Title() +
+                                    "\nGenre : " + show.getMovie().getMovie_Genre() +
+                                    "\nSynopsis : " + show.getMovie().getMovie_Synopsis());
+                }
+                hasMoviesForDate = true;
             }
         }
 
-        // Show a message if no movies are available for the selected date
-        if (movieTitles.isEmpty()) {
-            AlertHelper alert = new AlertHelper("No movies available for that date.");
-            alert.executeWarningAlert();
+        if (!hasMoviesForDate) {
+            movieTitles.add("There are no movies available for this date.");
         }
 
         this.movieListView.setItems(movieTitles);
     }
 
+    /**
+     * Handles the "See Show Options" button click event.
+     * Navigates to the view displaying available shows for the selected movie and date.
+     *
+     * @param pEvent The action event triggered by the button click.
+     */
     @FXML
-    protected void onSeeShowOptionsButtonClick(ActionEvent event) {
-        // Get the selected movie title from the ListView
-        String selectedMovieTitle = (String) this.movieListView.getSelectionModel().getSelectedItem();
+    protected void onSeeShowOptionsButtonClick(ActionEvent pEvent) {
+        String selectedItem = this.movieListView.getSelectionModel().getSelectedItem();
         LocalDate selectedDate = this.movieDatePicker.getValue();
 
-        // Check if a movie title and a valid date are selected
-        if (selectedMovieTitle == null) {
-            AlertHelper alert = new AlertHelper("Please select a movie title from the list. ");
-            alert.executeWarningAlert();
+        if (selectedItem == null) {
+            new AlertHelper("Please select a movie from the list.").executeWarningAlert();
             return;
         }
 
-        if (selectedDate == null) {
-            AlertHelper alert = new AlertHelper("Please select a date.");
-            alert.executeWarningAlert();
-            return;
-        }
+        // Extract the title from the selected item's first line
+        String selectedMovieTitle = selectedItem.split("\n")[0].replace("Title : ", "").trim();
 
-        // Filter shows based on the selected movie title and date
+        // Filter shows based on the extracted title and selected date
         List<Show> filteredShows = this.aShowsList.stream()
-                .filter(show -> show.getMovie().getAMovie_Title().equals(selectedMovieTitle)
+                .filter(show -> show.getMovie().getMovie_Title().equals(selectedMovieTitle)
                         && show.getShowDate().equals(selectedDate))
                 .toList();
 
-        // If no shows match, inform the user
+
         if (filteredShows.isEmpty()) {
-            System.out.println("No shows available for the selected movie and date.");
+            new AlertHelper("No shows available for the selected movie and date.").executeWarningAlert();
+            return;
+        }
+
+        // Check if the selected date is in the past
+        if (selectedDate.isBefore(LocalDate.now())) {
+            new AlertHelper("The selected show date is in the past. Please select a valid date.").executeWarningAlert();
             return;
         }
 
         try {
-            // Load the new view
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("movie-shows-view.fxml"));
-            Parent showsRoot = loader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(MovieTheatreApplication.class.getResource(MOVIE_SHOWS_VIEW_PATH));
+            Parent root = fxmlLoader.load();
 
-            // Pass data to the new controller
-            //MovieShowsViewController controller = loader.getController();
-            //controller.setMovieShowsView(filteredShows);
+            MovieShowsController controller = fxmlLoader.getController();
+            controller.setMovieShowsView(filteredShows.get(0), aLoggedClient, filteredShows);
 
-            // Set the new scene
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(showsRoot));
-            stage.setTitle("Movie Shows");
-            stage.show();
+            Stage currentStage = (Stage) ((Node) pEvent.getSource()).getScene().getWindow();
+            currentStage.setTitle("Movie Shows");
+            currentStage.setScene(new Scene(root));
+            currentStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
     /**
-     * Handles the "Sign out" button click event.
+     * Handles the "Sign Out" button click event.
      * Navigates the user back to the login view.
      *
-     * @param pActionEvent the action event triggered by the button click.
-     * @author Mohammad Tarin Wahidi
+     * @param pActionEvent The action event triggered by the button click.
      */
     public void onSignOutButtonClick(ActionEvent pActionEvent) {
         try {
-            // Load the login view FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integrationprojectsdoop2/Login-View.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(LOGIN_VIEW_PATH));
             Parent loginView = loader.load();
 
-            // Create a new scene for the login view
             Scene newScene = new Scene(loginView);
             newScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
 
-            // Set the new scene to the current stage
-            Stage currentStage = (Stage) ((javafx.scene.Node) pActionEvent.getSource()).getScene().getWindow();
+            Stage currentStage = (Stage) ((Node) pActionEvent.getSource()).getScene().getWindow();
             currentStage.setTitle("Log in");
             currentStage.setScene(newScene);
             currentStage.show();
-
         } catch (Exception e) {
             System.err.println("Error loading the Login-View.fxml: " + e.getMessage());
-            AlertHelper errorCatch = new AlertHelper(e.getMessage());
-            errorCatch.executeErrorAlert();
+            new AlertHelper(e.getMessage()).executeErrorAlert();
         }
     }
 
+    /**
+     * Updates the welcome label with the logged-in client's name.
+     */
     public void updateWelcomeLabel() {
-        this.welcomeLabel.setText("Welcome, " + this.aLoggedClient.getaUser_Name() + "!");
+        this.welcomeLabel.setText("Welcome, " + this.aLoggedClient.getUser_Name() + "!");
     }
 }

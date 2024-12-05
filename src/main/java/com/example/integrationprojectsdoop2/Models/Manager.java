@@ -8,16 +8,20 @@ import java.util.List;
  * Represents a Manager, which is a type of {@link User}.
  * Inherits all properties and behaviors of the {@link User} class.
  * Implements {@link Serializable} for object serialization.
- * Each Manager is assigned a unique manager ID.
+ * Each Manager is assigned a unique manager ID upon creation.
+ * The class is part of a user management system for the application.
+ *
  * @author Samuel
+ * @version 1.0
  */
 public class Manager extends User {
 
-    /** The serialID for the files. */
+    /** The serial version UID for serialization. */
     @Serial
     private static final long serialVersionUID = 1824568323534453788L;
 
-    private final List<User> aManagersList  = UserManager.getInstance().getaManagersList();
+    /** List of all managers managed by the {@link UserManager}. */
+    private final List<User> aManagersList = UserManager.getInstance().getaManagersList();
 
     /** Counter for generating unique Manager IDs. */
     private int aManagerIDCounter = lastIncrement();
@@ -40,9 +44,10 @@ public class Manager extends User {
     }
 
     /**
-     * Generates a unique Manager ID by incrementing the counter.
+     * Generates a unique Manager ID by incrementing the ID counter.
+     * The format of the ID is "M<number>", where the number is generated sequentially.
      *
-     * @return the generated Manager ID in the format "M<number>".
+     * @return the generated Manager ID.
      * @author Samuel
      */
     private synchronized String generateManagerID() {
@@ -50,15 +55,23 @@ public class Manager extends User {
     }
 
     /**
-     * Gets the unique Manager ID.
+     * Gets the unique Manager ID assigned to this Manager.
      *
-     * @return the Manager ID.
+     * @return the Manager ID as a string in the format "M<number>".
      * @author Samuel
      */
     public String getManagerID() {
         return aManagerID;
     }
 
+    /**
+     * Determines the last increment value for generating unique Manager IDs.
+     * If the managers list is empty or uninitialized, the increment starts at 1.
+     *
+     * @return the next increment value for generating unique Manager IDs.
+     * @throws ClassCastException if the list contains objects that are not of type {@link Manager}.
+     * @author Samuel
+     */
     private int lastIncrement() {
         if (this.aManagersList == null || this.aManagersList.isEmpty()) {
             return 1;  // Start at 1 if the list is empty or uninitialized
